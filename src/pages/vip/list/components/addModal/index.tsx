@@ -5,7 +5,7 @@ import {
   ProFormText,
 } from '@ant-design/pro-components';
 import { message } from 'antd';
-import { addRule } from '@/services/ant-design-pro/api';
+import { addVip } from '@/services/ant-design-pro/api';
 
 interface IProps {
   visible: boolean;
@@ -21,7 +21,7 @@ const AddModal: React.FC<IProps> = (props) => {
     const hide = message.loading('正在添加');
 
     try {
-      await addRule(params);
+      await addVip(params);
       hide();
       message.success('Added successfully');
       return true;

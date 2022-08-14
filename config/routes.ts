@@ -6,7 +6,7 @@ export default [
     icon: 'crown',
     routes: [
       { path: '/vip/list', name: '会员列表', icon: 'smile', component: './vip/list' },
-      { path: '/vip/config', name: '等级配置', icon: 'smile', component: './TableList' },
+      { path: '/vip/config', name: '等级配置', icon: 'smile', component: './Welcome' },
     ],
   },
   {
@@ -15,13 +15,13 @@ export default [
     icon: 'crown',
     access: 'canAdmin',
     routes: [
-      { path: '/payment/recharge', name: '充值', icon: 'smile', component: './TableList' },
-      { path: '/payment/recharge-list', name: '充值记录', icon: 'smile', component: './TableList' },
+      { path: '/payment/recharge', name: '充值', icon: 'smile', component: './Welcome' },
+      { path: '/payment/recharge-list', name: '充值记录', icon: 'smile', component: './Welcome' },
       {
         path: '/payment/consumption-list',
         name: '消费记录',
         icon: 'smile',
-        component: './TableList',
+        component: './Welcome',
       },
     ],
   },
@@ -31,10 +31,10 @@ export default [
     icon: 'crown',
     access: 'canAdmin',
     routes: [
-      { path: '/room/arrange', name: '排房', icon: 'smile', component: './TableList' },
-      { path: '/room/config', name: '客房配置', icon: 'smile', component: './TableList' },
-      { path: '/room/order', name: '订房记录', icon: 'smile', component: './TableList' },
-      { path: '/room/refund', name: '退款申请', icon: 'smile', component: './TableList' },
+      { path: '/room/arrange', name: '排房', icon: 'smile', component: './Welcome' },
+      { path: '/room/config', name: '客房配置', icon: 'smile', component: './Welcome' },
+      { path: '/room/order', name: '订房记录', icon: 'smile', component: './Welcome' },
+      { path: '/room/refund', name: '退款申请', icon: 'smile', component: './Welcome' },
     ],
   },
   {
@@ -42,7 +42,7 @@ export default [
     name: '店铺管理',
     icon: 'crown',
     access: 'canAdmin',
-    routes: [{ path: '/store/config', name: '店铺配置', icon: 'smile', component: './TableList' }],
+    routes: [{ path: '/store/config', name: '店铺配置', icon: 'smile', component: './Welcome' }],
   },
   {
     path: '/user',

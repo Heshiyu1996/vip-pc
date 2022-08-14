@@ -1,4 +1,4 @@
-import { removeRule, rule, updateRule } from '@/services/ant-design-pro/api';
+import { removeRule, rule } from '@/services/ant-design-pro/api';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import {
@@ -7,8 +7,7 @@ import {
 } from '@ant-design/pro-components';
 import { Button, message } from 'antd';
 import React, { useRef, useState } from 'react';
-import type { FormValueType } from './components/EditModal';
-import EditModal from './components/EditModal';
+import EditModal from './components/editModal';
 import AddModal from './components/addModal';
 const mockLevelData = [
   {
@@ -51,25 +50,6 @@ const LevelEnumConfig = (() => {
  * @param fields
  */
 
-const handleUpdate = async (fields: FormValueType) => {
-  const hide = message.loading('Configuring');
-
-  try {
-    await updateRule({
-      name: fields.name,
-      desc: fields.desc,
-      key: fields.key,
-    });
-    hide();
-    message.success('Configuration is successful');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('Configuration failed, please try again!');
-    return false;
-  }
-}; // 删除指定记录
-
 const handleRemove = async (selectedItem: API.RuleListItem) => {
   const hide = message.loading('正在删除');
   if (!selectedItem) return true;
@@ -91,8 +71,17 @@ const handleRemove = async (selectedItem: API.RuleListItem) => {
 const TableList: React.FC = () => {
   const [visibleAddModal, setVisibleAddModal] = useState<boolean>(false);
   const [visibleEditModal, setVisibleEditModal] = useState<boolean>(false);
-  const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<API.RuleListItem>();
+  const onEditOk = () => {
+    setVisibleEditModal(false);
+    setCurrentRow(undefined);
+
+    if (actionRef.current) {
+      actionRef.current.reload();
+    }
+  }
+
+  const actionRef = useRef<ActionType>();
   const columns: ProColumns<API.RuleListItem>[] = [
     {
       title: '名字',
@@ -181,40 +170,12 @@ const TableList: React.FC = () => {
       />
 
       {/* 弹框：新增 */}
-      <AddModal visible={visibleAddModal}
-        onVisibleChange={setVisibleAddModal} />
-      {/* <ModalForm
-        title="新增"
-        width="400px"
-        visible={visibleAddModal}
-        onVisibleChange={setVisibleAddModal}
-        onFinish={async (value) => {
-          const success = await handleAdd(value as API.RuleListItem);
-
-          if (success) {
-            setVisibleAddModal(false);
-
-            if (actionRef.current) {
-              actionRef.current.reload();
-            }
-          }
-        }}
-      >
-        <ProFormText
-          rules={[
-            {
-              required: true,
-              message: '名字必填',
-            },
-          ]}
-          width="md"
-          name="name"
-        />
-        <ProFormTextArea width="md" name="desc" />
-      </ModalForm> */}
+      <AddModal visible={visibleAddModal} onVisibleChange={setVisibleAddModal} />
 
       {/* 弹框：编辑 */}
-      <EditModal
+      <EditModal values={currentRow || {}} visible={visibleEditModal} onVisibleChange={setVisibleEditModal} onOk={onEditOk} />
+
+      {/* <EditModal
         onSubmit={async (value) => {
           const success = await handleUpdate(value);
 
@@ -232,7 +193,7 @@ const TableList: React.FC = () => {
         }}
         updateModalVisible={visibleEditModal}
         values={currentRow || {}}
-      />
+      /> */}
     </PageContainer>
   );
 };

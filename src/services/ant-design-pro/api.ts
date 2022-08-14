@@ -60,16 +60,17 @@ export async function rule(
   });
 }
 
-/** 新建规则 PUT /api/rule */
-export async function updateRule(options?: { [key: string]: any }) {
-  return request<API.RuleListItem>('/api/rule', {
+/** 编辑规则 PUT /api/vip/info/{id} */
+export async function editVip(params?: { [key: string]: any }, options?: { [key: string]: any }) {
+  return request<API.RuleListItem>(`/api/vip/info/${params.id}`, {
     method: 'PUT',
+    data: params,
     ...(options || {}),
   });
 }
 
 /** 新增会员卡 POST /api/vip/info/add */
-export async function addRule(params?: { [key: string]: any }, options?: { [key: string]: any }) {
+export async function addVip(params?: { [key: string]: any }, options?: { [key: string]: any }) {
   return request<API.RuleListItem>('/api/vip/info/add', {
     method: 'POST',
     data: params,
