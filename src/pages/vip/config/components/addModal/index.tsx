@@ -2,9 +2,10 @@ import React from 'react';
 import {
   ModalForm,
   ProFormText,
+  ProFormDigit,
 } from '@ant-design/pro-components';
 import { message } from 'antd';
-import { addVip } from '@/services/ant-design-pro/api';
+import { addVipConfig } from '@/services/ant-design-pro/api';
 
 interface IProps {
   visible: boolean;
@@ -19,7 +20,7 @@ const AddModal: React.FC<IProps> = (props) => {
     const hide = message.loading('正在新增');
 
     try {
-      await addVip(params);
+      await addVipConfig(params);
       hide();
       message.success('新增成功!');
       return true;
@@ -32,7 +33,7 @@ const AddModal: React.FC<IProps> = (props) => {
 
   return (
     <ModalForm
-      title="新增会员卡"
+      title="新增等级配置"
       visible={visible}
       onVisibleChange={onVisibleChange}
       onFinish={async (value) => {
@@ -46,38 +47,109 @@ const AddModal: React.FC<IProps> = (props) => {
       }}
     >
       <ProFormText
-        label="名字"
+        label="等级名称"
         rules={[
           {
             required: true,
-            message: '名字必填!',
+            message: '等级名称必填!',
           },
         ]}
         width="md"
-        name="ownerName"
+        name="levelName"
       />
 
-      <ProFormText
-        label="手机号"
+      <ProFormDigit
+        label="最低充值条件"
         rules={[
           {
             required: true,
-            message: '手机号必填!',
+            message: '最低充值条件必填!',
           },
         ]}
         width="md"
-        name="mobileNumber"
+        addonAfter="元"
+        fieldProps={{controls: false}}
+        name="minimumRechargeAmount"
+      />
+      <ProFormDigit
+        label="会员折扣"
+        rules={[
+          {
+            required: true,
+            message: '会员折扣必填!',
+          },
+        ]}
+        width="md"
+        addonAfter="折"
+        fieldProps={{controls: false}}
+        min={0}
+        max={10}
+        name="vipDiscount"
+      />
+      <ProFormDigit
+        label="会员日折扣"
+        rules={[
+          {
+            required: true,
+            message: '会员日折扣必填!',
+          },
+        ]}
+        width="md"
+        addonAfter="折"
+        fieldProps={{controls: false}}
+        min={0}
+        max={10}
+        name="vipDayDiscount"
+      />
+      <ProFormDigit
+        label="餐饮折扣"
+        rules={[
+          {
+            required: true,
+            message: '餐饮折扣必填!',
+          },
+        ]}
+        width="md"
+        addonAfter="折"
+        fieldProps={{controls: false}}
+        min={0}
+        max={10}
+        name="diningDiscount"
+      />
+      <ProFormDigit
+        label="温泉/乐园折扣"
+        rules={[
+          {
+            required: true,
+            message: '温泉/乐园折扣必填!',
+          },
+        ]}
+        width="md"
+        addonAfter="元（相比直客通价优惠）"
+        fieldProps={{controls: false}}
+        name="hotSpringOrParkDiscount"
       />
       <ProFormText
-        label="身份证号"
+        label="专享特权"
         rules={[
           {
             required: true,
-            message: '身份证号必填!',
+            message: '专享特权必填!',
           },
         ]}
         width="md"
-        name="identityNumber"
+        name="privilege"
+      />
+      <ProFormText
+        label="生日礼包"
+        rules={[
+          {
+            required: true,
+            message: '生日礼包必填!',
+          },
+        ]}
+        width="md"
+        name="birthdayPackage"
       />
     </ModalForm>
   );
