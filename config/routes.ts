@@ -6,7 +6,7 @@ export default [
     icon: 'crown',
     routes: [
       { path: '/vip/list', name: '会员列表', icon: 'smile', component: './vip/list' },
-      { path: '/vip/config', name: '等级配置', icon: 'smile', component: './Welcome' },
+      { path: '/vip/config', name: '等级配置', icon: 'smile', component: './vip/config' },
     ],
   },
   {
@@ -49,6 +49,6 @@ export default [
     layout: false,
     routes: [{ path: '/user/login', component: './user/Login' }, { component: './404' }],
   },
-  { path: '/', redirect: '/vip/list' },
+  { path: '/', redirect: '/vip/config' },
   { component: './404' },
 ];

@@ -40,7 +40,7 @@ export async function getNotices(options?: { [key: string]: any }) {
 }
 
 /** 查询会员卡列表 GET /api/vip/info/list */
-export async function rule(
+export async function getVipList(
   params: {
     // query
     /** 当前的页码 */
@@ -59,7 +59,7 @@ export async function rule(
   });
 }
 
-/** 编辑规则 PUT /api/vip/info/{id} */
+/** 编辑会员卡 PUT /api/vip/info/{id} */
 export async function editVip(params?: { [key: string]: any }, options?: { [key: string]: any }) {
   return request<API.RuleListItem>(`/api/vip/info/${params.id}`, {
     method: 'PUT',
@@ -77,7 +77,7 @@ export async function addVip(params?: { [key: string]: any }, options?: { [key: 
   });
 }
 
-/** 删除规则 DELETE /api/vip/info/{id} */
+/** 删除会员卡 DELETE /api/vip/info/{id} */
 export async function removeVip(params?: { [key: string]: any }, options?: { [key: string]: any }) {
   return request<Record<string, any>>(`/api/vip/info/${params.id}`, {
     method: 'DELETE',

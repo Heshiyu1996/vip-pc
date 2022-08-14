@@ -6,43 +6,9 @@ import {
   ProTable,
 } from '@ant-design/pro-components';
 import { Button, message } from 'antd';
-import { removeVip, getVipList } from '@/services/ant-design-pro/api';
 import EditModal from './components/editModal';
 import AddModal from './components/addModal';
-const mockLevelData = [
-  {
-    id: '0',
-    levelName: '普通用户',
-  },
-  {
-    id: '1',
-    levelName: '一级',
-  },
-  {
-    id: '2',
-    levelName: '二级',
-  },
-  {
-    id: '3',
-    levelName: '三级',
-  },
-  {
-    id: '4',
-    levelName: '四级',
-  },
-  {
-    id: '5',
-    levelName: '五级',
-  },
-];
-
-const LevelEnumConfig = (() => {
-  const map = {};
-  mockLevelData.forEach((item) => {
-    map[item.id] = item.levelName;
-  });
-  return map;
-})();
+import { removeVipConfig, getVipConfigList } from '@/services/ant-design-pro/api';
 
 // 删除指定行
 const handleRemove = async (selectedItem: API.RuleListItem) => {
@@ -50,15 +16,15 @@ const handleRemove = async (selectedItem: API.RuleListItem) => {
   if (!selectedItem) return true;
 
   try {
-    await removeVip({
+    await removeVipConfig({
       key: selectedItem.key,
     });
     hide();
-    message.success('Deleted successfully and will refresh soon');
+    message.success('删除成功!');
     return true;
   } catch (error) {
     hide();
-    message.error('Delete failed, please try again');
+    message.error('删除失败，请稍后重试!');
     return false;
   }
 };
@@ -82,44 +48,33 @@ const TableList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const columns: ProColumns<API.RuleListItem>[] = [
     {
-      title: '名字',
-      dataIndex: 'ownerName',
-      render: (dom, entity) => {
-        return (
-          <a
-            onClick={() => setCurrentRow(entity)}
-          >
-            {dom}
-          </a>
-        );
-      },
+      title: '卡类型编码',
+      dataIndex: 'id',
     },
     {
-      title: '手机号',
-      dataIndex: 'mobileNumber',
-      valueType: 'textarea',
+      title: '等级名称',
+      dataIndex: 'levelName',
     },
     {
-      title: '当前等级',
-      dataIndex: 'currentLevelCode',
-      hideInForm: true,
-      valueEnum: LevelEnumConfig,
-      renderText: (val: string) => LevelEnumConfig[val],
+      title: '最低充值条件',
+      dataIndex: 'minimumRechargeAmount',
+      renderText: (val: string) => `${val || '-'}元`,
     },
     {
-      title: '会员卡号',
-      dataIndex: 'cardId',
-      valueType: 'textarea',
+      title: '会员折扣',
+      dataIndex: 'vipDiscount',
     },
     {
-      title: '身份证号',
-      dataIndex: 'identityNumber',
-      valueType: 'textarea',
+      title: '会员日折扣',
+      dataIndex: 'vipDayDiscount',
     },
     {
-      title: '会员卡余额',
-      dataIndex: 'totalBalance',
-      valueType: 'textarea',
+      title: '餐饮折扣',
+      dataIndex: 'diningDiscount',
+    },
+    {
+      title: '温泉/乐园折扣(元)',
+      dataIndex: 'hotSpringOrParkDiscount',
     },
     {
       title: '操作',
@@ -145,9 +100,8 @@ const TableList: React.FC = () => {
         headerTitle="查询结果"
         actionRef={actionRef}
         rowKey="key"
-        search={{
-          labelWidth: 120,
-        }}
+        // 无查询表单
+        search={false}
         toolBarRender={() => [
           <Button
             type="primary"
@@ -159,7 +113,7 @@ const TableList: React.FC = () => {
             <PlusOutlined /> 新增
           </Button>,
         ]}
-        request={getVipList}
+        request={getVipConfigList}
         columns={columns}
       />
 
