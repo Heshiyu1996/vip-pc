@@ -35,11 +35,19 @@ declare namespace API {
   };
 
   type RuleListItem = {
+    id?: number;
+    ownerName?: string;
+    mobileNumber?: string;
+    identityNumber?: string;
+    totalBalance?: number;
+    currentLevelCode?: number;
+    cardId?: string;
+
     key?: number;
     disabled?: boolean;
     href?: string;
     avatar?: string;
-    name?: string;
+    // name?: string;
     owner?: string;
     desc?: string;
     callNo?: number;

@@ -9,6 +9,14 @@ const genList = (current: number, pageSize: number) => {
   for (let i = 0; i < pageSize; i += 1) {
     const index = (current - 1) * 10 + i;
     tableListDataSource.push({
+      id: index,
+      ownerName: `TradeCode ${index}`,
+      mobileNumber: '15602327855',
+      identityNumber: '441725199001012222',
+      totalBalance: 10000,
+      currentLevelCode: i % 6,
+      cardId: Math.floor(Math.random() * 1000),
+
       key: index,
       disabled: i % 6 === 0,
       href: 'https://ant.design',
@@ -16,10 +24,8 @@ const genList = (current: number, pageSize: number) => {
         'https://gw.alipayobjects.com/zos/rmsportal/eeHMaZBwmTvLdIwMfBpg.png',
         'https://gw.alipayobjects.com/zos/rmsportal/udxAbMEhpwthVVcjLXik.png',
       ][i % 2],
-      name: `TradeCode ${index}`,
       owner: '曲丽丽',
       desc: '这是一段描述',
-      callNo: Math.floor(Math.random() * 1000),
       status: Math.floor(Math.random() * 10) % 4,
       updatedAt: moment().format('YYYY-MM-DD'),
       createdAt: moment().format('YYYY-MM-DD'),

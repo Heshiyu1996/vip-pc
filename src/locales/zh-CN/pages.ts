@@ -1,4 +1,9 @@
 export default {
+  'pages.vipList.updateForm.ruleName.ownerName': '名字',
+  'pages.vipList.updateForm.ruleName.mobileNumber': '手机号',
+  'pages.vipList.updateForm.ruleName.nameRules': '请输入名字！',
+  'pages.vipList.mobileNumber': '手机号',
+
   'pages.layouts.userLayout.title': 'Ant Design 是西湖区最具影响力的 Web 设计规范',
   'pages.login.accountLogin.tab': '账户密码登录',
   'pages.login.accountLogin.errorMessage': '错误的用户名和密码(admin/ant.design)',
@@ -29,7 +34,7 @@ export default {
   'pages.searchTable.createForm.newRule': '新建规则',
   'pages.searchTable.updateForm.ruleConfig': '规则配置',
   'pages.searchTable.updateForm.basicConfig': '基本信息',
-  'pages.searchTable.updateForm.ruleName.nameLabel': '规则名称',
+  // 'pages.searchTable.updateForm.ruleName.nameLabel': '规则名称',
   'pages.searchTable.updateForm.ruleName.nameRules': '请输入规则名称！',
   'pages.searchTable.updateForm.ruleDesc.descLabel': '规则描述',
   'pages.searchTable.updateForm.ruleDesc.descPlaceholder': '请输入至少五个字符',
