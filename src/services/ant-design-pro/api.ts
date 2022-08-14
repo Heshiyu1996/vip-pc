@@ -68,10 +68,11 @@ export async function updateRule(options?: { [key: string]: any }) {
   });
 }
 
-/** 新建规则 POST /api/rule */
-export async function addRule(options?: { [key: string]: any }) {
-  return request<API.RuleListItem>('/api/rule', {
+/** 新增会员卡 POST /api/vip/info/add */
+export async function addRule(params?: { [key: string]: any }, options?: { [key: string]: any }) {
+  return request<API.RuleListItem>('/api/vip/info/add', {
     method: 'POST',
+    data: params,
     ...(options || {}),
   });
 }

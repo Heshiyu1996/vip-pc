@@ -1,17 +1,15 @@
-import { addRule, removeRule, rule, updateRule } from '@/services/ant-design-pro/api';
+import { removeRule, rule, updateRule } from '@/services/ant-design-pro/api';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import {
-  ModalForm,
   PageContainer,
-  ProFormText,
-  ProFormTextArea,
   ProTable,
 } from '@ant-design/pro-components';
 import { Button, message } from 'antd';
 import React, { useRef, useState } from 'react';
 import type { FormValueType } from './components/EditModal';
 import EditModal from './components/EditModal';
+import AddModal from './components/addModal';
 const mockLevelData = [
   {
     id: '0',
@@ -46,26 +44,6 @@ const LevelEnumConfig = (() => {
   });
   return map;
 })();
-/**
- * @en-US Add node
- * @zh-CN 添加节点
- * @param fields
- */
-
-const handleAdd = async (fields: API.RuleListItem) => {
-  const hide = message.loading('正在添加');
-
-  try {
-    await addRule({ ...fields });
-    hide();
-    message.success('Added successfully');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('Adding failed, please try again!');
-    return false;
-  }
-};
 /**
  * @en-US Update node
  * @zh-CN 更新节点
@@ -203,7 +181,9 @@ const TableList: React.FC = () => {
       />
 
       {/* 弹框：新增 */}
-      <ModalForm
+      <AddModal visible={visibleAddModal}
+        onVisibleChange={setVisibleAddModal} />
+      {/* <ModalForm
         title="新增"
         width="400px"
         visible={visibleAddModal}
@@ -231,7 +211,7 @@ const TableList: React.FC = () => {
           name="name"
         />
         <ProFormTextArea width="md" name="desc" />
-      </ModalForm>
+      </ModalForm> */}
 
       {/* 弹框：编辑 */}
       <EditModal

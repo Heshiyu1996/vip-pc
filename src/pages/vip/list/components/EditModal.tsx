@@ -1,63 +1,88 @@
+import { PlusOutlined } from '@ant-design/icons';
 import {
+  ModalForm,
+  ProForm,
+  ProFormDateRangePicker,
+  ProFormSelect,
   ProFormText,
-  ProFormTextArea,
 } from '@ant-design/pro-components';
-import { Modal } from 'antd';
-import React from 'react';
+import { Button, message } from 'antd';
 
-export type FormValueType = {
-  target?: string;
-  template?: string;
-  type?: string;
-  time?: string;
-  frequency?: string;
-} & Partial<API.RuleListItem>;
-
-export type UpdateFormProps = {
-  onCancel: (flag?: boolean, formVals?: FormValueType) => void;
-  onSubmit: (values: FormValueType) => Promise<void>;
-  updateModalVisible: boolean;
-  values: Partial<API.RuleListItem>;
+const waitTime = (time: number = 100) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(true);
+    }, time);
+  });
 };
 
-const EditModal: React.FC<UpdateFormProps> = (props) => {
+export default () => {
   return (
-    <Modal
-      width={640}
-      bodyStyle={{ padding: '32px 40px 48px' }}
-      destroyOnClose
-      title='规则配置'
-      visible={props.updateModalVisible}
-      onCancel={() => {
-        props.onCancel();
+    <ModalForm<{
+      name: string;
+      company: string;
+    }>
+      title="新建表单"
+      trigger={
+        <Button type="primary">
+          <PlusOutlined />
+          新建表单
+        </Button>
+      }
+      autoFocusFirstInput
+      modalProps={{
+        onCancel: () => console.log('run'),
+      }}
+      submitTimeout={2000}
+      onFinish={async (values) => {
+        await waitTime(2000);
+        console.log(values.name);
+        message.success('提交成功');
+        return true;
       }}
     >
-      <ProFormText
-        name="name"
-        label='名字'
-        width="md"
-        rules={[
-          {
-            required: true,
-            message: '请输入名字！',
-          },
-        ]}
-      />
-      <ProFormTextArea
-        name="desc"
-        width="md"
-        label='规则描述'
-        placeholder='请输入至少五个字符'
-        rules={[
-          {
-            required: true,
-            message: '请输入至少五个字符的规则描述！',
-            min: 5,
-          },
-        ]}
-      />
-    </Modal>
+      <ProForm.Group>
+        <ProFormText
+          width="md"
+          name="name"
+          label="签约客户名称"
+          tooltip="最长为 24 位"
+          placeholder="请输入名称"
+        />
+
+        <ProFormText width="md" name="company" label="我方公司名称" placeholder="请输入名称" />
+      </ProForm.Group>
+      <ProForm.Group>
+        <ProFormText width="md" name="contract" label="合同名称" placeholder="请输入名称" />
+        <ProFormDateRangePicker name="contractTime" label="合同生效时间" />
+      </ProForm.Group>
+      <ProForm.Group>
+        <ProFormSelect
+          request={async () => [
+            {
+              value: 'chapter',
+              label: '盖章后生效',
+            },
+          ]}
+          width="xs"
+          name="useMode"
+          label="合同约定生效方式"
+        />
+        <ProFormSelect
+          width="xs"
+          options={[
+            {
+              value: 'time',
+              label: '履行完终止',
+            },
+          ]}
+          name="unusedMode"
+          label="合同约定失效效方式"
+        />
+      </ProForm.Group>
+      <ProFormText width="sm" name="id" label="主合同编号" />
+      <ProFormText name="project" disabled label="项目名称" initialValue="xxxx项目" />
+      <ProFormText width="xs" name="mangerName" disabled label="商务经理" initialValue="启途" />
+    </ModalForm>
   );
 };
-
-export default EditModal;
