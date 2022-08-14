@@ -267,7 +267,7 @@
       "delete": {
         "tags": ["rule"],
         "description": "删除规则",
-        "operationId": "removeRule",
+        "operationId": "removeVip",
         "responses": {
           "200": {
             "description": "Success",

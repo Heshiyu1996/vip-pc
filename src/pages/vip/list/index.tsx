@@ -1,4 +1,4 @@
-import { removeRule, rule } from '@/services/ant-design-pro/api';
+import { removeVip, rule } from '@/services/ant-design-pro/api';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import {
@@ -55,7 +55,7 @@ const handleRemove = async (selectedItem: API.RuleListItem) => {
   if (!selectedItem) return true;
 
   try {
-    await removeRule({
+    await removeVip({
       key: selectedItem.key,
     });
     hide();
@@ -130,18 +130,16 @@ const TableList: React.FC = () => {
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => [
-        <a
-          key="config"
-          onClick={() => {
-            setVisibleEditModal(true);
-            setCurrentRow(record);
-          }}
-        >
+        <Button key='edit' type="link" size="small" onClick={() => {
+          setVisibleEditModal(true);
+          setCurrentRow(record);
+        }}>
           编辑
-        </a>,
-        <a key="subscribeAlert" onClick={() => handleRemove(record)}>
+        </Button>
+        ,
+        <Button key='remove' type="link" size="small" danger onClick={() => handleRemove(record)}>
           删除
-        </a>,
+        </Button>,
       ],
     },
   ];
