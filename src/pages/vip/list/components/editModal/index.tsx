@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import type { ProFormInstance, ActionType } from '@ant-design/pro-components';
+import type { ProFormInstance } from '@ant-design/pro-components';
 import {
   ModalForm,
   ProFormText,
@@ -11,6 +11,7 @@ interface IProps {
   values: { [key: string]: any };
   visible: boolean;
   onVisibleChange: React.Dispatch<React.SetStateAction<boolean>>;
+  onOk: () => void;
 }
 export type FormValueType = {
   ownerName: string;
@@ -19,10 +20,9 @@ export type FormValueType = {
 } & Partial<API.RuleListItem>;
 
 const EditModal: React.FC<IProps> = (props) => {
-  const { visible, onVisibleChange } = props;
+  const { visible, onVisibleChange, onOk } = props;
 
   const formRef = useRef<ProFormInstance>();
-  const actionRef = useRef<ActionType>();
 
   useEffect(() => {
     const values = {
@@ -35,7 +35,7 @@ const EditModal: React.FC<IProps> = (props) => {
   }, [props.values]);
 
   const handleEdit = async (fields: FormValueType) => {
-    const hide = message.loading('Configuring');
+    const hide = message.loading('正在更新');
 
     try {
       await editVip({
@@ -44,11 +44,11 @@ const EditModal: React.FC<IProps> = (props) => {
         identityNumber: fields.identityNumber,
       });
       hide();
-      message.success('Configuration is successful');
+      message.success('编辑成功!');
       return true;
     } catch (error) {
       hide();
-      message.error('Configuration failed, please try again!');
+      message.error('编辑失败，请稍后重试!');
       return false;
     }
   };
@@ -56,12 +56,6 @@ const EditModal: React.FC<IProps> = (props) => {
   return (
     <ModalForm
       formRef={formRef}
-      // initialValues={{
-      //   id: props.values.cardId,
-      //   ownerName: props.values.ownerName,
-      //   mobileNumber: props.values.mobileNumber,
-      //   identityNumber: props.values.identityNumber,
-      // }}
       title="编辑会员卡"
       visible={visible}
       onVisibleChange={onVisibleChange}
@@ -69,9 +63,7 @@ const EditModal: React.FC<IProps> = (props) => {
         const success = await handleEdit(value as API.RuleListItem);
         if (success) {
           onVisibleChange(false);
-          if (actionRef.current) {
-            actionRef.current.reload();
-          }
+          onOk();
         }
       }}
     >

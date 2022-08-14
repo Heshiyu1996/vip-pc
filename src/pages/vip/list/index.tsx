@@ -43,13 +43,8 @@ const LevelEnumConfig = (() => {
   });
   return map;
 })();
-/**
- * @en-US Update node
- * @zh-CN 更新节点
- *
- * @param fields
- */
 
+// 删除指定行
 const handleRemove = async (selectedItem: API.RuleListItem) => {
   const hide = message.loading('正在删除');
   if (!selectedItem) return true;
@@ -70,12 +65,15 @@ const handleRemove = async (selectedItem: API.RuleListItem) => {
 
 const TableList: React.FC = () => {
   const [visibleAddModal, setVisibleAddModal] = useState<boolean>(false);
+
   const [visibleEditModal, setVisibleEditModal] = useState<boolean>(false);
   const [currentRow, setCurrentRow] = useState<API.RuleListItem>();
   const onEditOk = () => {
     setVisibleEditModal(false);
     setCurrentRow(undefined);
-
+    handleReload();
+  }
+  const handleReload = () => {
     if (actionRef.current) {
       actionRef.current.reload();
     }
@@ -89,9 +87,7 @@ const TableList: React.FC = () => {
       render: (dom, entity) => {
         return (
           <a
-            onClick={() => {
-              setCurrentRow(entity); // setShowDetail(true);
-            }}
+            onClick={() => setCurrentRow(entity)}
           >
             {dom}
           </a>
@@ -168,30 +164,10 @@ const TableList: React.FC = () => {
       />
 
       {/* 弹框：新增 */}
-      <AddModal visible={visibleAddModal} onVisibleChange={setVisibleAddModal} />
+      <AddModal visible={visibleAddModal} onVisibleChange={setVisibleAddModal} onOk={handleReload} />
 
       {/* 弹框：编辑 */}
       <EditModal values={currentRow || {}} visible={visibleEditModal} onVisibleChange={setVisibleEditModal} onOk={onEditOk} />
-
-      {/* <EditModal
-        onSubmit={async (value) => {
-          const success = await handleUpdate(value);
-
-          if (success) {
-            setVisibleEditModal(false);
-            setCurrentRow(undefined);
-
-            if (actionRef.current) {
-              actionRef.current.reload();
-            }
-          }
-        }}
-        onCancel={() => {
-          setVisibleEditModal(false);
-        }}
-        updateModalVisible={visibleEditModal}
-        values={currentRow || {}}
-      /> */}
     </PageContainer>
   );
 };

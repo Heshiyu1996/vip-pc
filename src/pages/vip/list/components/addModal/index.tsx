@@ -1,5 +1,4 @@
-import React, { useRef } from 'react';
-import type { ActionType } from '@ant-design/pro-components';
+import React from 'react';
 import {
   ModalForm,
   ProFormText,
@@ -10,24 +9,23 @@ import { addVip } from '@/services/ant-design-pro/api';
 interface IProps {
   visible: boolean;
   onVisibleChange: React.Dispatch<React.SetStateAction<boolean>>;
+  onOk: () => void;
 }
 
 const AddModal: React.FC<IProps> = (props) => {
-  const { visible, onVisibleChange } = props;
-
-  const actionRef = useRef<ActionType>();
+  const { visible, onVisibleChange, onOk } = props;
   // 新增
   const handleAdd = async (params: API.RuleListItem) => {
-    const hide = message.loading('正在添加');
+    const hide = message.loading('正在新增');
 
     try {
       await addVip(params);
       hide();
-      message.success('Added successfully');
+      message.success('新增成功!');
       return true;
     } catch (error) {
       hide();
-      message.error('Adding failed, please try again!');
+      message.error('新增失败，请稍后重试!');
       return false;
     }
   };
@@ -41,8 +39,8 @@ const AddModal: React.FC<IProps> = (props) => {
         const success = await handleAdd(value as API.RuleListItem);
         if (success) {
           onVisibleChange(false);
-          if (actionRef.current) {
-            actionRef.current.reload();
+          if (onOk) {
+            onOk();
           }
         }
       }}
