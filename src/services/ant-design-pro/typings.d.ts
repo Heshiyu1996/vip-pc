@@ -101,6 +101,27 @@ declare namespace API {
     imageList?: string[];
   };
 
+  type RechargeList = {
+    data?: RechargeListItem[];
+    /** 列表的内容总数 */
+    total?: number;
+    success?: boolean;
+  };
+
+  type RechargeListItem = {
+    amount?: number;
+    cardId?: string;
+    /**
+     * 充值渠道（0：微信；1：线下）
+     */
+    channel?:    number;
+    createTime?: number;
+    /**
+     * 流水号
+     */
+    id?:   string;
+    name?: string;
+  };
   type FakeCaptcha = {
     code?: number;
     status?: string;
