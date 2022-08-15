@@ -17,7 +17,7 @@ const handleRemove = async (selectedItem: API.RuleListItem) => {
 
   try {
     await removeVipConfig({
-      key: selectedItem.key,
+      id: selectedItem.id,
     });
     hide();
     message.success('删除成功!');

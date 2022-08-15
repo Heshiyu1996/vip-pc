@@ -42,13 +42,13 @@ export default [
     name: '店铺管理',
     icon: 'crown',
     access: 'canAdmin',
-    routes: [{ path: '/store/config', name: '店铺配置', icon: 'smile', component: './Welcome' }],
+    routes: [{ path: '/store/config', name: '店铺配置', icon: 'smile', component: './store/config' }],
   },
   {
     path: '/user',
     layout: false,
     routes: [{ path: '/user/login', component: './user/Login' }, { component: './404' }],
   },
-  { path: '/', redirect: '/vip/config' },
+  { path: '/', redirect: '/store/config' },
   { component: './404' },
 ];

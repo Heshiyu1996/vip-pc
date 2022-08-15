@@ -238,8 +238,19 @@ function editVip(req: Request, res: Response, u: string, b: Request) {
   res.json(result);
 }
 
+function deleteVip(req: Request, res: Response, u: string, b: Request) {
+  const result = {
+    success: true,
+    message: '删除成功',
+    data: {}
+  };
+
+  res.json(result);
+}
+
 export default {
   'GET /api/vip/info/list': getVipList,
   'POST /api/vip/info/add': addVip,
   'PUT /api/vip/info/*': editVip,
+  'DELETE /api/vip/info/*': deleteVip,
 };

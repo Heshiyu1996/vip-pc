@@ -51,14 +51,14 @@ const handleRemove = async (selectedItem: API.RuleListItem) => {
 
   try {
     await removeVip({
-      key: selectedItem.key,
+      id: selectedItem.id,
     });
     hide();
-    message.success('Deleted successfully and will refresh soon');
+    message.success('删除成功!');
     return true;
   } catch (error) {
     hide();
-    message.error('Delete failed, please try again');
+    message.error('删除失败，请稍后重试!');
     return false;
   }
 };
@@ -68,18 +68,18 @@ const TableList: React.FC = () => {
 
   const [visibleEditModal, setVisibleEditModal] = useState<boolean>(false);
   const [currentRow, setCurrentRow] = useState<API.RuleListItem>();
-  const onEditOk = () => {
-    setVisibleEditModal(false);
-    setCurrentRow(undefined);
-    handleReload();
-  }
+  const actionRef = useRef<ActionType>();
   const handleReload = () => {
     if (actionRef.current) {
       actionRef.current.reload();
     }
   }
+  const onEditOk = () => {
+    setVisibleEditModal(false);
+    setCurrentRow(undefined);
+    handleReload();
+  }
 
-  const actionRef = useRef<ActionType>();
   const columns: ProColumns<API.RuleListItem>[] = [
     {
       title: '名字',

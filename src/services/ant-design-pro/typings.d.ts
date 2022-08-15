@@ -65,7 +65,7 @@ declare namespace API {
   };
 
   type VipConfigListItem = {
-    birthdayPackage?:         string;
+    birthdayPackage?:         string | string[];
     createTime?:              string;
     diningDiscount?:          number;
     hotSpringOrParkDiscount?: number;
@@ -79,6 +79,19 @@ declare namespace API {
     vipDayDiscount?:          number;
     vipDiscount?:             number;
     key?: number;
+  };
+
+  type StoreConfigList = {
+    success?: boolean;
+    data?: StoreConfigListItem[];
+    /** 列表的内容总数 */
+    total?: number;
+  };
+  type StoreConfigListItem = {
+    id?: string;
+    label?: string;
+    value?: string;
+    imageList?: string[];
   };
   type VipConfigList = {
     data?: VipConfigListItem[];

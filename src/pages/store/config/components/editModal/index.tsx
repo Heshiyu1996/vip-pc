@@ -5,7 +5,7 @@ import {
   ProFormText,
 } from '@ant-design/pro-components';
 import { message } from 'antd';
-import { editVipConfig } from '@/services/ant-design-pro/api';
+import { editStoreConfig } from '@/services/ant-design-pro/api';
 
 interface IProps {
   values: { [key: string]: any };
@@ -38,7 +38,7 @@ const EditModal: React.FC<IProps> = (props) => {
     const hide = message.loading('正在更新');
 
     try {
-      await editVipConfig({
+      await editStoreConfig({
         ownerName: fields.ownerName,
         mobileNumber: fields.mobileNumber,
         identityNumber: fields.identityNumber,
@@ -56,7 +56,7 @@ const EditModal: React.FC<IProps> = (props) => {
   return (
     <ModalForm
       formRef={formRef}
-      title="编辑等级配置"
+      title="编辑店铺配置"
       visible={visible}
       onVisibleChange={onVisibleChange}
       onFinish={async (value) => {

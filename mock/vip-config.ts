@@ -249,8 +249,19 @@ function editVipConfig(req: Request, res: Response, u: string, b: Request) {
   res.json(result);
 }
 
+function removeVipConfig(req: Request, res: Response, u: string, b: Request) {
+  const result = {
+    success: true,
+    message: '删除成功',
+    data: {}
+  };
+
+  res.json(result);
+}
+
 export default {
-  'GET /api/vip/config/list': getVipConfigList,
-  'POST /api/vip/config/add': addVipConfig,
-  'PUT /api/vip/config/*': editVipConfig,
+  'GET /api/vip/level/list': getVipConfigList,
+  'POST /api/vip/level/add': addVipConfig,
+  'PUT /api/vip/level/*': editVipConfig,
+  'DELETE /api/vip/level/*': removeVipConfig,
 };
