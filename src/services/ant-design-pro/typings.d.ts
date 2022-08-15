@@ -64,6 +64,13 @@ declare namespace API {
     success?: boolean;
   };
 
+  type VipConfigList = {
+    data?: VipConfigListItem[];
+    /** 列表的内容总数 */
+    total?: number;
+    success?: boolean;
+  };
+
   type VipConfigListItem = {
     birthdayPackage?:         string | string[];
     createTime?:              string;
@@ -92,12 +99,6 @@ declare namespace API {
     label?: string;
     value?: string;
     imageList?: string[];
-  };
-  type VipConfigList = {
-    data?: VipConfigListItem[];
-    /** 列表的内容总数 */
-    total?: number;
-    success?: boolean;
   };
 
   type FakeCaptcha = {
