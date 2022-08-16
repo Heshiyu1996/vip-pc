@@ -44,17 +44,6 @@ declare namespace API {
     cardId?: string;
 
     key?: number;
-    // disabled?: boolean;
-    // href?: string;
-    // avatar?: string;
-    // // name?: string;
-    // owner?: string;
-    // desc?: string;
-    // callNo?: number;
-    // status?: number;
-    // updatedAt?: string;
-    // createdAt?: string;
-    // progress?: number;
   };
 
   type RuleList = {
@@ -121,6 +110,41 @@ declare namespace API {
      */
     id?:   string;
     name?: string;
+  };
+
+  type RoomArrangeList = {
+    data?: RoomArrangeListItem[];
+    /** 列表的内容总数 */
+    total?: number;
+    success?: boolean;
+  };
+
+  type RoomArrangeListItem = {
+    /**
+     * 客房图片
+     */
+     imagesList?: string[];
+     /**
+      * 当前剩余
+      */
+     restCount: number;
+     /**
+      * 客房编码
+      */
+     roomId: string;
+     /**
+      * 客房类型
+      */
+     roomType:   string;
+     totalCount: number;
+     /**
+      * 预定情况
+      */
+     orderList?: {
+      endTime:   number;
+      orderId:   string;
+      startTime: number;
+     }[];
   };
   type FakeCaptcha = {
     code?: number;
