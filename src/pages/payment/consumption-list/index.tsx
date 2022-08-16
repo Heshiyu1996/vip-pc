@@ -5,7 +5,7 @@ import {
   ProTable,
 } from '@ant-design/pro-components';
 import { Button, message } from 'antd';
-import { removeRechargeList, getRechargeList, exportRechargeList } from '@/services/ant-design-pro/api';
+import { removeConsumptionList, getConsumptionList, exportConsumptionList } from '@/services/ant-design-pro/api';
 import moment from 'moment';
 import { download } from '@/common/tools';
 import EditModal from './components/editModal';
@@ -36,7 +36,7 @@ const handleRemove = async (selectedItem: API.RuleListItem) => {
   if (!selectedItem) return true;
 
   try {
-    await removeRechargeList({
+    await removeConsumptionList({
       id: selectedItem.id,
     });
     hide();
@@ -50,7 +50,7 @@ const handleRemove = async (selectedItem: API.RuleListItem) => {
   }
 };
 
-const RechargeList: React.FC = () => {
+const ConsumptionList: React.FC = () => {
   const [visibleAddModal, setVisibleAddModal] = useState<boolean>(false);
 
   const [visibleEditModal, setVisibleEditModal] = useState<boolean>(false);
@@ -68,7 +68,7 @@ const RechargeList: React.FC = () => {
     const params = formRef.current?.getFieldsValue();
     
     try {
-      const res = await exportRechargeList(params);
+      const res = await exportConsumptionList(params);
       console.log(res, 33);
       const { data } = res || {};
       if (!data) throw new Error();
@@ -163,7 +163,7 @@ const RechargeList: React.FC = () => {
             导出
           </Button>,
         ]}
-        request={getRechargeList}
+        request={getConsumptionList}
         columns={columns}
       />
 
@@ -176,4 +176,4 @@ const RechargeList: React.FC = () => {
   );
 };
 
-export default RechargeList;
+export default ConsumptionList;

@@ -21,7 +21,7 @@ export default [
         path: '/payment/consumption-list',
         name: '消费记录',
         icon: 'smile',
-        component: './Welcome',
+        component: './payment/consumption-list',
       },
     ],
   },
@@ -49,6 +49,6 @@ export default [
     layout: false,
     routes: [{ path: '/user/login', component: './user/Login' }, { component: './404' }],
   },
-  { path: '/', redirect: '/payment/recharge-list' },
+  { path: '/', redirect: '/payment/consumption-list' },
   { component: './404' },
 ];
