@@ -18,7 +18,7 @@ export type FormValueType = {
   message?: string;
 } & Partial<API.RuleListItem>;
 
-const EditModal: React.FC<IProps> = (props) => {
+const ConfirmModal: React.FC<IProps> = (props) => {
   const { visible, onVisibleChange, onOk } = props;
   const [visibleMessage, setVisibleMessage] = useState(true);
 
@@ -90,4 +90,4 @@ const EditModal: React.FC<IProps> = (props) => {
   );
 };
 
-export default EditModal;
+export default ConfirmModal;

@@ -5,9 +5,9 @@ import {
   ProTable,
 } from '@ant-design/pro-components';
 import { Button, message } from 'antd';
-import EditModal from './components/editModal';
-import AddModal from './components/addModal';
-import { getRoomRefundList, rejectRoomRefund, exportRoomRefund } from '@/services/ant-design-pro/api';
+import ConfirmModal from './components/confirmModal';
+import RejectModal from './components/rejectModal';
+import { getRoomRefundList, exportRoomRefund } from '@/services/ant-design-pro/api';
 import { download } from '@/common/tools';
 import './index.less';
 
@@ -53,32 +53,13 @@ const StatusEnumConfig = (() => {
   return map;
 })();
 
-// 删除指定行
-const handleReject = async (selectedItem: API.RoomRefundListItem) => {
-  const hide = message.loading('正在拒绝');
-  if (!selectedItem) return true;
-
-  try {
-    await rejectRoomRefund({
-      id: selectedItem.orderId,
-    });
-    hide();
-    message.success('拒绝成功!');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('拒绝失败，请稍后重试!');
-    return false;
-  }
-};
-
 const RoomRefund: React.FC = () => {
-  const [visibleAddModal, setVisibleAddModal] = useState<boolean>(false);
+  const [visibleRejectModal, setVisibleRejectModal] = useState<boolean>(false);
 
-  const [visibleEditModal, setVisibleEditModal] = useState<boolean>(false);
+  const [visibleConfirmModal, setVisibleConfirmModal] = useState<boolean>(false);
   const [currentRow, setCurrentRow] = useState<API.RoomRefundListItem>();
   const onEditOk = () => {
-    setVisibleEditModal(false);
+    setVisibleConfirmModal(false);
     setCurrentRow(undefined);
     handleReload();
   }
@@ -161,13 +142,16 @@ const RoomRefund: React.FC = () => {
 
         return [
           <Button key='edit' type="link" size="small" onClick={() => {
-            setVisibleEditModal(true);
+            setVisibleConfirmModal(true);
             setCurrentRow(record);
           }}>
             同意
           </Button>
           ,
-          <Button key='remove' type="link" size="small" danger onClick={() => handleReject(record)}>
+          <Button key='remove' type="link" size="small" danger onClick={() => {
+            setVisibleRejectModal(true);
+            setCurrentRow(record);
+          }}>
             拒绝
           </Button>,
         ]
@@ -191,11 +175,12 @@ const RoomRefund: React.FC = () => {
         columns={columns}
       />
 
-      {/* 弹框：新增 */}
-      <AddModal visible={visibleAddModal} onVisibleChange={setVisibleAddModal} onOk={handleReload} />
 
-      {/* 弹框：编辑 */}
-      <EditModal values={currentRow || {}} visible={visibleEditModal} onVisibleChange={setVisibleEditModal} onOk={onEditOk} />
+      {/* 弹框：同意 */}
+      <ConfirmModal values={currentRow || {}} visible={visibleConfirmModal} onVisibleChange={setVisibleConfirmModal} onOk={onEditOk} />
+
+      {/* 弹框：拒绝 */}
+      <RejectModal values={currentRow || {}} visible={visibleRejectModal} onVisibleChange={setVisibleRejectModal} onOk={onEditOk} />
     </PageContainer>
   );
 };
