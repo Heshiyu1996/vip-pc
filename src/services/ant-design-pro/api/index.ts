@@ -4,4 +4,5 @@ export * from './store-config';
 export * from './recharge-list';
 export * from './consumption-list';
 export * from './room-arrange';
+export * from './room-order';
 export * from './room-refund';

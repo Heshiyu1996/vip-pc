@@ -147,7 +147,6 @@ declare namespace API {
      }[];
   };
 
-
   type RoomRefundList = {
     data?: RoomRefundListItem[];
     /** 列表的内容总数 */
@@ -198,6 +197,56 @@ declare namespace API {
     statusRefund: string;
   };
 
+  type RoomOrderList = {
+    data?: RoomOrderListItem[];
+    /** 列表的内容总数 */
+    total?: number;
+    success?: boolean;
+  };
+
+  type RoomOrderListItem = {
+    /**
+     * 会员卡号
+     */
+    cardNo: string;
+    /**
+     * 创建时间
+     */
+    createTime: number;
+    /**
+     * 预订天数
+     */
+    days: number;
+    /**
+     * 名字
+     */
+    name: string;
+    /**
+     * 预订渠道
+     */
+    orderChannel: string;
+    /**
+     * 订单号
+     */
+    orderId: string;roomType
+    /**
+     * 订单状态
+     */
+    orderStatus?: string;
+    /**
+     * 客房类型
+     */
+    roomType?: string;
+    /**
+     * 预订开始时间
+     */
+    orderStartTime: number;
+    /**
+     * 预订结束时间
+     */
+    orderEndTime: number;
+};
+  
   type FakeCaptcha = {
     code?: number;
     status?: string;
