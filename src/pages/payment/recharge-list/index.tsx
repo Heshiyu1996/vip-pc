@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import type { ActionType, ProColumns, ProFormInstance } from '@ant-design/pro-components';
 import {
   PageContainer,
@@ -7,9 +7,12 @@ import {
 import { Button, message } from 'antd';
 import { removeRechargeList, getRechargeList, exportRechargeList } from '@/services/ant-design-pro/api';
 import moment from 'moment';
-import { download } from '@/common/tools';
+import { download, getParams } from '@/common/tools';
 import EditModal from './components/editModal';
 import AddModal from './components/addModal';
+
+// url携带参数时的查找逻辑
+const urlCardId = getParams('cardId');
 
 const mocChannelData = [
   {
@@ -69,7 +72,6 @@ const RechargeList: React.FC = () => {
     
     try {
       const res = await exportRechargeList(params);
-      console.log(res, 33);
       const { data } = res || {};
       if (!data) throw new Error();
       download('', data);
@@ -148,6 +150,13 @@ const RechargeList: React.FC = () => {
       ,
     },
   ];
+
+  useEffect(() => {
+    if (urlCardId) {
+      formRef.current?.setFieldValue('cardId', urlCardId);
+    }
+  }, []);
+
   return (
     <PageContainer>
       <ProTable<API.RuleListItem, API.PageParams>
@@ -157,6 +166,9 @@ const RechargeList: React.FC = () => {
         formRef={formRef}
         search={{
           labelWidth: 120,
+        }}
+        params={{
+          cardId: urlCardId
         }}
         toolBarRender={() => [
           <Button key="primary" onClick={handleExport}>

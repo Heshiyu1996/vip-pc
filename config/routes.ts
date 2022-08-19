@@ -15,7 +15,7 @@ export default [
     icon: 'crown',
     access: 'canAdmin',
     routes: [
-      { path: '/payment/recharge', name: '充值', icon: 'smile', component: './Welcome' },
+      { path: '/payment/recharge', name: '充值', icon: 'smile', component: './payment/recharge' },
       { path: '/payment/recharge-list', name: '充值记录', icon: 'smile', component: './payment/recharge-list' },
       {
         path: '/payment/consumption-list',
@@ -49,6 +49,6 @@ export default [
     layout: false,
     routes: [{ path: '/user/login', component: './user/Login' }, { component: './404' }],
   },
-  { path: '/', redirect: '/room/order' },
+  { path: '/', redirect: '/payment/recharge' },
   { component: './404' },
 ];

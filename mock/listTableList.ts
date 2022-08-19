@@ -14,6 +14,7 @@ const genList = (current: number, pageSize: number) => {
       mobileNumber: '15602327855',
       identityNumber: '441725199001012222',
       totalBalance: 10000,
+      giftBalance: 800,
       currentLevelCode: i % 6,
       cardId: Math.floor(Math.random() * 1000),
 
