@@ -3,9 +3,13 @@ import type { ProFormInstance } from '@ant-design/pro-components';
 import {
   ModalForm,
   ProFormText,
+  ProFormRadio,
+  ProFormUploadButton,
+  ProFormDigit,
+  ProFormTextArea,
 } from '@ant-design/pro-components';
 import { message } from 'antd';
-import { editVipConfig } from '@/services/ant-design-pro/api';
+import { editRoomConfig } from '@/services/ant-design-pro/api';
 
 interface IProps {
   values: { [key: string]: any };
@@ -14,10 +18,20 @@ interface IProps {
   onOk: () => void;
 }
 export type FormValueType = {
-  ownerName: string;
-  mobileNumber: string;
-  identityNumber: string;
-} & Partial<API.RuleListItem>;
+  id:           string;
+  amount:       number;
+  images:       string[];
+  policyDesc:   string;
+  price:        number;
+  roomFacility: string;
+  roomType:     string;
+  vipDiscount:  boolean;
+};
+
+const FormLayout = {
+  labelCol: { span: 6 },
+  wrapperCol: { span: 18 },
+}
 
 const EditModal: React.FC<IProps> = (props) => {
   const { visible, onVisibleChange, onOk } = props;
@@ -26,10 +40,14 @@ const EditModal: React.FC<IProps> = (props) => {
 
   useEffect(() => {
     const values = {
-      id: props.values.cardId,
-      ownerName: props.values.ownerName,
-      mobileNumber: props.values.mobileNumber,
-      identityNumber: props.values.identityNumber,
+      id: props.values.id,
+      roomType: props.values.roomType,
+      price: props.values.price,
+      vipDiscount: props.values.vipDiscount,
+      images: props.values.images,
+      amount: props.values.amount,
+      roomFacility: props.values.roomFacility,
+      policyDesc: props.values.policyDesc,
     }
     formRef?.current?.setFieldsValue(values);
   }, [props.values]);
@@ -38,10 +56,15 @@ const EditModal: React.FC<IProps> = (props) => {
     const hide = message.loading('正在更新');
 
     try {
-      await editVipConfig({
-        ownerName: fields.ownerName,
-        mobileNumber: fields.mobileNumber,
-        identityNumber: fields.identityNumber,
+      await editRoomConfig({
+        id: fields.id,
+        roomType: fields.roomType,
+        price: fields.price,
+        vipDiscount: fields.vipDiscount,
+        images: fields.images,
+        amount: fields.amount,
+        roomFacility: fields.roomFacility,
+        policyDesc: fields.policyDesc,
       });
       hide();
       message.success('编辑成功!');
@@ -56,11 +79,14 @@ const EditModal: React.FC<IProps> = (props) => {
   return (
     <ModalForm
       formRef={formRef}
-      title="编辑等级配置"
+      title="编辑客房配置"
+      width={550}
+      {...FormLayout}
+      layout="horizontal"
       visible={visible}
       onVisibleChange={onVisibleChange}
       onFinish={async (value) => {
-        const success = await handleEdit(value as API.RuleListItem);
+        const success = await handleEdit(value);
         if (success) {
           onVisibleChange(false);
           onOk();
@@ -69,49 +95,108 @@ const EditModal: React.FC<IProps> = (props) => {
     >
       <ProFormText
         disabled
-        label="会员卡号"
+        label="客房编码"
         rules={[
           {
             required: true,
-            message: '会员卡号必填!',
+            message: '客房编码必填!',
           },
         ]}
         width="md"
         name="id"
       />
       <ProFormText
-        label="名字"
+        label="客房类型"
         rules={[
           {
             required: true,
-            message: '名字必填!',
+            message: '客房类型必填!',
           },
         ]}
         width="md"
-        name="ownerName"
+        name="roomType"
       />
 
-      <ProFormText
-        label="手机号"
+      <ProFormDigit
+        label="单日价格"
         rules={[
           {
             required: true,
-            message: '手机号必填!',
+            message: '单日价格必填!',
           },
         ]}
         width="md"
-        name="mobileNumber"
+        addonAfter="元"
+        fieldProps={{controls: false}}
+        min={0}
+        name="price"
       />
-      <ProFormText
-        label="身份证号"
+
+      <ProFormRadio.Group
+        name="vipDiscount"
+        label="是否参与会员优惠"
+        options={[
+          {
+            value: true,
+            label: '是',
+          },
+          {
+            value: false,
+            label: '否',
+          },
+        ]}
+      />
+
+      {/* TODO: 上传相关还没有处理 */}
+      <ProFormUploadButton
+        extra="支持扩展名：.jpg .png"
+        label="客房图片"
         rules={[
           {
             required: true,
-            message: '身份证号必填!',
+            message: '客房图片必填!',
+          },
+        ]}
+        title="上传文件"
+        listType="picture-card"
+        name="images"
+        max={10}
+      />
+
+      <ProFormDigit
+        label="数量"
+        rules={[
+          {
+            required: true,
+            message: '数量必填!',
           },
         ]}
         width="md"
-        name="identityNumber"
+        addonAfter="间"
+        fieldProps={{controls: false}}
+        name="amount"
+      />
+      <ProFormTextArea
+        label="房间设施"
+        rules={[
+          {
+            required: true,
+            message: '房间设施必填!',
+          },
+        ]}
+        width="sm"
+        name="roomFacility"
+      />
+      <ProFormTextArea
+        label="入住及取消政策"
+        rules={[
+          {
+            required: true,
+            message: '入住及取消政策必填!',
+          },
+        ]}
+        width="sm"
+        name="policyDesc"
       />
     </ModalForm>
   );

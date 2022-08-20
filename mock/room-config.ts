@@ -13,10 +13,7 @@ const genList = (current: number, pageSize: number) => {
           "id": index,
           "amount": index,
           "images": [
-              "http://dummyimage.com/400x400",
-              "http://dummyimage.com/400x400",
-              "http://dummyimage.com/400x400",
-              "http://dummyimage.com/400x400"
+            "http://dummyimage.com/400x400",
           ],
           "roomType": "ea cupidatat labore deserunt sunt",
           "price": index,

@@ -155,18 +155,18 @@ declare namespace API {
   };
 
   type RoomConfigListItem = {
-    amount?:       number;
-    createTime?:   string;
-    id?:           number;
-    images?:       null;
-    isDelete?:     number;
-    policyDesc?:   string;
-    price?:        number;
-    roomFacility?: string;
-    roomType?:     string;
-    updater?:      string;
-    updateTime?:   string;
-    vipDiscount?:  null;
+    amount:       number;
+    createTime:   string;
+    id:           number;
+    images:       string[];
+    isDelete:     number;
+    policyDesc:   string;
+    price:        number;
+    roomFacility: string;
+    roomType:     string;
+    updater:      string;
+    updateTime:   string;
+    vipDiscount:  null;
 }
 
   type RoomRefundList = {

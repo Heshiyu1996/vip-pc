@@ -3,10 +3,12 @@ import {
   ModalForm,
   ProFormText,
   ProFormDigit,
-  ProFormSelect,
+  ProFormTextArea,
+  ProFormRadio,
+  ProFormUploadButton,
 } from '@ant-design/pro-components';
 import { message } from 'antd';
-import { addVipConfig } from '@/services/ant-design-pro/api';
+import { addRoomConfig } from '@/services/ant-design-pro/api';
 
 interface IProps {
   visible: boolean;
@@ -16,38 +18,17 @@ interface IProps {
 
 const FormLayout = {
   labelCol: { span: 6 },
-  wrapperCol: { span: 10 },
+  wrapperCol: { span: 14 },
 }
-
-// 入住专享特权
-const CheckInOptions = [
-  { label: '延迟退房', value: '1' },
-  { label: '管家服务', value: '2' },
-  { label: 'VIP通道', value: '3' },
-  { label: '免押入住', value: '4' },
-  { label: '欢迎水果', value: '5' },
-  { label: '安睡奶', value: '6' },
-  { label: '茶礼盒', value: '7' },
-  { label: '商城积分奖品兑换', value: '8' },
-]
-
-// 生日特权
-const BirthdayOptions = [
-  { label: '免费入住(豪华房1间)', value: '1' },
-  { label: '免费入住(温泉房1间)', value: '2' },
-  { label: '免费入住(园景豪华温泉房1间)', value: '3' },
-  { label: '生日大礼包', value: '4' },
-  { label: '自助晚餐(随行1人免费)', value: '5' },
-]
 
 const AddModal: React.FC<IProps> = (props) => {
   const { visible, onVisibleChange, onOk } = props;
   // 新增
-  const handleAdd = async (params: API.VipConfigListItem) => {
+  const handleAdd = async (params: API.RoomConfigListItem) => {
     const hide = message.loading('正在新增');
 
     try {
-      await addVipConfig(params);
+      await addRoomConfig(params);
       hide();
       message.success('新增成功!');
       return true;
@@ -60,14 +41,17 @@ const AddModal: React.FC<IProps> = (props) => {
 
   return (
     <ModalForm
-      title="新增等级配置"
+      title="新增客房配置"
       visible={visible}
       width={550}
       {...FormLayout}
       layout="horizontal"
+      initialValues={{
+        vipDiscount: true
+      }}
       onVisibleChange={onVisibleChange}
       onFinish={async (value) => {
-        const success = await handleAdd(value as API.VipConfigListItem);
+        const success = await handleAdd(value as API.RoomConfigListItem);
         if (success) {
           onVisibleChange(false);
           if (onOk) {
@@ -77,102 +61,97 @@ const AddModal: React.FC<IProps> = (props) => {
       }}
     >
       <ProFormText
-        label="等级名称"
+        label="客房类型"
         rules={[
           {
             required: true,
-            message: '等级名称必填!',
+            message: '客房类型必填!',
           },
         ]}
         width="md"
-        name="levelName"
+        name="roomType"
       />
 
       <ProFormDigit
-        label="最低充值条件"
+        label="单日价格"
         rules={[
           {
             required: true,
-            message: '最低充值条件必填!',
+            message: '单日价格必填!',
           },
         ]}
         width="md"
         addonAfter="元"
         fieldProps={{controls: false}}
-        name="minimumRechargeAmount"
-      />
-      <ProFormDigit
-        label="会员折扣"
-        rules={[
-          {
-            required: true,
-            message: '会员折扣必填!',
-          },
-        ]}
-        width="md"
-        addonAfter="折"
-        fieldProps={{controls: false}}
         min={0}
-        max={10}
+        name="price"
+      />
+
+      <ProFormRadio.Group
         name="vipDiscount"
+        label="是否参与会员优惠"
+        options={[
+          {
+            value: true,
+            label: '是',
+          },
+          {
+            value: false,
+            label: '否',
+          },
+        ]}
       />
-      <ProFormDigit
-        label="会员日折扣"
+
+      {/* TODO: 上传相关还没有处理 */}
+      <ProFormUploadButton
+        extra="支持扩展名：.jpg .png"
+        label="客房图片"
         rules={[
           {
             required: true,
-            message: '会员日折扣必填!',
+            message: '客房图片必填!',
           },
         ]}
-        width="md"
-        addonAfter="折"
-        fieldProps={{controls: false}}
-        min={0}
+        title="上传文件"
+        listType="picture-card"
+        name="images"
         max={10}
-        name="vipDayDiscount"
       />
+
       <ProFormDigit
-        label="餐饮折扣"
+        label="数量"
         rules={[
           {
             required: true,
-            message: '餐饮折扣必填!',
+            message: '数量必填!',
           },
         ]}
         width="md"
-        addonAfter="折"
+        addonAfter="间"
         fieldProps={{controls: false}}
-        min={0}
-        max={10}
-        name="diningDiscount"
+        name="amount"
       />
-      <ProFormDigit
-        label="温泉/乐园折扣"
+      <ProFormTextArea
+        label="房间设施"
         rules={[
           {
             required: true,
-            message: '温泉/乐园折扣必填!',
+            message: '房间设施必填!',
           },
         ]}
-        width="md"
-        addonAfter="元"
-        tooltip="相比直客通价优惠"
-        fieldProps={{controls: false}}
-        name="hotSpringOrParkDiscount"
+        width="sm"
+        name="roomFacility"
       />
-      <ProFormSelect
-        label="专享特权"
-        mode="multiple"
-        allowClear
-        options={CheckInOptions}
-        name="privilege"
-      />
-      <ProFormSelect
-        label="生日礼包"
-        mode="multiple"
-        allowClear
-        options={BirthdayOptions}
-        name="birthdayPackage"
+      <ProFormTextArea
+        label="入住及取消政策"
+        rules={[
+          {
+            required: true,
+            message: '入住及取消政策必填!',
+          },
+        ]}
+        width="sm"
+        name="policyDesc"
       />
     </ModalForm>
   );
