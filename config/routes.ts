@@ -32,7 +32,7 @@ export default [
     access: 'canAdmin',
     routes: [
       { path: '/room/arrange', name: '排房', icon: 'smile', component: './room/arrange' },
-      { path: '/room/config', name: '客房配置', icon: 'smile', component: './Welcome' },
+      { path: '/room/config', name: '客房配置', icon: 'smile', component: './room/config' },
       { path: '/room/order', name: '订房记录', icon: 'smile', component: './room/order' },
       { path: '/room/refund', name: '退款申请', icon: 'smile', component: './room/refund' },
     ],
@@ -49,6 +49,6 @@ export default [
     layout: false,
     routes: [{ path: '/user/login', component: './user/Login' }, { component: './404' }],
   },
-  { path: '/', redirect: '/payment/recharge' },
+  { path: '/', redirect: '/room/config' },
   { component: './404' },
 ];

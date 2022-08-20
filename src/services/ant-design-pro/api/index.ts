@@ -5,5 +5,6 @@ export * from './recharge';
 export * from './recharge-list';
 export * from './consumption-list';
 export * from './room-arrange';
+export * from './room-config';
 export * from './room-order';
 export * from './room-refund';

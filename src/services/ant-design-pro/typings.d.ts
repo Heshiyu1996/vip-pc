@@ -147,6 +147,40 @@ declare namespace API {
      }[];
   };
 
+  type RoomConfigList = {
+    data?: RoomConfigListItem[];
+    /** 列表的内容总数 */
+    total?: number;
+    success?: boolean;
+  };
+
+  type RoomConfigListItem = {
+    /**
+     * 客房图片
+     */
+    imagesList: string[];
+    /**
+     * 单日价格
+     */
+    price: number;
+    /**
+     * 客房编码
+     */
+    roomId: string;
+    /**
+     * 客房类型
+     */
+    roomType: string;
+    /**
+     * 数量
+     */
+    totalCount: number;
+    /**
+     * 是否参与会员优惠
+     */
+    useVipDiscount: string;
+};
+
   type RoomRefundList = {
     data?: RoomRefundListItem[];
     /** 列表的内容总数 */
