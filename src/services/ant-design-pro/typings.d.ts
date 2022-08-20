@@ -155,31 +155,19 @@ declare namespace API {
   };
 
   type RoomConfigListItem = {
-    /**
-     * 客房图片
-     */
-    imagesList: string[];
-    /**
-     * 单日价格
-     */
-    price: number;
-    /**
-     * 客房编码
-     */
-    roomId: string;
-    /**
-     * 客房类型
-     */
-    roomType: string;
-    /**
-     * 数量
-     */
-    totalCount: number;
-    /**
-     * 是否参与会员优惠
-     */
-    useVipDiscount: string;
-};
+    amount?:       number;
+    createTime?:   string;
+    id?:           number;
+    images?:       null;
+    isDelete?:     number;
+    policyDesc?:   string;
+    price?:        number;
+    roomFacility?: string;
+    roomType?:     string;
+    updater?:      string;
+    updateTime?:   string;
+    vipDiscount?:  null;
+}
 
   type RoomRefundList = {
     data?: RoomRefundListItem[];

@@ -115,12 +115,12 @@ const RoomConfig: React.FC = () => {
   const columns: ProColumns<API.RoomConfigListItem>[] = [
     {
       title: '客房编码',
-      dataIndex: 'roomId',
+      dataIndex: 'id',
       hideInSearch: true,
     },
     {
       title: '客房图片',
-      dataIndex: 'imagesList',
+      dataIndex: 'images',
       valueType: 'textarea',
       hideInSearch: true,
       // @ts-ignore
@@ -189,7 +189,7 @@ const RoomConfig: React.FC = () => {
       <ProTable<API.RoomConfigListItem, API.PageParams>
         headerTitle="查询结果"
         actionRef={actionRef}
-        rowKey="roomId"
+        rowKey="id"
         formRef={formRef}
         search={{
           labelWidth: 120,

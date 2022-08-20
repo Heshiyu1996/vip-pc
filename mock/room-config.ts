@@ -4,22 +4,22 @@ import { parse } from 'url';
 
 // mock tableListDataSource
 const genList = (current: number, pageSize: number) => {
-  const tableListDataSource: API.VipConfigListItem[] = [];
+  const tableListDataSource: API.RoomConfigListItem[] = [];
 
   for (let i = 0; i < pageSize; i += 1) {
     const index = (current - 1) * 10 + i;
     tableListDataSource.push(
       {
-          "totalCount": `${index}`,
-          "imagesList": [
+          "id": index,
+          "amount": index,
+          "images": [
               "http://dummyimage.com/400x400",
               "http://dummyimage.com/400x400",
               "http://dummyimage.com/400x400",
               "http://dummyimage.com/400x400"
           ],
-          "roomId": `${index}`,
           "roomType": "ea cupidatat labore deserunt sunt",
-          "price":`${index}`,
+          "price": index,
           "useVipDiscount": `${index % 3}`
       }
     );
