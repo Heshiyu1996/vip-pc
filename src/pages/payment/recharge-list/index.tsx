@@ -119,13 +119,6 @@ const RechargeList: React.FC = () => {
       valueEnum: ChannelEnumConfig,
       renderText: (val: string) => ChannelEnumConfig[val],
     },
-    // TODO: 这里应该是startTime + endTime
-    {
-      title: '时间区间',
-      dataIndex: 'startTime',
-      hideInTable: true,
-      valueType: 'textarea',
-    },
     {
       title: '充值金额',
       dataIndex: 'amount',
@@ -133,10 +126,31 @@ const RechargeList: React.FC = () => {
       valueType: 'textarea',
     },
     {
-      title: '时间',
+      title: '充值时间',
       dataIndex: 'createTime',
-      valueType: 'textarea',
+      key: 'showTime',
+      valueType: 'dateRange',
+      hideInTable: true,
+      search: {
+        transform: (value) => {
+          return {
+            startTime: value[0],
+            endTime: value[1],
+          };
+        },
+      },
+      fieldProps: {
+        showTime: { format: 'HH:mm' },
+        format: "YYYY-MM-DD HH:mm"
+      },
+    },
+    {
+      title: '充值时间',
+      dataIndex: 'createTime',
+      valueType: 'dateTime',
+      key: 'showTime',
       hideInSearch: true,
+      sorter: true,
       renderText: (val: string) => moment().format('YYYY-MM-DD HH:mm:ss'),
     },
     {

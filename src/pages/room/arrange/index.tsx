@@ -78,11 +78,12 @@ const ArrangeList: React.FC = () => {
       valueEnum: RoomTypeEnumConfig,
       renderText: (val: string) => RoomTypeEnumConfig[val],
     },
-    // TODO: 这里应该是 startTime 、 endTime
+    
     {
-      title: '日期',
-      dataIndex: 'startTime',
-      valueType: 'textarea',
+      title: "创建时间",
+      key: 'since',
+      dataIndex: 'date',
+      valueType: 'date',
       hideInTable: true,
     },
     {

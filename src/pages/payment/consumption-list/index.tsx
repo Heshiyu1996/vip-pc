@@ -117,12 +117,33 @@ const ConsumptionList: React.FC = () => {
       valueEnum: ChannelEnumConfig,
       renderText: (val: string) => ChannelEnumConfig[val],
     },
-    // TODO: 这里应该是startTime + endTime
     {
-      title: '时间区间',
-      dataIndex: 'startTime',
+      title: '消费时间',
+      dataIndex: 'createTime',
+      key: 'showTime',
+      valueType: 'dateRange',
       hideInTable: true,
-      valueType: 'textarea',
+      search: {
+        transform: (value) => {
+          return {
+            startTime: value[0],
+            endTime: value[1],
+          };
+        },
+      },
+      fieldProps: {
+        showTime: { format: 'HH:mm' },
+        format: "YYYY-MM-DD HH:mm"
+      },
+    },
+    {
+      title: '消费时间',
+      dataIndex: 'createTime',
+      valueType: 'dateTime',
+      key: 'showTime',
+      hideInSearch: true,
+      sorter: true,
+      renderText: (val: string) => moment().format('YYYY-MM-DD HH:mm:ss'),
     },
     {
       title: '充值金额',
@@ -131,7 +152,7 @@ const ConsumptionList: React.FC = () => {
       valueType: 'textarea',
     },
     {
-      title: '时间',
+      title: '消费时间',
       dataIndex: 'createTime',
       valueType: 'textarea',
       hideInSearch: true,
