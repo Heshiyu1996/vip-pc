@@ -32,7 +32,7 @@ export async function editRoomConfig(params?: { [key: string]: any }, options?: 
 
 /** 批量编辑客房配置价格 PUT /api/room/config/price/edit */
 export async function editRoomConfigPrice(params?: { [key: string]: any }, options?: { [key: string]: any }) {
-  return request<API.RoomConfigListItem>(`/api/room/config/${params.id}`, {
+  return request<API.RoomConfigListItem>(`/api/room/config/price/edit`, {
     method: 'PUT',
     data: params,
     ...(options || {}),
@@ -41,7 +41,7 @@ export async function editRoomConfigPrice(params?: { [key: string]: any }, optio
 
 /** 批量编辑客房配置价格 PUT /api/room/config/count/edit */
 export async function editRoomConfigCount(params?: { [key: string]: any }, options?: { [key: string]: any }) {
-  return request<API.RoomConfigListItem>(`/api/room/config/${params.id}`, {
+  return request<API.RoomConfigListItem>(`/api/room/config/count/edit`, {
     method: 'PUT',
     data: params,
     ...(options || {}),
@@ -61,15 +61,6 @@ export async function addRoomConfig(params?: { [key: string]: any }, options?: {
 export async function removeRoomConfig(params?: { [key: string]: any }, options?: { [key: string]: any }) {
   return request<Record<string, any>>(`/api/room/config/${params.id}`, {
     method: 'DELETE',
-    data: params,
-    ...(options || {}),
-  });
-}
-
-/** 导出客房配置 DELETE /api/room/config/export */
-export async function exportRoomConfigList(params?: { [key: string]: any }, options?: { [key: string]: any }) {
-  return request<Record<string, any>>(`/api/room/config/export`, {
-    method: 'POST',
     data: params,
     ...(options || {}),
   });

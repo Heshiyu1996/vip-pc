@@ -5,11 +5,12 @@ import {
   PageContainer,
   ProTable,
 } from '@ant-design/pro-components';
-import { Button, message, Image } from 'antd';
-import EditModal from './components/editModal';
+import { Button, message, Image, Table, Space } from 'antd';
 import AddModal from './components/addModal';
-import { getRoomConfigList, exportRoomConfigList, removeRoomConfig } from '@/services/ant-design-pro/api';
-import { download } from '@/common/tools';
+import EditModal from './components/editModal';
+import EditMultiPriceModal from './components/edit-multi-price-modal';
+import EditMultiCountModal from './components/edit-multi-count-modal';
+import { getRoomConfigList, removeRoomConfig } from '@/services/ant-design-pro/api';
 import './index.less';
 
 const mockRoomTypeData = [
@@ -75,36 +76,39 @@ const handleRemove = async (selectedItem: API.RoomConfigListItem) => {
 
 const RoomConfig: React.FC = () => {
   const [visibleAddModal, setVisibleAddModal] = useState<boolean>(false);
-
   const [visibleEditModal, setVisibleEditModal] = useState<boolean>(false);
   const [currentRow, setCurrentRow] = useState<API.RoomConfigListItem>();
-  const onEditOk = () => {
-    setVisibleEditModal(false);
-    setCurrentRow(undefined);
-    handleReload();
-  }
+
+  const [visibleEditMultiPriceModal, setVisibleEditMultiPriceModal] = useState<boolean>(false);
+  const [visibleEditMultiCountModal, setVisibleEditMultiCountModal] = useState<boolean>(false);
+  const [currentSelectedRowKey, setCurrentSelectedRowKey] = useState<(string | number)[]>();
+
   const handleReload = () => {
     if (actionRef.current) {
       actionRef.current.reload();
     }
   }
 
+  const onRefresh = () => {
+    setVisibleAddModal(false);
+    setVisibleEditModal(false);
+    setVisibleEditMultiPriceModal(false);
+    setVisibleEditMultiCountModal(false);
+    setCurrentRow(undefined);
+    setCurrentSelectedRowKey(undefined);
+    handleReload();
+  }
+
   const formRef = useRef<ProFormInstance>();
-  const handleExport = async () => {
-    const hide = message.loading('导出中...');
-    const params = formRef.current?.getFieldsValue();
-    
-    try {
-      const res = await exportRoomConfigList(params);
-      const { data } = res || {};
-      if (!data) throw new Error();
-      download('', data);
-      hide();
-      message.success('导出成功!');
-    } catch (error) {
-      hide();
-      message.error('导出失败，请稍后重试!');
-    }
+
+  const handleEditRoomConfigPrice = (selectedRowKeys: (string | number)[]) => {
+    setCurrentSelectedRowKey(selectedRowKeys);
+    setVisibleEditMultiPriceModal(true);
+  }
+
+  const handleEditRoomConfigCount = (selectedRowKeys: (string | number)[]) => {
+    setCurrentSelectedRowKey(selectedRowKeys);
+    setVisibleEditMultiCountModal(true);
   }
 
   const actionRef = useRef<ActionType>();
@@ -190,13 +194,32 @@ const RoomConfig: React.FC = () => {
         search={{
           labelWidth: 120,
         }}
+        rowSelection={{
+          // 自定义选择项参考: https://ant.design/components/table-cn/#components-table-demo-row-selection-custom
+          // 注释该行则默认不显示下拉选项
+          selections: [Table.SELECTION_ALL, Table.SELECTION_INVERT],
+        }}
+        tableAlertRender={({ selectedRowKeys, selectedRows, onCleanSelected }) => (
+          <Space size={24}>
+              已选 {selectedRowKeys.length} 项
+              <a style={{ marginLeft: 8 }} onClick={onCleanSelected}>
+                取消选择
+              </a>
+          </Space>
+        )}
+        tableAlertOptionRender={({ selectedRowKeys }) => {
+          return (
+            <Space size={16}>
+              <Button key="multi-price" onClick={() => handleEditRoomConfigPrice(selectedRowKeys)}>
+                批量修改价格
+              </Button>
+              <Button key="multi-count" onClick={() => handleEditRoomConfigCount(selectedRowKeys)}>
+                批量修改数量
+              </Button>
+            </Space>
+          );
+        }}
         toolBarRender={() => [
-          <Button key="primary">
-            批量修改价格
-          </Button>,
-          <Button key="primary">
-            批量修改数量
-          </Button>,
           <Button
             type="primary"
             key="primary"
@@ -212,10 +235,16 @@ const RoomConfig: React.FC = () => {
       />
 
       {/* 弹框：新增 */}
-      <AddModal visible={visibleAddModal} onVisibleChange={setVisibleAddModal} onOk={handleReload} />
+      <AddModal visible={visibleAddModal} onVisibleChange={setVisibleAddModal} onOk={onRefresh} />
 
       {/* 弹框：编辑 */}
-      <EditModal values={currentRow || {}} visible={visibleEditModal} onVisibleChange={setVisibleEditModal} onOk={onEditOk} />
+      <EditModal values={currentRow || {}} visible={visibleEditModal} onVisibleChange={setVisibleEditModal} onOk={onRefresh} />
+
+      {/* 弹框：批量编辑价格 */}
+      <EditMultiPriceModal values={currentSelectedRowKey || {}} visible={visibleEditMultiPriceModal} onVisibleChange={setVisibleEditMultiPriceModal} onOk={onRefresh} />
+    
+      {/* 弹框：批量编辑数量 */}
+      <EditMultiCountModal values={currentSelectedRowKey || {}} visible={visibleEditMultiCountModal} onVisibleChange={setVisibleEditMultiCountModal} onOk={onRefresh} />
     </PageContainer>
   );
 };

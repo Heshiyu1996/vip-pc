@@ -241,16 +241,6 @@ function removeRoomConfig(req: Request, res: Response, u: string, b: Request) {
   res.json(result);
 }
 
-function exportRoomConfigList(req: Request, res: Response, u: string, b: Request) {
-  const result = {
-    success: true,
-    message: '导出成功',
-    data: "http://www.xlsx"
-  };
-
-  res.json(result);
-}
-
 function editRoomConfigPrice(req: Request, res: Response, u: string, b: Request) {
   const result = {
     success: true,
@@ -276,5 +266,4 @@ export default {
   'PUT /api/room/config/price/edit': editRoomConfigPrice,
   'PUT /api/room/config/count/edit': editRoomConfigCount,
   'DELETE /api/room/config/*': removeRoomConfig,
-  'POST /api/room/config/export': exportRoomConfigList,
 };
