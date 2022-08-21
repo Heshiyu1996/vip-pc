@@ -1,14 +1,12 @@
 import Footer from '@/components/Footer';
 import RightContent from '@/components/RightContent';
-import { BookOutlined, LinkOutlined } from '@ant-design/icons';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
 import { PageLoading, SettingDrawer } from '@ant-design/pro-components';
-import type { RunTimeLayoutConfig } from 'umi';
-import { history, Link } from 'umi';
+import type { RunTimeLayoutConfig, RequestConfig } from 'umi';
+import { history } from 'umi';
 import defaultSettings from '../config/defaultSettings';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 
-const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
 
 /** 获取用户信息比较慢的时候会展示一个 loading */
@@ -66,18 +64,6 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
       }
     },
     links: [],
-    // links: isDev
-    //   ? [
-    //       <Link key="openapi" to="/umi/plugin/openapi" target="_blank">
-    //         <LinkOutlined />
-    //         <span>OpenAPI 文档</span>
-    //       </Link>,
-    //       <Link to="/~docs" key="docs">
-    //         <BookOutlined />
-    //         <span>业务组件文档</span>
-    //       </Link>,
-    //     ]
-    //   : [],
     menuHeaderRender: undefined,
     // 自定义 403 页面
     // unAccessible: <div>unAccessible</div>,
@@ -105,4 +91,24 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     },
     ...initialState?.settings,
   };
+};
+
+export const request: RequestConfig = {
+  errorConfig: {
+    adaptor: (resData) => {
+      if (!resData.success) {
+        // 未登录
+        if (resData?.data?.errorType === 902) {
+          history.push(`/user/login`);
+        }
+        throw ({
+          ...resData,
+          // 后端下发 msg 兼容为 message
+          message: resData.msg,
+        });
+      }
+
+      return resData;
+    },
+  },
 };

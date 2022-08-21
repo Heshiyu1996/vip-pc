@@ -2,11 +2,11 @@
 /* eslint-disable */
 import { request } from 'umi';
 
-/** 获取当前的用户 GET /api/currentUser */
+/** 获取当前登录的用户信息 GET /api/user/info */
 export async function currentUser(options?: { [key: string]: any }) {
   return request<{
     data: API.CurrentUser;
-  }>('/api/currentUser', {
+  }>('/api/user/info', {
     method: 'GET',
     ...(options || {}),
   });
@@ -20,6 +20,8 @@ export async function login(body: API.LoginParams, options?: { [key: string]: an
       'Content-Type': 'application/json',
     },
     data: body,
+    // // 跳过统一错误统一处理
+    // skipErrorHandler: true,
     ...(options || {}),
   });
 }
