@@ -2,7 +2,6 @@
 /* eslint-disable */
 import { request } from 'umi';
 
-
 /** 获取当前登录的用户信息 GET /api/user/info */
 export async function currentUser(options?: { [key: string]: any }) {
   return request<{
@@ -51,7 +50,6 @@ const requestList = <T>(url: string, options?: { [key: string]: any },) => {
       data: data?.list,
       total: data?.total
     }
-    console.log(modifiedRes, 1232312);
     return modifiedRes;
   })
 }

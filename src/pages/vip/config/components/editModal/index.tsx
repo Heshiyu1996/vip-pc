@@ -3,9 +3,12 @@ import type { ProFormInstance } from '@ant-design/pro-components';
 import {
   ModalForm,
   ProFormText,
+  ProFormDigit,
+  ProFormSelect,
 } from '@ant-design/pro-components';
 import { message } from 'antd';
 import { editVipConfig } from '@/services/ant-design-pro/api';
+import { CheckInOptions, BirthdayOptions } from '@/common/config'
 
 interface IProps {
   values: { [key: string]: any };
@@ -14,10 +17,15 @@ interface IProps {
   onOk: () => void;
 }
 export type FormValueType = {
-  ownerName: string;
-  mobileNumber: string;
-  identityNumber: string;
-} & Partial<API.RuleListItem>;
+  levelName: string;
+  minimumRechargeAmount: string;
+  vipDiscount: string;
+  vipDayDiscount: string;
+  diningDiscount: string;
+  hotSpringOrParkDiscount: string;
+  privilegeOrigin: string[];
+  birthdayPackageOrigin: string[];
+} & Partial<API.VipConfigListItem>;
 
 const EditModal: React.FC<IProps> = (props) => {
   const { visible, onVisibleChange, onOk } = props;
@@ -26,10 +34,15 @@ const EditModal: React.FC<IProps> = (props) => {
 
   useEffect(() => {
     const values = {
-      id: props.values.cardId,
-      ownerName: props.values.ownerName,
-      mobileNumber: props.values.mobileNumber,
-      identityNumber: props.values.identityNumber,
+      id: props.values.id,
+      levelName: props.values.levelName,
+      minimumRechargeAmount: props.values.minimumRechargeAmount,
+      vipDiscount: props.values.vipDiscount,
+      vipDayDiscount: props.values.vipDayDiscount,
+      diningDiscount: props.values.diningDiscount,
+      hotSpringOrParkDiscount: props.values.hotSpringOrParkDiscount,
+      privilegeOrigin: props.values.privilege?.split(';'),
+      birthdayPackageOrigin: props.values.birthdayPackage?.split(';'),
     }
     formRef?.current?.setFieldsValue(values);
   }, [props.values]);
@@ -39,9 +52,15 @@ const EditModal: React.FC<IProps> = (props) => {
 
     try {
       await editVipConfig({
-        ownerName: fields.ownerName,
-        mobileNumber: fields.mobileNumber,
-        identityNumber: fields.identityNumber,
+        id: fields.id,
+        levelName: fields.levelName,
+        minimumRechargeAmount: fields.minimumRechargeAmount,
+        vipDiscount: fields.vipDiscount,
+        vipDayDiscount: fields.vipDayDiscount,
+        diningDiscount: fields.diningDiscount,
+        hotSpringOrParkDiscount: fields.hotSpringOrParkDiscount,
+        privilege: fields.privilegeOrigin?.join(';'),
+        birthdayPackage: fields.birthdayPackageOrigin?.join(';'),
       });
       hide();
       message.success('编辑成功!');
@@ -60,7 +79,7 @@ const EditModal: React.FC<IProps> = (props) => {
       visible={visible}
       onVisibleChange={onVisibleChange}
       onFinish={async (value) => {
-        const success = await handleEdit(value as API.RuleListItem);
+        const success = await handleEdit(value as API.VipConfigListItem);
         if (success) {
           onVisibleChange(false);
           onOk();
@@ -68,50 +87,113 @@ const EditModal: React.FC<IProps> = (props) => {
       }}
     >
       <ProFormText
-        disabled
-        label="会员卡号"
+        label="等级编号"
+        hidden
         rules={[
           {
             required: true,
-            message: '会员卡号必填!',
+            message: '等级名称必填!',
           },
         ]}
         width="md"
         name="id"
       />
       <ProFormText
-        label="名字"
+        label="等级名称"
         rules={[
           {
             required: true,
-            message: '名字必填!',
+            message: '等级名称必填!',
           },
         ]}
         width="md"
-        name="ownerName"
+        name="levelName"
       />
-
-      <ProFormText
-        label="手机号"
+      <ProFormDigit
+        label="最低充值条件"
         rules={[
           {
             required: true,
-            message: '手机号必填!',
+            message: '最低充值条件必填!',
           },
         ]}
         width="md"
-        name="mobileNumber"
+        addonAfter="元"
+        fieldProps={{controls: false}}
+        name="minimumRechargeAmount"
       />
-      <ProFormText
-        label="身份证号"
+      <ProFormDigit
+        label="会员折扣"
         rules={[
           {
             required: true,
-            message: '身份证号必填!',
+            message: '会员折扣必填!',
           },
         ]}
         width="md"
-        name="identityNumber"
+        addonAfter="折"
+        fieldProps={{controls: false}}
+        min={0}
+        max={10}
+        name="vipDiscount"
+      />
+      <ProFormDigit
+        label="会员日折扣"
+        rules={[
+          {
+            required: true,
+            message: '会员日折扣必填!',
+          },
+        ]}
+        width="md"
+        addonAfter="折"
+        fieldProps={{controls: false}}
+        min={0}
+        max={10}
+        name="vipDayDiscount"
+      />
+      <ProFormDigit
+        label="餐饮折扣"
+        rules={[
+          {
+            required: true,
+            message: '餐饮折扣必填!',
+          },
+        ]}
+        width="md"
+        addonAfter="折"
+        fieldProps={{controls: false}}
+        min={0}
+        max={10}
+        name="diningDiscount"
+      />
+      <ProFormDigit
+        label="温泉/乐园折扣"
+        rules={[
+          {
+            required: true,
+            message: '温泉/乐园折扣必填!',
+          },
+        ]}
+        width="md"
+        addonAfter="元"
+        tooltip="相比直客通价优惠"
+        fieldProps={{controls: false}}
+        name="hotSpringOrParkDiscount"
+      />
+      <ProFormSelect
+        label="专享特权"
+        mode="multiple"
+        allowClear
+        options={CheckInOptions}
+        name="privilegeOrigin"
+      />
+      <ProFormSelect
+        label="生日礼包"
+        mode="multiple"
+        allowClear
+        options={BirthdayOptions}
+        name="birthdayPackageOrigin"
       />
     </ModalForm>
   );

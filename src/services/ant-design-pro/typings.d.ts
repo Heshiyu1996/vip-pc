@@ -61,7 +61,6 @@ declare namespace API {
   };
 
   type VipConfigListItem = {
-    birthdayPackage?:         string | string[];
     createTime?:              string;
     diningDiscount?:          number;
     hotSpringOrParkDiscount?: number;
@@ -69,7 +68,8 @@ declare namespace API {
     isDelete?:                number;
     levelName?:               string;
     minimumRechargeAmount?:   number;
-    privilege?:               string;
+    privilegeOrigin?:         string | string[];
+    birthdayPackageOrigin?:   string | string[];
     updater?:                 string;
     updateTime?:              string;
     vipDayDiscount?:          number;

@@ -10,25 +10,6 @@ import EditModal from './components/editModal';
 import AddModal from './components/addModal';
 import { removeVipConfig, getVipConfigList } from '@/services/ant-design-pro/api';
 
-// 删除指定行
-const handleRemove = async (selectedItem: API.RuleListItem) => {
-  const hide = message.loading('正在删除');
-  if (!selectedItem) return true;
-
-  try {
-    await removeVipConfig({
-      id: selectedItem.id,
-    });
-    hide();
-    message.success('删除成功!');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('删除失败，请稍后重试!');
-    return false;
-  }
-};
-
 const TableList: React.FC = () => {
   const [visibleAddModal, setVisibleAddModal] = useState<boolean>(false);
 
@@ -44,6 +25,25 @@ const TableList: React.FC = () => {
       actionRef.current.reload();
     }
   }
+  // 删除指定行
+  const handleRemove = async (selectedItem: API.RuleListItem) => {
+    const hide = message.loading('正在删除');
+    if (!selectedItem) return true;
+  
+    try {
+      await removeVipConfig({
+        id: selectedItem.id,
+      });
+      hide();
+      message.success('删除成功!');
+      handleReload();
+      return true;
+    } catch (error) {
+      hide();
+      message.error('删除失败，请稍后重试!');
+      return false;
+    }
+  };
 
   const actionRef = useRef<ActionType>();
   const columns: ProColumns<API.RuleListItem>[] = [
@@ -99,7 +99,7 @@ const TableList: React.FC = () => {
       <ProTable<API.RuleListItem, API.PageParams>
         headerTitle="查询结果"
         actionRef={actionRef}
-        rowKey="key"
+        rowKey="id"
         // 无查询表单
         search={false}
         toolBarRender={() => [

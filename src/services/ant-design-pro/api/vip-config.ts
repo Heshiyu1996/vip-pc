@@ -1,6 +1,7 @@
 // @ts-ignore
 /* eslint-disable */
 import { request } from 'umi';
+import { requestList } from '@/common/tools';
 
 /** 查询会员卡配置列表 GET /api/vip/level/list */
 export async function getVipConfigList(
@@ -13,7 +14,7 @@ export async function getVipConfigList(
   },
   options?: { [key: string]: any },
 ) {
-  return request<API.RuleList>('/api/vip/level/list', {
+  return requestList<API.RuleList>('/api/vip/level/list', {
     method: 'GET',
     params: {
       ...params,

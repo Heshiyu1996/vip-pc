@@ -7,6 +7,7 @@ import {
 } from '@ant-design/pro-components';
 import { message } from 'antd';
 import { addVipConfig } from '@/services/ant-design-pro/api';
+import { CheckInOptions, BirthdayOptions } from '@/common/config'
 
 interface IProps {
   visible: boolean;
@@ -19,32 +20,15 @@ const FormLayout = {
   wrapperCol: { span: 10 },
 }
 
-// 入住专享特权
-const CheckInOptions = [
-  { label: '延迟退房', value: '1' },
-  { label: '管家服务', value: '2' },
-  { label: 'VIP通道', value: '3' },
-  { label: '免押入住', value: '4' },
-  { label: '欢迎水果', value: '5' },
-  { label: '安睡奶', value: '6' },
-  { label: '茶礼盒', value: '7' },
-  { label: '商城积分奖品兑换', value: '8' },
-]
-
-// 生日特权
-const BirthdayOptions = [
-  { label: '免费入住(豪华房1间)', value: '1' },
-  { label: '免费入住(温泉房1间)', value: '2' },
-  { label: '免费入住(园景豪华温泉房1间)', value: '3' },
-  { label: '生日大礼包', value: '4' },
-  { label: '自助晚餐(随行1人免费)', value: '5' },
-]
-
 const AddModal: React.FC<IProps> = (props) => {
   const { visible, onVisibleChange, onOk } = props;
   // 新增
   const handleAdd = async (params: API.VipConfigListItem) => {
     const hide = message.loading('正在新增');
+
+    const { privilegeOrigin = [], birthdayPackageOrigin = [] } = params;
+    params.privilege = privilegeOrigin?.join(';');
+    params.birthdayPackage = birthdayPackageOrigin?.join(';');
 
     try {
       await addVipConfig(params);
@@ -165,14 +149,14 @@ const AddModal: React.FC<IProps> = (props) => {
         mode="multiple"
         allowClear
         options={CheckInOptions}
-        name="privilege"
+        name="privilegeOrigin"
       />
       <ProFormSelect
         label="生日礼包"
         mode="multiple"
         allowClear
         options={BirthdayOptions}
-        name="birthdayPackage"
+        name="birthdayPackageOrigin"
       />
     </ModalForm>
   );
