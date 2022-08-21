@@ -2,6 +2,7 @@
 /* eslint-disable */
 import { request } from 'umi';
 
+
 /** 获取当前登录的用户信息 GET /api/user/info */
 export async function currentUser(options?: { [key: string]: any }) {
   return request<{
@@ -41,6 +42,20 @@ export async function getNotices(options?: { [key: string]: any }) {
   });
 }
 
+const requestList = <T>(url: string, options?: { [key: string]: any },) => {
+  return request<T>(url, options).then((res: T) => {
+    const { success, msg, data } = res;
+    const modifiedRes = {
+      success,
+      msg,
+      data: data?.list,
+      total: data?.total
+    }
+    console.log(modifiedRes, 1232312);
+    return modifiedRes;
+  })
+}
+
 /** 查询会员卡列表 GET /api/vip/info/list */
 export async function getVipList(
   params: {
@@ -52,13 +67,13 @@ export async function getVipList(
   },
   options?: { [key: string]: any },
 ) {
-  return request<API.RuleList>('/api/vip/info/list', {
+  return requestList<API.RuleList>('/api/vip/info/list', {
     method: 'GET',
     params: {
       ...params,
     },
     ...(options || {}),
-  });
+  })
 }
 
 /** 编辑会员卡 PUT /api/vip/info/{id} */

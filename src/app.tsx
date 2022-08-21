@@ -96,6 +96,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
 export const request: RequestConfig = {
   errorConfig: {
     adaptor: (resData) => {
+      // 异常处理
       if (!resData.success) {
         // 未登录
         if (resData?.data?.errorType === 902) {

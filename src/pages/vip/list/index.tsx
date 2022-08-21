@@ -47,25 +47,6 @@ const LevelEnumConfig = (() => {
   return map;
 })();
 
-// 删除指定行
-const handleRemove = async (selectedItem: API.RuleListItem) => {
-  const hide = message.loading('正在删除');
-  if (!selectedItem) return true;
-
-  try {
-    await removeVip({
-      id: selectedItem.id,
-    });
-    hide();
-    message.success('删除成功!');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('删除失败，请稍后重试!');
-    return false;
-  }
-};
-
 const TableList: React.FC = () => {
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const [visibleAddModal, setVisibleAddModal] = useState<boolean>(false);
@@ -87,7 +68,7 @@ const TableList: React.FC = () => {
   const columns: ProColumns<API.RuleListItem>[] = [
     {
       title: '会员卡号',
-      dataIndex: 'cardId',
+      dataIndex: 'id',
       valueType: 'textarea',
       render: (dom, entity) => {
         return (
@@ -153,6 +134,27 @@ const TableList: React.FC = () => {
       ],
     },
   ];
+
+  // 删除指定行
+  const handleRemove = async (selectedItem: API.RuleListItem) => {
+    const hide = message.loading('正在删除');
+    if (!selectedItem) return true;
+  
+    try {
+      await removeVip({
+        id: selectedItem.id,
+      });
+      hide();
+      message.success('删除成功!');
+      handleReload();
+      return true;
+    } catch (error) {
+      hide();
+      message.error('删除失败，请稍后重试!');
+      return false;
+    }
+  };
+
   return (
     <PageContainer>
       <ProTable<API.RuleListItem, API.PageParams>

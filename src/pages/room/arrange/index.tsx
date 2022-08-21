@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import type { ProColumns, ProFormInstance } from '@ant-design/pro-components';
 import {
   PageContainer,
@@ -7,6 +7,7 @@ import {
 import { Button, message, Image } from 'antd';
 import { getRoomArrangeList, exportRoomArrangeList } from '@/services/ant-design-pro/api';
 import { download } from '@/common/tools';
+import EditModal from './components/editModal';
 import './index.less';
 
 const mockRoomTypeData = [
@@ -28,13 +29,10 @@ const RoomTypeEnumConfig = (() => {
   return map;
 })();
 
-// 删除指定行
-const handleDetail = async (selectedItem: API.RoomArrangeListItem) => {
-  console.log(selectedItem);
-  
-};
-
 const ArrangeList: React.FC = () => {
+  const [visibleEditModal, setVisibleEditModal] = useState<boolean>(false);
+  const [currentRow, setCurrentRow] = useState<API.RuleListItem>();
+
   const formRef = useRef<ProFormInstance>();
   const handleExport = async () => {
     const hide = message.loading('导出中...');
@@ -104,6 +102,19 @@ const ArrangeList: React.FC = () => {
       ,
     },
   ];
+
+  // 查看预订情况
+  const handleDetail = async (selectedItem: API.RoomArrangeListItem) => {
+    setVisibleEditModal(true);
+    setCurrentRow(selectedItem);
+  };
+
+  const onClose = () => {
+    setVisibleEditModal(false);
+    setCurrentRow({});
+    
+  }
+
   return (
     <PageContainer>
       <ProTable<API.RoomArrangeListItem, API.PageParams>
@@ -121,7 +132,8 @@ const ArrangeList: React.FC = () => {
         request={getRoomArrangeList}
         columns={columns}
       />
-      {/* TODO: 缺少一个查看预订情况的弹窗 */}
+      {/* 弹框：查看预订情况 */}
+      <EditModal values={currentRow || {}} visible={visibleEditModal} onVisibleChange={setVisibleEditModal} onOk={onClose} />
     </PageContainer>
   );
 };

@@ -14,7 +14,7 @@ interface IProps {
   onOk: () => void;
 }
 export type FormValueType = {
-  ownerName: string;
+  roomType: string;
   mobileNumber: string;
   identityNumber: string;
 } & Partial<API.RuleListItem>;
@@ -26,93 +26,54 @@ const EditModal: React.FC<IProps> = (props) => {
 
   useEffect(() => {
     const values = {
-      id: props.values.id,
-      ownerName: props.values.ownerName,
+      roomId: props.values.roomId,
+      roomType: props.values.roomType,
       mobileNumber: props.values.mobileNumber,
       identityNumber: props.values.identityNumber,
     }
     formRef?.current?.setFieldsValue(values);
   }, [props.values]);
 
-  const handleEdit = async (fields: FormValueType) => {
-    const hide = message.loading('正在更新');
-
-    try {
-      await editVip({
-        id: fields.id,
-        ownerName: fields.ownerName,
-        mobileNumber: fields.mobileNumber,
-        identityNumber: fields.identityNumber,
-      });
-      hide();
-      message.success('编辑成功!');
-      return true;
-    } catch (error) {
-      hide();
-      message.error('编辑失败，请稍后重试!');
-      return false;
-    }
-  };
-
   return (
     <ModalForm
       formRef={formRef}
-      title="编辑会员卡"
+      title="查看预订情况"
       visible={visible}
       onVisibleChange={onVisibleChange}
-      onFinish={async (value) => {
-        const success = await handleEdit(value as API.RuleListItem);
-        if (success) {
-          onVisibleChange(false);
-          onOk();
-        }
-      }}
     >
       <ProFormText
         disabled
-        label="会员卡号"
+        label="客房编码"
         rules={[
           {
             required: true,
-            message: '会员卡号必填!',
+            message: '客房编码必填!',
           },
         ]}
         width="md"
-        name="id"
+        name="roomId"
       />
       <ProFormText
-        label="名字"
+        label="客房类型"
         rules={[
           {
             required: true,
-            message: '名字必填!',
+            message: '客房类型必填!',
           },
         ]}
         width="md"
-        name="ownerName"
-      />
-
-      <ProFormText
-        label="手机号"
-        rules={[
-          {
-            required: true,
-            message: '手机号必填!',
-          },
-        ]}
-        width="md"
-        name="mobileNumber"
+        name="roomType"
       />
       <ProFormText
-        label="身份证号"
+        label="余量情况"
         rules={[
           {
             required: true,
-            message: '身份证号必填!',
+            message: '余量情况必填!',
           },
         ]}
         width="md"
-        name="identityNumber"
+        name="restCount"
       />
     </ModalForm>
   );
