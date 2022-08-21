@@ -1,6 +1,7 @@
 // @ts-ignore
 /* eslint-disable */
 import { request } from 'umi';
+import { requestList } from '@/common/tools';
 
 /** 查询充值列表 GET /api/payment/recharge/list */
 export async function getRechargeList(
@@ -12,7 +13,7 @@ export async function getRechargeList(
   },
   options?: { [key: string]: any },
 ) {
-  return request<API.RuleList>('/api/payment/recharge/list', {
+  return requestList<API.RechargeList>('/api/payment/recharge/list', {
     method: 'GET',
     params: {
       ...params,

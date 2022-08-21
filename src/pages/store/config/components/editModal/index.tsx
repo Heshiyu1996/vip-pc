@@ -18,7 +18,7 @@ export type FormValueType = {
   id: string;
   label: string;
   value: string;
-  imageList: string;
+  images: string;
 } & Partial<API.StoreConfigListItem>;
 
 const EditModal: React.FC<IProps> = (props) => {
@@ -44,8 +44,8 @@ const EditModal: React.FC<IProps> = (props) => {
       label: props.values.label,
       value: props.values.value,
     }
-    if (props.values?.imageList?.length) {
-      newValues.imageList = handlePreviewImageList(props.values?.imageList);
+    if (props.values?.images?.length) {
+      newValues.images = handlePreviewImageList(props.values?.images);
     }
     formRef?.current?.setFieldsValue(newValues);
   }, [props.values]);
@@ -58,7 +58,7 @@ const EditModal: React.FC<IProps> = (props) => {
         id: fields.id,
         label: fields.label,
         value: fields.value,
-        imageList: fields.imageList,
+        images: fields.images,
       });
       hide();
       message.success('编辑成功!');
@@ -125,7 +125,7 @@ const EditModal: React.FC<IProps> = (props) => {
         label="图片"
         title="上传文件"
         listType="picture-card"
-        name="imageList"
+        name="images"
         max={10}
       />
     </ModalForm>

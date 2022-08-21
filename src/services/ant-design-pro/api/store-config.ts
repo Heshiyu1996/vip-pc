@@ -1,6 +1,7 @@
 // @ts-ignore
 /* eslint-disable */
 import { request } from 'umi';
+import { requestList } from '@/common/tools';
 
 /** 查询会员卡配置列表 GET /api/store/config/list */
 export async function getStoreConfigList(
@@ -12,8 +13,8 @@ export async function getStoreConfigList(
   },
   options?: { [key: string]: any },
 ) {
-  return request<API.RuleList>('/api/store/config/list', {
-    method: 'GET',
+  return request<API.RuleList>('/api/user/logout', {
+    method: 'POST',
     params: {
       ...params,
     },

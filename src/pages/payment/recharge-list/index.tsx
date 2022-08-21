@@ -33,26 +33,6 @@ const ChannelEnumConfig = (() => {
   return map;
 })();
 
-// 删除指定行
-const handleRemove = async (selectedItem: API.RuleListItem) => {
-  const hide = message.loading('正在删除');
-  if (!selectedItem) return true;
-
-  try {
-    await removeRechargeList({
-      id: selectedItem.id,
-    });
-    hide();
-    message.success('删除成功!');
-    
-    return true;
-  } catch (error) {
-    hide();
-    message.error('删除失败，请稍后重试!');
-    return false;
-  }
-};
-
 const RechargeList: React.FC = () => {
   const [visibleAddModal, setVisibleAddModal] = useState<boolean>(false);
 
@@ -64,6 +44,26 @@ const RechargeList: React.FC = () => {
       actionRef.current.reload();
     }
   }
+
+  // 删除指定行
+  const handleRemove = async (selectedItem: API.RuleListItem) => {
+    const hide = message.loading('正在删除');
+    if (!selectedItem) return true;
+  
+    try {
+      await removeRechargeList({
+        id: selectedItem.id,
+      });
+      hide();
+      message.success('删除成功!');
+      handleReload();
+      return true;
+    } catch (error) {
+      hide();
+      message.error('删除失败，请稍后重试!');
+      return false;
+    }
+  };
 
   const formRef = useRef<ProFormInstance>();
   const handleExport = async () => {

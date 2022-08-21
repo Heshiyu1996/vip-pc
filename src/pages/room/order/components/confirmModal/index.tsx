@@ -17,7 +17,7 @@ interface IProps {
   onOk: () => void;
 }
 export type FormValueType = {
-  orderId: string;
+  id: string;
   identifyCode: string;
   message?: string;
 } & Partial<API.RoomOrderListItem>;
@@ -30,7 +30,7 @@ const ConfirmModal: React.FC<IProps> = (props) => {
 
   useEffect(() => {
     const values = {
-      orderId: props.values.orderId,
+      id: props.values.id,
     }
     formRef?.current?.setFieldsValue(values);
   }, [props.values]);
@@ -40,7 +40,7 @@ const ConfirmModal: React.FC<IProps> = (props) => {
 
     try {
       await confirmRoomOrder({
-        orderId: fields.orderId,
+        id: fields.id,
         identifyCode: fields.identifyCode,
         message: fields.message,
       });
@@ -61,7 +61,7 @@ const ConfirmModal: React.FC<IProps> = (props) => {
       width="500px"
       title="确认订房"
       initialValues={{
-        orderId: props.values.orderId
+        id: props.values.id
       }}
       visible={visible}
       onVisibleChange={onVisibleChange}
@@ -83,7 +83,7 @@ const ConfirmModal: React.FC<IProps> = (props) => {
         ]}
         disabled
         width="md"
-        name="orderId"
+        name="id"
       />
       <ProFormText
         label="确认号"

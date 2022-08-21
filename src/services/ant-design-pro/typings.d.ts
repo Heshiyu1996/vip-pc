@@ -87,7 +87,7 @@ declare namespace API {
     id?: string;
     label?: string;
     value?: string;
-    imageList?: string[];
+    images?: string[];
   };
 
   type RechargeList = {
@@ -208,7 +208,7 @@ declare namespace API {
     /**
      * 订单号
      */
-    orderId: string;
+    id: string;
     /**
      * 预订开始日期
      */
@@ -255,6 +255,7 @@ declare namespace API {
      * 订单状态
      */
     orderStatus?: string;
+    orderStatusCode: string;
     /**
      * 客房类型
      */

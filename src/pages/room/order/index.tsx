@@ -33,15 +33,15 @@ const ChannelEnumConfig = (() => {
 
 const mockStatusData = [
   {
-    id: '0',
+    id: 'NEW',
     levelName: '待确认',
   },
   {
-    id: '1',
+    id: 'ACCEPTED',
     levelName: '已确认',
   },
   {
-    id: '2',
+    id: 'REJECTED',
     levelName: '已拒绝',
   },
 ];
@@ -92,15 +92,15 @@ const RoomOrder: React.FC = () => {
   const columns: ProColumns<API.RoomOrderListItem>[] = [
     {
       title: '订单号',
-      dataIndex: 'orderId',
+      dataIndex: 'id',
     },
     {
       title: '名字',
-      dataIndex: 'name',
+      dataIndex: 'vipCardName',
     },
     {
       title: '会员卡号',
-      dataIndex: 'cardNo',
+      dataIndex: 'vipCardId',
     },
     {
       title: '客房类型',
@@ -109,24 +109,24 @@ const RoomOrder: React.FC = () => {
     },
     {
       title: '支付渠道',
-      dataIndex: 'orderChannel',
+      dataIndex: 'transactionChannelId',
       valueEnum: ChannelEnumConfig,
       renderText: (val: string) => ChannelEnumConfig[val],
     },
     {
       title: '预订天数',
-      dataIndex: 'days',
+      dataIndex: 'orderDays',
     },
     {
       title: '预订日期',
-      dataIndex: 'orderStartTime',
-      render: (_, record) => `${moment(record.orderStartTime).format('YYYY-MM-DD')} ~ ${moment(record.orderEndTime).format('YYYY-MM-DD')}`,
+      dataIndex: 'orderStartDate',
+      render: (_, record) => `${moment(record.orderStartDate).format('YYYY-MM-DD')} ~ ${moment(record.orderEndDate).format('YYYY-MM-DD')}`,
     },
     {
       title: '状态',
-      dataIndex: 'orderStatus',
+      dataIndex: 'orderStatusCode',
       hideInSearch: true,
-      render: (_, record) => <span className={`status-${record.orderStatus}`}>{StatusEnumConfig[record.orderStatus]}</span>,
+      render: (_, record) => <span className={`status-${record.orderStatusCode}`}>{StatusEnumConfig[record.orderStatusCode]}</span>,
     },
     {
       title: '创建时间',
@@ -138,7 +138,7 @@ const RoomOrder: React.FC = () => {
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => {
-        if (record.orderStatus !== '0') return null;
+        if (record.orderStatusCode !== 'NEW') return null;
 
         return [
           <Button key='edit' type="link" size="small" onClick={() => {
@@ -165,7 +165,7 @@ const RoomOrder: React.FC = () => {
         headerTitle="查询结果"
         actionRef={actionRef}
         formRef={formRef}
-        rowKey="orderId"
+        rowKey="id"
         toolBarRender={() => [
           <Button key="primary" onClick={handleExport}>
             导出

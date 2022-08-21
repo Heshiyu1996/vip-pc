@@ -32,15 +32,15 @@ const ChannelEnumConfig = (() => {
 
 const mockStatusData = [
   {
-    id: '0',
+    id: 'NEW',
     levelName: '待处理',
   },
   {
-    id: '1',
+    id: 'ACCEPTED',
     levelName: '已同意',
   },
   {
-    id: '2',
+    id: 'REJECTED',
     levelName: '已拒绝',
   },
 ];
@@ -91,15 +91,15 @@ const RoomRefund: React.FC = () => {
   const columns: ProColumns<API.RoomRefundListItem>[] = [
     {
       title: '申请单号',
-      dataIndex: 'orderId',
+      dataIndex: 'id',
     },
     {
       title: '会员卡号',
-      dataIndex: 'cardNo',
+      dataIndex: 'vipCardId',
     },
     {
       title: '支付渠道',
-      dataIndex: 'orderChannel',
+      dataIndex: 'transactionChannelId',
       valueEnum: ChannelEnumConfig,
       renderText: (val: string) => ChannelEnumConfig[val],
     },
@@ -110,24 +110,24 @@ const RoomRefund: React.FC = () => {
     },
     {
       title: '预订天数',
-      dataIndex: 'days',
+      dataIndex: 'orderDays',
       hideInSearch: true,
     },
     {
       title: '退款进度',
-      dataIndex: 'statusRefund',
+      dataIndex: 'refundStatusCode',
       valueEnum: StatusEnumConfig,
       hideInTable: true,
     },
     {
       title: '退款进度',
-      dataIndex: 'statusRefund',
+      dataIndex: 'refundStatusCode',
       hideInSearch: true,
       render: (val: string) => <span className={`status-${val}`}>{StatusEnumConfig[val]}</span>
     },
     {
       title: '预订时间',
-      dataIndex: 'orderStartTime',
+      dataIndex: 'orderStartDate',
     },
     {
       title: '申请时间',
@@ -138,7 +138,7 @@ const RoomRefund: React.FC = () => {
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => {
-        if (record.statusRefund !== '0') return null;
+        if (record.refundStatusCode !== 'NEW') return null;
 
         return [
           <Button key='edit' type="link" size="small" onClick={() => {
@@ -165,7 +165,7 @@ const RoomRefund: React.FC = () => {
         headerTitle="查询结果"
         actionRef={actionRef}
         formRef={formRef}
-        rowKey="orderId"
+        rowKey="id"
         toolBarRender={() => [
           <Button key="primary" onClick={handleExport}>
             导出

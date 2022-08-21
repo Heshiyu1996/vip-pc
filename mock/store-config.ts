@@ -9,7 +9,7 @@ function getStoreConfigList(req: Request, res: Response, u: string) {
                 "id": "62",
                 "label": "labore laborum dolor irure Duis",
                 "value": "quis Excepteur",
-                "imageList": [
+                "images": [
                     "http://dummyimage.com/400x400"
                 ]
             },
@@ -17,7 +17,7 @@ function getStoreConfigList(req: Request, res: Response, u: string) {
                 "id": "50",
                 "label": "nulla eiusmod",
                 "value": "velit consequat commodo culpa",
-                "imageList": [
+                "images": [
                     "http://dummyimage.com/400x400",
                     "http://dummyimage.com/400x400",
                     "http://dummyimage.com/400x400",
@@ -28,7 +28,7 @@ function getStoreConfigList(req: Request, res: Response, u: string) {
                 "id": "31",
                 "label": "amet voluptate aliquip proident sint",
                 "value": "minim pariatur in commodo eiusmod",
-                "imageList": [
+                "images": [
                     "http://dummyimage.com/400x400"
                 ]
             },
@@ -36,7 +36,7 @@ function getStoreConfigList(req: Request, res: Response, u: string) {
                 "id": "48",
                 "label": "cupidatat Lorem culpa minim",
                 "value": "qui eiusmod",
-                "imageList": [
+                "images": [
                     "http://dummyimage.com/400x400",
                     "http://dummyimage.com/400x400",
                     "http://dummyimage.com/400x400"
@@ -46,7 +46,7 @@ function getStoreConfigList(req: Request, res: Response, u: string) {
                 "id": "84",
                 "label": "ut mollit tempor",
                 "value": "consequat esse dolore Lorem Ut",
-                "imageList": [
+                "images": [
                     "http://dummyimage.com/400x400",
                     "http://dummyimage.com/400x400",
                     "http://dummyimage.com/400x400",

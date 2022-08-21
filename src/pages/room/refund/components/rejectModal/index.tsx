@@ -27,7 +27,7 @@ const RejectModal: React.FC<IProps> = (props) => {
 
     try {
       await rejectRoomRefund({
-        orderId: props.values.orderId,
+        id: props.values.id,
         message: fields.message,
       });
       hide();

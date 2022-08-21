@@ -99,7 +99,7 @@ export const request: RequestConfig = {
       // 异常处理
       if (!resData.success) {
         // 未登录
-        if (resData?.data?.errorType === 902) {
+        if ([902, 909].includes(resData?.data?.errorType)) {
           history.push(`/user/login`);
         }
         throw ({

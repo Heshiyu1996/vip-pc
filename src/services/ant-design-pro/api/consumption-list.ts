@@ -1,6 +1,7 @@
 // @ts-ignore
 /* eslint-disable */
 import { request } from 'umi';
+import { requestList } from '@/common/tools';
 
 /** 查询消费列表 GET /api/payment/consumption/list */
 export async function getConsumptionList(
@@ -12,7 +13,7 @@ export async function getConsumptionList(
   },
   options?: { [key: string]: any },
 ) {
-  return request<API.RuleList>('/api/payment/consumption/list', {
+  return requestList<API.RuleList>('/api/payment/consumption/list', {
     method: 'GET',
     params: {
       ...params,

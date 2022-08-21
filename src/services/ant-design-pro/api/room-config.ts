@@ -1,6 +1,7 @@
 // @ts-ignore
 /* eslint-disable */
 import { request } from 'umi';
+import { requestList } from '@/common/tools';
 
 /** 查询客房配置列表 GET /api/room/config/list */
 export async function getRoomConfigList(
@@ -12,7 +13,7 @@ export async function getRoomConfigList(
   },
   options?: { [key: string]: any },
 ) {
-  return request<API.RoomConfigList>('/api/room/config/list', {
+  return requestList<API.RoomConfigList>('/api/room/config/list', {
     method: 'GET',
     params: {
       ...params,

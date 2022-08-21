@@ -9,6 +9,7 @@ import { useState, useRef } from 'react';
 import type { ActionType } from '@ant-design/pro-components';
 import { ProList } from '@ant-design/pro-components';
 import { Button, Image } from 'antd';
+import { getStoreConfigList } from '@/services/ant-design-pro/api';
 import EditModal from './components/editModal';
 import './index.less';
 
@@ -16,7 +17,7 @@ interface IItem {
   id: string;
   label: string;
   value: string;
-  imageList: string[];
+  images: string[];
   title: string;
 }
 
@@ -25,7 +26,7 @@ const dataSource = [
     id: '1',
     label: '店铺信息',
     value: 'eu dolore officia',
-    imageList: [
+    images: [
       'http://dummyimage.com/400x400',
       'http://dummyimage.com/400x400',
       'http://dummyimage.com/400x400',
@@ -46,7 +47,7 @@ const dataSource = [
     id: '2',
     label: '商户资质',
     value: 'aute incididunt',
-    imageList: [
+    images: [
       'http://dummyimage.com/400x400',
     ],
     title: ''
@@ -55,7 +56,7 @@ const dataSource = [
     id: '3',
     label: '商户信息',
     value: 'Lorem',
-    imageList: [
+    images: [
       'http://dummyimage.com/400x400',
     ],
     title: ''
@@ -64,7 +65,7 @@ const dataSource = [
     id: '4',
     label: '商户声明',
     value: 'Lorem',
-    imageList: [
+    images: [
       'http://dummyimage.com/400x400',
     ],
     title: ''
@@ -73,7 +74,7 @@ const dataSource = [
     id: '5',
     label: '防疫政策',
     value: 'Lorem',
-    imageList: [
+    images: [
       'http://dummyimage.com/400x400',
     ],
     title: ''
@@ -101,7 +102,8 @@ export default () => {
       <ProList<IItem>
         headerTitle="店铺配置"
         rowKey="id"
-        dataSource={dataSource}
+        // dataSource={dataSource}
+        request={getStoreConfigList}
         split
         actionRef={actionRef}
         metas={{
@@ -115,7 +117,7 @@ export default () => {
             render: (_, row) => {
               return (
                 <div key={row.id}>
-                  {row?.imageList?.map((url, index) => <Image
+                  {row?.images?.map((url, index) => <Image
                     key={`${url}${index}`}
                     width={50}
                     src={url}

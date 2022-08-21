@@ -27,7 +27,7 @@ const ConfirmModal: React.FC<IProps> = (props) => {
 
     try {
       await confirmRoomRefund({
-        orderId: props.values.orderId,
+        id: props.values.id,
         message: fields.message,
       });
       hide();

@@ -53,7 +53,7 @@ const Recharge: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>();
 
   const onSearch = (val: string) => {
-    getVipList({ cardId: val }).then((res) => {
+    getVipList({ id: val }).then((res) => {
       const { data } = res;
       if (!data?.length) {
         message.error('会员卡号不存在，请重新输入!');
@@ -107,7 +107,7 @@ const Recharge: React.FC = () => {
     rechargeAmount(params).then(() => {
       Modal.success({
         title: '充值成功!',
-        content: (<p>已成功为 <b>{vipInfo.ownerName}(卡号: {vipInfo.cardId}) </b> 充值 <b>{amount}</b> 元.</p>)
+        content: (<p>已成功为 <b>{vipInfo.ownerName}(卡号: {vipInfo.id}) </b> 充值 <b>{amount}</b> 元.</p>)
       })
       handleReset();
     }).finally(() => {
@@ -139,11 +139,11 @@ const Recharge: React.FC = () => {
             </Col>
           </Row>
 
-          {vipInfo?.cardId && <div>
+          {vipInfo?.id && <div>
             <Row gutter={[16, 24]}>
               <Col span={24}>
                 <Descriptions title="用户信息" bordered column={1}>
-                  <Descriptions.Item label="会员卡号">{vipInfo?.cardId}</Descriptions.Item>
+                  <Descriptions.Item label="会员卡号">{vipInfo?.id}</Descriptions.Item>
                   <Descriptions.Item label="会员名字">{vipInfo?.ownerName}</Descriptions.Item>
                   <Descriptions.Item label="手机号">{vipInfo?.mobileNumber}</Descriptions.Item>
                   <Descriptions.Item label="当前等级">{LevelEnumConfig[vipInfo?.currentLevelCode]}</Descriptions.Item>

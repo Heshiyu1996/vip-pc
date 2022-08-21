@@ -1,6 +1,7 @@
 // @ts-ignore
 /* eslint-disable */
 import { request } from 'umi';
+import { requestList } from '@/common/tools';
 
 /** 获取退款申请记录 GET /api/room/refund/list */
 export async function getRoomRefundList(
@@ -12,7 +13,7 @@ export async function getRoomRefundList(
   },
   options?: { [key: string]: any },
 ) {
-  return request<API.RoomRefundList>('/api/room/refund/list', {
+  return requestList<API.RoomRefundList>('/api/room/refund/list', {
     method: 'GET',
     params: {
       ...params,
@@ -21,18 +22,18 @@ export async function getRoomRefundList(
   });
 }
 
-/** 同意退款 PUT /api/room/refund/confirm/{orderId} */
+/** 同意退款 PUT /api/room/refund/confirm/{id} */
 export async function confirmRoomRefund(params?: { [key: string]: any }, options?: { [key: string]: any }) {
-  return request<API.RoomRefundListItem>(`/api/room/refund/confirm/${params.orderId}`, {
+  return request<API.RoomRefundListItem>(`/api/room/refund/confirm/${params.id}`, {
     method: 'PUT',
     data: params,
     ...(options || {}),
   });
 }
 
-/** 拒绝退款 PUT /api/room/refund/reject/{orderId} */
+/** 拒绝退款 PUT /api/room/refund/reject/{id} */
 export async function rejectRoomRefund(params?: { [key: string]: any }, options?: { [key: string]: any }) {
-  return request<API.RoomRefundListItem>(`/api/room/refund/reject/${params.orderId}`, {
+  return request<API.RoomRefundListItem>(`/api/room/refund/reject/${params.id}`, {
     method: 'PUT',
     data: params,
     ...(options || {}),

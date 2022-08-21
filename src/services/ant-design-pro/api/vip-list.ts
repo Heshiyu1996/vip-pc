@@ -1,6 +1,7 @@
 // @ts-ignore
 /* eslint-disable */
 import { request } from 'umi';
+import { requestList } from '@/common/tools';
 
 /** 获取当前登录的用户信息 GET /api/user/info */
 export async function currentUser(options?: { [key: string]: any }) {
@@ -39,19 +40,6 @@ export async function getNotices(options?: { [key: string]: any }) {
     method: 'GET',
     ...(options || {}),
   });
-}
-
-const requestList = <T>(url: string, options?: { [key: string]: any },) => {
-  return request<T>(url, options).then((res: T) => {
-    const { success, msg, data } = res;
-    const modifiedRes = {
-      success,
-      msg,
-      data: data?.list,
-      total: data?.total
-    }
-    return modifiedRes;
-  })
 }
 
 /** 查询会员卡列表 GET /api/vip/info/list */
