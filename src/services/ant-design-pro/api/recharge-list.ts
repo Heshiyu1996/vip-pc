@@ -3,7 +3,7 @@
 import { request } from 'umi';
 import { requestList } from '@/common/tools';
 
-/** 查询充值列表 GET /api/payment/recharge/list */
+/** 查询充值列表 GET /pc/api/payment/recharge/list */
 export async function getRechargeList(
   params: {
     /** 当前的页码 */
@@ -13,7 +13,7 @@ export async function getRechargeList(
   },
   options?: { [key: string]: any },
 ) {
-  return requestList<API.RechargeList>('/api/payment/recharge/list', {
+  return requestList<API.RechargeList>('/pc/api/payment/recharge/list', {
     method: 'GET',
     params: {
       ...params,
@@ -22,18 +22,18 @@ export async function getRechargeList(
   });
 }
 
-/** 删除充值列表记录 DELETE /api/payment/recharge/{id} */
+/** 删除充值列表记录 DELETE /pc/api/payment/recharge/{id} */
 export async function removeRechargeList(params?: { [key: string]: any }, options?: { [key: string]: any }) {
-  return request<Record<string, any>>(`/api/payment/recharge/${params.id}`, {
+  return request<Record<string, any>>(`/pc/api/payment/recharge/${params.id}`, {
     method: 'DELETE',
     data: params,
     ...(options || {}),
   });
 }
 
-/** 导出充值列表记录 DELETE /api/payment/recharge/export */
+/** 导出充值列表记录 DELETE /pc/api/payment/recharge/export */
 export async function exportRechargeList(params?: { [key: string]: any }, options?: { [key: string]: any }) {
-  return request<Record<string, any>>(`/api/payment/recharge/export`, {
+  return request<Record<string, any>>(`/pc/api/payment/recharge/export`, {
     method: 'POST',
     data: params,
     ...(options || {}),

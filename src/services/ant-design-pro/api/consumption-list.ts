@@ -3,7 +3,7 @@
 import { request } from 'umi';
 import { requestList } from '@/common/tools';
 
-/** 查询消费列表 GET /api/payment/consumption/list */
+/** 查询消费列表 GET /pc/api/payment/consumption/list */
 export async function getConsumptionList(
   params: {
     /** 当前的页码 */
@@ -13,7 +13,7 @@ export async function getConsumptionList(
   },
   options?: { [key: string]: any },
 ) {
-  return requestList<API.RuleList>('/api/payment/consumption/list', {
+  return requestList<API.RuleList>('/pc/api/payment/consumption/list', {
     method: 'GET',
     params: {
       ...params,
@@ -22,18 +22,18 @@ export async function getConsumptionList(
   });
 }
 
-/** 删除消费列表记录 DELETE /api/payment/consumption/{id} */
+/** 删除消费列表记录 DELETE /pc/api/payment/consumption/{id} */
 export async function removeConsumptionList(params?: { [key: string]: any }, options?: { [key: string]: any }) {
-  return request<Record<string, any>>(`/api/payment/consumption/${params.id}`, {
+  return request<Record<string, any>>(`/pc/api/payment/consumption/${params.id}`, {
     method: 'DELETE',
     data: params,
     ...(options || {}),
   });
 }
 
-/** 导出消费列表记录 DELETE /api/payment/consumption/export */
+/** 导出消费列表记录 DELETE /pc/api/payment/consumption/export */
 export async function exportConsumptionList(params?: { [key: string]: any }, options?: { [key: string]: any }) {
-  return request<Record<string, any>>(`/api/payment/consumption/export`, {
+  return request<Record<string, any>>(`/pc/api/payment/consumption/export`, {
     method: 'POST',
     data: params,
     ...(options || {}),

@@ -3,7 +3,7 @@
 import { request } from 'umi';
 import { requestList } from '@/common/tools';
 
-/** 获取订房记录 GET /api/room/order/list */
+/** 获取订房记录 GET /pc/api/room/order/list */
 export async function getRoomOrderList(
   params: {
     /** 当前的页码 */
@@ -13,7 +13,7 @@ export async function getRoomOrderList(
   },
   options?: { [key: string]: any },
 ) {
-  return requestList<API.RoomRefundList>('/api/room/order/list', {
+  return requestList<API.RoomRefundList>('/pc/api/room/order/list', {
     method: 'GET',
     params: {
       ...params,
@@ -22,27 +22,27 @@ export async function getRoomOrderList(
   });
 }
 
-/** 同意订房 PUT /api/room/order/accept/{id} */
+/** 同意订房 PUT /pc/api/room/order/accept/{id} */
 export async function confirmRoomOrder(params?: { [key: string]: any }, options?: { [key: string]: any }) {
-  return request<API.RoomRefundListItem>(`/api/room/order/accept/${params.id}`, {
+  return request<API.RoomRefundListItem>(`/pc/api/room/order/accept/${params.id}`, {
     method: 'PUT',
     data: params,
     ...(options || {}),
   });
 }
 
-/** 拒绝订房 PUT /api/room/order/reject/{id} */
+/** 拒绝订房 PUT /pc/api/room/order/reject/{id} */
 export async function rejectRoomOrder(params?: { [key: string]: any }, options?: { [key: string]: any }) {
-  return request<API.RoomRefundListItem>(`/api/room/order/reject/${params.id}`, {
+  return request<API.RoomRefundListItem>(`/pc/api/room/order/reject/${params.id}`, {
     method: 'PUT',
     data: params,
     ...(options || {}),
   });
 }
 
-/** 导出订房记录 POST /api/room/order/export */
+/** 导出订房记录 POST /pc/api/room/order/export */
 export async function exportRoomOrder(params?: { [key: string]: any }, options?: { [key: string]: any }) {
-  return request<API.RoomRefundListItem>('/api/room/order/export', {
+  return request<API.RoomRefundListItem>('/pc/api/room/order/export', {
     method: 'POST',
     data: params,
     ...(options || {}),
