@@ -19,7 +19,7 @@ interface IProps {
 export type FormValueType = {
   levelName: string;
   minimumRechargeAmount: string;
-  vipDiscount: string;
+  vipDiscount: boolean;
   vipDayDiscount: string;
   diningDiscount: string;
   hotSpringOrParkDiscount: string;

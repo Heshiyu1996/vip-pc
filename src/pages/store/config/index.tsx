@@ -21,66 +21,6 @@ interface IItem {
   title: string;
 }
 
-const dataSource = [
-  {
-    id: '1',
-    label: '店铺信息',
-    value: 'eu dolore officia',
-    images: [
-      'http://dummyimage.com/400x400',
-      'http://dummyimage.com/400x400',
-      'http://dummyimage.com/400x400',
-      'http://dummyimage.com/400x400',
-      'http://dummyimage.com/400x400',
-      'http://dummyimage.com/400x400',
-      'http://dummyimage.com/400x400',
-      'http://dummyimage.com/400x400',
-      'http://dummyimage.com/400x400',
-      'http://dummyimage.com/400x400',
-      'http://dummyimage.com/400x400',
-      'http://dummyimage.com/400x400',
-      'http://dummyimage.com/400x400',
-    ],
-    title: ''
-  },
-  {
-    id: '2',
-    label: '商户资质',
-    value: 'aute incididunt',
-    images: [
-      'http://dummyimage.com/400x400',
-    ],
-    title: ''
-  },
-  {
-    id: '3',
-    label: '商户信息',
-    value: 'Lorem',
-    images: [
-      'http://dummyimage.com/400x400',
-    ],
-    title: ''
-  },
-  {
-    id: '4',
-    label: '商户声明',
-    value: 'Lorem',
-    images: [
-      'http://dummyimage.com/400x400',
-    ],
-    title: ''
-  },
-  {
-    id: '5',
-    label: '防疫政策',
-    value: 'Lorem',
-    images: [
-      'http://dummyimage.com/400x400',
-    ],
-    title: ''
-  },
-];
-
 export default () => {
   const [visibleEditModal, setVisibleEditModal] = useState<boolean>(false);
   const [currentRow, setCurrentRow] = useState<API.StoreConfigListItem>();

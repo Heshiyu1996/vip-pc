@@ -22,9 +22,9 @@ export async function getRoomConfigList(
   });
 }
 
-/** 编辑客房配置 PUT /api/room/config/{id} */
+/** 编辑客房配置 PUT /api/room/config/edit/{id} */
 export async function editRoomConfig(params?: { [key: string]: any }, options?: { [key: string]: any }) {
-  return request<API.RoomConfigListItem>(`/api/room/config/${params.id}`, {
+  return request<API.RoomConfigListItem>(`/api/room/config/edit/${params.id}`, {
     method: 'PUT',
     data: params,
     ...(options || {}),
@@ -40,9 +40,9 @@ export async function editRoomConfigPrice(params?: { [key: string]: any }, optio
   });
 }
 
-/** 批量编辑客房配置价格 PUT /api/room/config/count/edit */
+/** 批量编辑客房配置价格 PUT /api/room/config/amount/edit */
 export async function editRoomConfigCount(params?: { [key: string]: any }, options?: { [key: string]: any }) {
-  return request<API.RoomConfigListItem>(`/api/room/config/count/edit`, {
+  return request<API.RoomConfigListItem>(`/api/room/config/amount/edit`, {
     method: 'PUT',
     data: params,
     ...(options || {}),

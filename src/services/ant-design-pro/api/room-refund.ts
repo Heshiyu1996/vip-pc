@@ -22,9 +22,9 @@ export async function getRoomRefundList(
   });
 }
 
-/** 同意退款 PUT /api/room/refund/confirm/{id} */
-export async function confirmRoomRefund(params?: { [key: string]: any }, options?: { [key: string]: any }) {
-  return request<API.RoomRefundListItem>(`/api/room/refund/confirm/${params.id}`, {
+/** 同意退款 PUT /api/room/refund/accept/{id} */
+export async function acceptRoomRefund(params?: { [key: string]: any }, options?: { [key: string]: any }) {
+  return request<API.RoomRefundListItem>(`/api/room/refund/accept/${params.id}`, {
     method: 'PUT',
     data: params,
     ...(options || {}),

@@ -1,9 +1,8 @@
 // @ts-ignore
 /* eslint-disable */
 import { request } from 'umi';
-import { requestList } from '@/common/tools';
 
-/** 查询会员卡配置列表 GET /api/store/config/list */
+/** 查询店铺配置列表 GET /api/store/config/list */
 export async function getStoreConfigList(
   params: {
     /** 当前的页码 */
@@ -13,8 +12,8 @@ export async function getStoreConfigList(
   },
   options?: { [key: string]: any },
 ) {
-  return request<API.RuleList>('/api/user/logout', {
-    method: 'POST',
+  return request<API.StoreConfigList>('/api/store/config/list', {
+    method: 'GET',
     params: {
       ...params,
     },
@@ -22,9 +21,9 @@ export async function getStoreConfigList(
   });
 }
 
-/** 编辑会员卡配置 PUT /api/store/config/{id} */
+/** 编辑店铺配置 PUT /api/store/config/{id} */
 export async function editStoreConfig(params?: { [key: string]: any }, options?: { [key: string]: any }) {
-  return request<API.RuleListItem>(`/api/store/config/${params.id}`, {
+  return request<API.RuleListItem>(`/api/store/config/${params.key}`, {
     method: 'PUT',
     data: params,
     ...(options || {}),

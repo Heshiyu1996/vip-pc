@@ -3,6 +3,7 @@ import type { ProFormInstance } from '@ant-design/pro-components';
 import {
   ModalForm,
   ProFormText,
+  ProFormDigit,
 } from '@ant-design/pro-components';
 import { message } from 'antd';
 import { editRoomConfigPrice } from '@/services/ant-design-pro/api';
@@ -14,7 +15,7 @@ interface IProps {
   onOk: () => void;
 }
 export type FormValueType = {
-  roomIds: string[];
+  ids: string[];
   price: string;
 } & Partial<API.RuleListItem>;
 
@@ -25,7 +26,7 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
 
   useEffect(() => {
     const values = {
-      roomIds: props.values,
+      ids: props.values,
     }
     formRef?.current?.setFieldsValue(values);
   }, [props.values]);
@@ -35,7 +36,7 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
 
     try {
       await editRoomConfigPrice({
-        roomIds: fields.roomIds,
+        ids: fields.ids,
         price: fields.price,
       });
       hide();
@@ -72,10 +73,10 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
           },
         ]}
         width="md"
-        name="roomIds"
+        name="ids"
       />
       
-      <ProFormText
+      <ProFormDigit
         label="单日价格"
         rules={[
           {
@@ -85,6 +86,8 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
         ]}
         width="md"
         addonAfter="元"
+        fieldProps={{ controls: false }}
+        min={0}
         name="price"
       />
     </ModalForm>

@@ -15,7 +15,7 @@ interface IProps {
   onOk: () => void;
 }
 export type FormValueType = {
-  id: string;
+  key: string;
   label: string;
   value: string;
   images: string;
@@ -40,7 +40,7 @@ const EditModal: React.FC<IProps> = (props) => {
   }
   useEffect(() => {
     const newValues = {
-      id: props.values.id,
+      key: props.values.key,
       label: props.values.label,
       value: props.values.value,
     }
@@ -55,7 +55,7 @@ const EditModal: React.FC<IProps> = (props) => {
 
     try {
       await editStoreConfig({
-        id: fields.id,
+        key: fields.key,
         label: fields.label,
         value: fields.value,
         images: fields.images,
@@ -86,15 +86,15 @@ const EditModal: React.FC<IProps> = (props) => {
     >
       <ProFormText
         disabled
-        label="配置ID"
+        label="key"
         rules={[
           {
             required: true,
-            message: '配置ID必填!',
+            message: 'key必填!',
           },
         ]}
         width="md"
-        name="id"
+        name="key"
       />
       <ProFormText
         disabled

@@ -13,7 +13,7 @@ const genList = (current: number, pageSize: number) => {
         "roomType": `0`,
         "restCount": 89,
         "totalCount": 100,
-        "imagesList": [
+        "images": [
           "http://dummyimage.com/400x400"
         ],
       }

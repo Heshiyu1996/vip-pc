@@ -5,7 +5,7 @@ import {
   ProFormRadio,
 } from '@ant-design/pro-components';
 import { message } from 'antd';
-import { confirmRoomRefund } from '@/services/ant-design-pro/api';
+import { acceptRoomRefund } from '@/services/ant-design-pro/api';
 import './index.less';
 
 interface IProps {
@@ -26,7 +26,7 @@ const ConfirmModal: React.FC<IProps> = (props) => {
     const hide = message.loading('正在操作');
 
     try {
-      await confirmRoomRefund({
+      await acceptRoomRefund({
         id: props.values.id,
         message: fields.message,
       });

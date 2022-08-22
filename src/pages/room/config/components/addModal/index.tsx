@@ -27,6 +27,8 @@ const AddModal: React.FC<IProps> = (props) => {
   const handleAdd = async (params: API.RoomConfigListItem) => {
     const hide = message.loading('正在新增');
 
+    params.images = ['https://gw.alipayobjects.com/mdn/rms_c30934/afts/img/A*_pfwTpDVsrAAAAAAAAAAAAAAARQnAQ'];
+
     try {
       await addRoomConfig(params);
       hide();

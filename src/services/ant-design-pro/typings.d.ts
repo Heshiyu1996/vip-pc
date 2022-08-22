@@ -3,7 +3,7 @@
 
 declare namespace API {
   type CurrentUser = {
-    name?: string;
+    username?: string;
     avatar?: string;
     userid?: string;
     email?: string;
@@ -73,7 +73,7 @@ declare namespace API {
     updater?:                 string;
     updateTime?:              string;
     vipDayDiscount?:          number;
-    vipDiscount?:             number;
+    vipDiscount?:             boolean;
     key?: number;
   };
 
@@ -123,20 +123,20 @@ declare namespace API {
     /**
      * 客房图片
      */
-     imagesList?: string[];
+     images?: string[];
      /**
       * 当前剩余
       */
-     restCount: number;
+     restAmount: number;
      /**
       * 客房编码
       */
-     roomId: string;
+     id: string;
      /**
       * 客房类型
       */
      roomType:   string;
-     totalCount: number;
+     totalAmount: number;
      /**
       * 预定情况
       */
@@ -166,7 +166,7 @@ declare namespace API {
     roomType:     string;
     updater:      string;
     updateTime:   string;
-    vipDiscount:  null;
+    vipDiscount:  boolean;
 }
 
   type RoomRefundList = {

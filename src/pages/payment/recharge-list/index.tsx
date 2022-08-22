@@ -91,6 +91,18 @@ const RechargeList: React.FC = () => {
 
   const columns: ProColumns<API.RuleListItem>[] = [
     {
+      title: '流水号',
+      dataIndex: 'id',
+      valueType: 'textarea',
+      hideInSearch: true,
+    },
+    {
+      title: '流水号',
+      dataIndex: 'flowId',
+      valueType: 'textarea',
+      hideInTable: true,
+    },
+    {
       title: '会员卡号',
       dataIndex: 'cardId',
       render: (dom, entity) => {
@@ -105,12 +117,7 @@ const RechargeList: React.FC = () => {
     },
     {
       title: '名字',
-      dataIndex: 'name',
-      valueType: 'textarea',
-    },
-    {
-      title: '流水号',
-      dataIndex: 'id',
+      dataIndex: 'ownerName',
       valueType: 'textarea',
     },
     {
@@ -165,12 +172,6 @@ const RechargeList: React.FC = () => {
     },
   ];
 
-  useEffect(() => {
-    if (urlCardId) {
-      formRef.current?.setFieldValue('cardId', urlCardId);
-    }
-  }, []);
-
   return (
     <PageContainer>
       <ProTable<API.RuleListItem, API.PageParams>
@@ -180,9 +181,6 @@ const RechargeList: React.FC = () => {
         formRef={formRef}
         search={{
           labelWidth: 120,
-        }}
-        params={{
-          cardId: urlCardId
         }}
         toolBarRender={() => [
           <Button key="primary" onClick={handleExport}>

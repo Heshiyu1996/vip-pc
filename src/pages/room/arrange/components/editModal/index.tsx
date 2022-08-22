@@ -1,17 +1,17 @@
-import React, { useRef, useEffect } from 'react';
-import type { ProFormInstance } from '@ant-design/pro-components';
+import React, { useRef, useState, useEffect } from 'react';
+import type { ProFormInstance, ProColumns } from '@ant-design/pro-components';
 import {
   ModalForm,
   ProFormText,
+  ProTable,
 } from '@ant-design/pro-components';
-import { message } from 'antd';
-import { editVip } from '@/services/ant-design-pro/api';
+import moment from 'moment';
+import { getRoomArrangeDetail } from '@/services/ant-design-pro/api';
 
 interface IProps {
   values: { [key: string]: any };
   visible: boolean;
   onVisibleChange: React.Dispatch<React.SetStateAction<boolean>>;
-  onOk: () => void;
 }
 export type FormValueType = {
   roomType: string;
@@ -19,20 +19,53 @@ export type FormValueType = {
   identityNumber: string;
 } & Partial<API.RuleListItem>;
 
+export type TableListItem = {}
+
 const EditModal: React.FC<IProps> = (props) => {
-  const { visible, onVisibleChange, onOk } = props;
+  const { visible, onVisibleChange } = props;
+  const [tableListDataSource, setTableListDataSource] = useState([]);
+  const getTableData = (id) => {
+    getRoomArrangeDetail({ id }).then((res) => {
+      const dataList = res?.data?.list;
+      setTableListDataSource(dataList);
+    });
+  }
 
   const formRef = useRef<ProFormInstance>();
 
   useEffect(() => {
+    const id = props.values?.id;
+    if (!id) return;
+
     const values = {
-      roomId: props.values.roomId,
+      id,
       roomType: props.values.roomType,
-      mobileNumber: props.values.mobileNumber,
-      identityNumber: props.values.identityNumber,
+      restAmount: props.values.restAmount,
     }
     formRef?.current?.setFieldsValue(values);
+
+    // 查询排房详情
+    getTableData(id);
   }, [props.values]);
+
+  useEffect(() => {
+    if (!visible) {
+      setTableListDataSource([]);
+    }
+  }, [visible]);
+
+  const columns: ProColumns<TableListItem>[] = [
+    {
+      title: '预订单号',
+      width: 80,
+      dataIndex: 'id',
+    },
+    {
+      title: '预订日期',
+      dataIndex: 'orderStartDate',
+      render: (_, record) => `${moment(record.orderStartDate).format('YYYY-MM-DD')} ~ ${moment(record.orderEndDate).format('YYYY-MM-DD')}`,
+    }
+  ]
 
   return (
     <ModalForm
@@ -51,7 +84,7 @@ const EditModal: React.FC<IProps> = (props) => {
           },
         ]}
         width="md"
-        name="roomId"
+        name="id"
       />
       <ProFormText
         label="客房类型"
@@ -73,7 +106,18 @@ const EditModal: React.FC<IProps> = (props) => {
           },
         ]}
         width="md"
-        name="restCount"
+        name="restAmount"
+      />
+
+      <ProTable<TableListItem>
+        dataSource={tableListDataSource}
+        rowKey="id"
+        pagination={{
+          showQuickJumper: true,
+        }}
+        columns={columns}
+        search={false}
+        dateFormatter="string"
       />
     </ModalForm>
   );

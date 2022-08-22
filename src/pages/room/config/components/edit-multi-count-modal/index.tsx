@@ -3,6 +3,7 @@ import type { ProFormInstance } from '@ant-design/pro-components';
 import {
   ModalForm,
   ProFormText,
+  ProFormDigit,
 } from '@ant-design/pro-components';
 import { message } from 'antd';
 import { editRoomConfigCount } from '@/services/ant-design-pro/api';
@@ -14,8 +15,8 @@ interface IProps {
   onOk: () => void;
 }
 export type FormValueType = {
-  roomIds: string[];
-  count: string;
+  ids: string[];
+  amount: string;
 } & Partial<API.RuleListItem>;
 
 const EditMultiCountModal: React.FC<IProps> = (props) => {
@@ -25,7 +26,7 @@ const EditMultiCountModal: React.FC<IProps> = (props) => {
 
   useEffect(() => {
     const values = {
-      roomIds: props.values,
+      ids: props.values,
     }
     formRef?.current?.setFieldsValue(values);
   }, [props.values]);
@@ -35,8 +36,8 @@ const EditMultiCountModal: React.FC<IProps> = (props) => {
 
     try {
       await editRoomConfigCount({
-        roomIds: fields.roomIds,
-        count: fields.count,
+        ids: fields.ids,
+        amount: fields.amount,
       });
       hide();
       message.success('编辑成功!');
@@ -72,10 +73,10 @@ const EditMultiCountModal: React.FC<IProps> = (props) => {
           },
         ]}
         width="md"
-        name="roomIds"
+        name="ids"
       />
       
-      <ProFormText
+      <ProFormDigit
         label="数量"
         rules={[
           {
@@ -85,7 +86,9 @@ const EditMultiCountModal: React.FC<IProps> = (props) => {
         ]}
         width="md"
         addonAfter="间"
-        name="count"
+        fieldProps={{ controls: false }}
+        min={0}
+        name="amount"
       />
     </ModalForm>
   );

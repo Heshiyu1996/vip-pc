@@ -13,36 +13,17 @@ import EditMultiCountModal from './components/edit-multi-count-modal';
 import { getRoomConfigList, removeRoomConfig } from '@/services/ant-design-pro/api';
 import './index.less';
 
-const mockRoomTypeData = [
-  {
-    id: '0',
-    levelName: '大床房',
-  },
-  {
-    id: '1',
-    levelName: '双床房',
-  },
-];
-
-const RoomTypeEnumConfig = (() => {
-  const map = {};
-  mockRoomTypeData.forEach((item) => {
-    map[item.id] = item.levelName;
-  });
-  return map;
-})();
-
 const mockUseVipDiscount = [
   {
-    id: '0',
+    id: null,
     levelName: '全部',
   },
   {
-    id: '1',
+    id: true,
     levelName: '是',
   },
   {
-    id: '2',
+    id: false,
     levelName: '否',
   },
 ];
@@ -54,25 +35,6 @@ const VipDiscountEnumConfig = (() => {
   });
   return map;
 })();
-
-// 删除指定行
-const handleRemove = async (selectedItem: API.RoomConfigListItem) => {
-  const hide = message.loading('正在删除');
-  if (!selectedItem) return true;
-
-  try {
-    await removeRoomConfig({
-      id: selectedItem.id,
-    });
-    hide();
-    message.success('删除成功!');
-    return true;
-  } catch (error) {
-    hide();
-    message.error('删除失败，请稍后重试!');
-    return false;
-  }
-};
 
 const RoomConfig: React.FC = () => {
   const [visibleAddModal, setVisibleAddModal] = useState<boolean>(false);
@@ -99,6 +61,26 @@ const RoomConfig: React.FC = () => {
     handleReload();
   }
 
+  // 删除指定行
+  const handleRemove = async (selectedItem: API.RoomConfigListItem) => {
+    const hide = message.loading('正在删除');
+    if (!selectedItem) return true;
+  
+    try {
+      await removeRoomConfig({
+        id: selectedItem.id,
+      });
+      hide();
+      message.success('删除成功!');
+      handleReload();
+      return true;
+    } catch (error) {
+      hide();
+      message.error('删除失败，请稍后重试!');
+      return false;
+    }
+  };
+
   const formRef = useRef<ProFormInstance>();
 
   const handleEditRoomConfigPrice = (selectedRowKeys: (string | number)[]) => {
@@ -119,6 +101,39 @@ const RoomConfig: React.FC = () => {
       hideInSearch: true,
     },
     {
+      title: '客房类型',
+      dataIndex: 'roomType',
+    },
+    {
+      title: '单日价格（元）',
+      dataIndex: 'price',
+      valueType: 'textarea',
+      hideInSearch: true,
+    },
+    {
+      title: '最低单日价',
+      dataIndex: 'lowestPrice',
+      valueType: 'textarea',
+      hideInTable: true,
+    },
+    {
+      title: '最高单日价',
+      dataIndex: 'highestPrice',
+      valueType: 'textarea',
+      hideInTable: true,
+    },
+    {
+      title: '数量',
+      dataIndex: 'amount',
+      hideInSearch: true,
+      valueType: 'textarea',
+    },
+    {
+      title: '是否参与会员优惠',
+      dataIndex: 'vipDiscount',
+      valueEnum: VipDiscountEnumConfig,
+    },
+    {
       title: '客房图片',
       dataIndex: 'images',
       valueType: 'textarea',
@@ -130,41 +145,6 @@ const RoomConfig: React.FC = () => {
         src={url}
         rootClassName='u-image-list'
       />),
-    },
-    {
-      title: '客房类型',
-      dataIndex: 'roomType',
-      valueEnum: RoomTypeEnumConfig,
-      renderText: (val: string) => RoomTypeEnumConfig[val],
-    },
-    {
-      title: '单日价格（元）',
-      dataIndex: 'price',
-      valueType: 'textarea',
-      hideInSearch: true,
-    },
-    {
-      title: '最低单日价',
-      dataIndex: 'lowPrice',
-      valueType: 'textarea',
-      hideInTable: true,
-    },
-    {
-      title: '最高单日价',
-      dataIndex: 'highPrice',
-      valueType: 'textarea',
-      hideInTable: true,
-    },
-    {
-      title: '数量',
-      dataIndex: 'totalCount',
-      hideInSearch: true,
-      valueType: 'textarea',
-    },
-    {
-      title: '是否参与会员优惠',
-      dataIndex: 'useVipDiscount',
-      valueEnum: VipDiscountEnumConfig,
     },
     {
       title: '操作',

@@ -1,0 +1,29 @@
+.u-home {
+  .todo-board {
+    .ant-card-body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .item-wrapper {
+        display: inline-block;
+        text-align: center;
+        flex: 1;
+        border-right: 1px solid #eee;
+
+        &:last-child {
+          border-right: 0;
+        }
+
+        .label {
+          color: #999;
+          font-size: 16px;
+        }
+
+        .value {
+          font-size: 24px;
+        }
+      }
+    }
+  }
+}

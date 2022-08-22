@@ -54,12 +54,12 @@ const ArrangeList: React.FC = () => {
   const columns: ProColumns<API.RoomArrangeListItem>[] = [
     {
       title: '客房编码',
-      dataIndex: 'roomId',
+      dataIndex: 'id',
       hideInSearch: true,
     },
     {
       title: '客房图片',
-      dataIndex: 'imagesList',
+      dataIndex: 'images',
       valueType: 'textarea',
       hideInSearch: true,
       // @ts-ignore
@@ -73,23 +73,21 @@ const ArrangeList: React.FC = () => {
     {
       title: '客房类型',
       dataIndex: 'roomType',
+      hideInSearch: true,
+    },
+    {
+      title: '客房类型',
+      dataIndex: 'roomType',
+      hideInTable: true,
       valueEnum: RoomTypeEnumConfig,
       renderText: (val: string) => RoomTypeEnumConfig[val],
     },
-    
-    {
-      title: "创建时间",
-      key: 'since',
-      dataIndex: 'date',
-      valueType: 'date',
-      hideInTable: true,
-    },
     {
       title: '余量情况',
-      dataIndex: 'restCount',
+      dataIndex: 'restAmount',
       hideInSearch: true,
       valueType: 'textarea',
-      renderText: (val: string, record: API.RoomArrangeListItem) => `(${val} / ${record.totalCount})`,
+      renderText: (val: string, record: API.RoomArrangeListItem) => `(${val} / ${record.restAmount})`,
     },
     {
       title: '操作',
@@ -119,7 +117,7 @@ const ArrangeList: React.FC = () => {
     <PageContainer>
       <ProTable<API.RoomArrangeListItem, API.PageParams>
         headerTitle="查询结果"
-        rowKey="roomId"
+        rowKey="id"
         formRef={formRef}
         search={{
           labelWidth: 120,

@@ -99,7 +99,7 @@ function getRoomRefundList(req: Request, res: Response, u: string) {
   return res.json(result);
 }
 
-function confirmRoomRefund(req: Request, res: Response, u: string, b: Request) {
+function acceptRoomRefund(req: Request, res: Response, u: string, b: Request) {
   const result = {
     success: true,
     message: '同意成功',
@@ -131,7 +131,7 @@ function exportRoomRefund(req: Request, res: Response, u: string, b: Request) {
 
 export default {
   'GET /api/room/refund/list': getRoomRefundList,
-  'PUT /api/room/refund/confirm/*': confirmRoomRefund,
+  'PUT /api/room/refund/accept/*': acceptRoomRefund,
   'PUT /api/room/refund/reject/*': rejectRoomRefund,
   'POST /api/room/refund/export': exportRoomRefund,
 };
