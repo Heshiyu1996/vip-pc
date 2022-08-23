@@ -35,7 +35,9 @@ export async function removeRechargeList(params?: { [key: string]: any }, option
 export async function exportRechargeList(params?: { [key: string]: any }, options?: { [key: string]: any }) {
   return request<Record<string, any>>(`/pc/api/payment/recharge/export`, {
     method: 'GET',
-    data: params,
+    params: {
+      ...params
+    },
     ...(options || {}),
   });
 }

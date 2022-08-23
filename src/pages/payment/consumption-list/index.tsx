@@ -79,7 +79,7 @@ const handleRemove = async (selectedItem: API.RuleListItem) => {
       message.success('导出成功!');
     } catch (error) {
       hide();
-      message.error('导出失败，请稍后重试!');
+      // message.error('导出失败，请稍后重试!');
     }
   }
 

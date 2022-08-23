@@ -105,7 +105,7 @@ export const request: RequestConfig = {
         throw ({
           ...resData,
           // 后端下发 msg 兼容为 message
-          message: resData.msg,
+          message: resData?.data?.errorMsg || resData.msg,
         });
       }
 

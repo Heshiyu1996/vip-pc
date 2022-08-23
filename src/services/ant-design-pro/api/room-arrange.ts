@@ -46,7 +46,9 @@ export async function removeRoomArrangeList(params?: { [key: string]: any }, opt
 export async function exportRoomArrangeList(params?: { [key: string]: any }, options?: { [key: string]: any }) {
   return request<Record<string, any>>(`/pc/api/room/arrangement/export`, {
     method: 'GET',
-    data: params,
+    params: {
+      ...params
+    },
     ...(options || {}),
   });
 }

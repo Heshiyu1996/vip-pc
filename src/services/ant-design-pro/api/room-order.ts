@@ -44,7 +44,9 @@ export async function rejectRoomOrder(params?: { [key: string]: any }, options?:
 export async function exportRoomOrder(params?: { [key: string]: any }, options?: { [key: string]: any }) {
   return request<API.RoomRefundListItem>('/pc/api/room/order/export', {
     method: 'GET',
-    data: params,
+    params: {
+      ...params
+    },
     ...(options || {}),
   });
 }

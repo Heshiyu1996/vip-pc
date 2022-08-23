@@ -31,11 +31,13 @@ export async function removeConsumptionList(params?: { [key: string]: any }, opt
   });
 }
 
-/** 导出消费列表记录 DELETE /pc/api/payment/consumption/export */
+/** 导出消费列表记录 GET /pc/api/payment/consumption/export */
 export async function exportConsumptionList(params?: { [key: string]: any }, options?: { [key: string]: any }) {
   return request<Record<string, any>>(`/pc/api/payment/consumption/export`, {
     method: 'GET',
-    data: params,
+    params: {
+      ...params
+    },
     ...(options || {}),
   });
 }
