@@ -23,7 +23,7 @@ export async function getStoreConfigList(
 
 /** 编辑店铺配置 PUT /pc/api/store/config/{id} */
 export async function editStoreConfig(params?: { [key: string]: any }, options?: { [key: string]: any }) {
-  return request<API.RuleListItem>(`/pc/api/store/config/${params.key}`, {
+  return request<API.RuleListItem>(`/pc/api/store/config/edit/${params.key}`, {
     method: 'PUT',
     data: params,
     ...(options || {}),

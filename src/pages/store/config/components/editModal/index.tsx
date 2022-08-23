@@ -7,6 +7,7 @@ import {
 } from '@ant-design/pro-components';
 import { message } from 'antd';
 import { editStoreConfig } from '@/services/ant-design-pro/api';
+import { handlePreviewImageList } from '@/common/tools';
 
 interface IProps {
   values: { [key: string]: any };
@@ -26,18 +27,6 @@ const EditModal: React.FC<IProps> = (props) => {
 
   const formRef = useRef<ProFormInstance>();
 
-  // 表单回填前，处理图片列表
-  const handlePreviewImageList = (imgList) => {
-    const fileList = imgList?.map((item, index) => (
-      {
-        uid: `${item}${index}`,
-        name: `${item}.png`,
-        status: 'done',
-        url: item,
-      }
-    ))
-    return fileList;
-  }
   useEffect(() => {
     const newValues = {
       key: props.values.key,
@@ -58,7 +47,13 @@ const EditModal: React.FC<IProps> = (props) => {
         key: fields.key,
         label: fields.label,
         value: fields.value,
-        images: fields.images,
+        images: fields.images?.map((item) => {
+          if (item.exist) {
+            return item.url;
+          } else {
+            return item?.response?.data;
+          }
+        }),
       });
       hide();
       message.success('编辑成功!');
@@ -113,17 +108,29 @@ const EditModal: React.FC<IProps> = (props) => {
         rules={[
           {
             required: true,
-            message: '内容!',
+            message: '内容必填!',
           },
         ]}
         width="md"
         name="value"
       />
-      {/* TODO: 上传相关还没有处理 */}
       <ProFormUploadButton
+        action="/pc/api/common/upload"
+        fieldProps={{
+          data: {
+            module: 'store',
+            key: props?.values?.key,
+          }
+        }}
         extra="支持扩展名：.jpg .png"
         label="图片"
-        title="上传文件"
+        rules={[
+          {
+            required: true,
+            message: '图片必填!',
+          },
+        ]}
+        title="上传图片"
         listType="picture-card"
         name="images"
         max={10}

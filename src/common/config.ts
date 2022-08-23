@@ -23,3 +23,11 @@ export const BirthdayOptions = [
   { label: '生日大礼包', value: '生日大礼包' },
   { label: '自助晚餐(随行1人免费)', value: '自助晚餐(随行1人免费)' },
 ]
+
+export interface IFile {
+  uid: string;
+  name: string;
+  status: string;
+  url: string;
+  exist?: boolean;
+}

@@ -10,6 +10,8 @@ import {
 } from '@ant-design/pro-components';
 import { message } from 'antd';
 import { editRoomConfig } from '@/services/ant-design-pro/api';
+import { handlePreviewImageList } from '@/common/tools';
+import { IFile } from '@/common/config';
 
 interface IProps {
   values: { [key: string]: any };
@@ -20,7 +22,7 @@ interface IProps {
 export type FormValueType = {
   id:           string;
   amount:       number;
-  images:       string[];
+  images:       string[] | IFile[];
   policyDesc:   string;
   price:        number;
   roomFacility: string;
@@ -44,7 +46,7 @@ const EditModal: React.FC<IProps> = (props) => {
       roomType: props.values.roomType,
       price: props.values.price,
       vipDiscount: props.values.vipDiscount,
-      images: props.values.images,
+      images: handlePreviewImageList(props.values.images),
       amount: props.values.amount,
       roomFacility: props.values.roomFacility,
       policyDesc: props.values.policyDesc,
@@ -54,14 +56,20 @@ const EditModal: React.FC<IProps> = (props) => {
 
   const handleEdit = async (fields: FormValueType) => {
     const hide = message.loading('正在更新');
-
+    
     try {
       await editRoomConfig({
         id: fields.id,
         roomType: fields.roomType,
         price: fields.price,
         vipDiscount: fields.vipDiscount,
-        images: fields.images,
+        images: fields.images?.map((item) => {
+          if (item.exist) {
+            return item.url;
+          } else {
+            return item?.response?.data;
+          }
+        }),
         amount: fields.amount,
         roomFacility: fields.roomFacility,
         policyDesc: fields.policyDesc,
@@ -149,6 +157,13 @@ const EditModal: React.FC<IProps> = (props) => {
 
       {/* TODO: 上传相关还没有处理 */}
       <ProFormUploadButton
+        action="/pc/api/common/upload"
+        fieldProps={{
+          data: {
+            module: 'room',
+            key: 'room-config',
+          }
+        }}
         extra="支持扩展名：.jpg .png"
         label="客房图片"
         rules={[

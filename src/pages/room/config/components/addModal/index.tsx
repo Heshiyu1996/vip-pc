@@ -27,7 +27,11 @@ const AddModal: React.FC<IProps> = (props) => {
   const handleAdd = async (params: API.RoomConfigListItem) => {
     const hide = message.loading('正在新增');
 
-    params.images = ['https://gw.alipayobjects.com/mdn/rms_c30934/afts/img/A*_pfwTpDVsrAAAAAAAAAAAAAAARQnAQ'];
+    // images入参前预处理：“字符串数组”
+    params.images = params?.images?.map((item ) => {
+      const url = item?.response?.data;
+      return url;
+    });
 
     try {
       await addRoomConfig(params);
@@ -104,8 +108,14 @@ const AddModal: React.FC<IProps> = (props) => {
         ]}
       />
 
-      {/* TODO: 上传相关还没有处理 */}
       <ProFormUploadButton
+        action="/pc/api/common/upload"
+        fieldProps={{
+          data: {
+            module: 'room',
+            key: 'room-config',
+          }
+        }}
         extra="支持扩展名：.jpg .png"
         label="客房图片"
         rules={[

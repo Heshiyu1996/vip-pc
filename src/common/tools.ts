@@ -1,4 +1,5 @@
 import { request } from 'umi';
+import type { IFile } from './config';
 
 export function download (href: string, title: string) {
   const a = document.createElement('a');
@@ -33,4 +34,19 @@ export const requestList = <T>(url: string, options?: { [key: string]: any },) =
     }
     return modifiedRes;
   })
+}
+
+// 回填 Upload 组件前，处理图片列表
+export const handlePreviewImageList = (imgList: string[]): IFile[] => {
+  const fileList = imgList?.map((item) => (
+    {
+      uid: item,
+      name: `${item}.png`,
+      status: 'done',
+      url: item,
+      // 这个字段用来标识是否为原有图片（不需要像新上传的图片一样要读取response）
+      exist: true,
+    }
+  ))
+  return fileList;
 }
