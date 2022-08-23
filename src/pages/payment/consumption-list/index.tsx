@@ -7,9 +7,11 @@ import {
 import { Button, message } from 'antd';
 import { removeConsumptionList, getConsumptionList, exportConsumptionList } from '@/services/ant-design-pro/api';
 import moment from 'moment';
-import { download } from '@/common/tools';
+import { download, getParams } from '@/common/tools';
 import EditModal from './components/editModal';
 import AddModal from './components/addModal';
+
+const defaultCardId = getParams('cardId')
 
 const mocChannelData = [
   {
@@ -176,6 +178,11 @@ const handleRemove = async (selectedItem: API.RuleListItem) => {
         actionRef={actionRef}
         rowKey="id"
         formRef={formRef}
+        form={{
+          initialValues: {
+            vipCardId: defaultCardId
+          }
+        }}
         search={{
           labelWidth: 120,
         }}

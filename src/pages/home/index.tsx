@@ -44,7 +44,7 @@ const Home: React.FC = () => {
           </div>
           <div className='item-wrapper'>
             <div className='label'>客房预订比例</div>
-            <div className='value'>{countForBooked}/{totalCountForBooking}个</div> 
+            <div className='value'>{countForBooked}/{totalCountForBooking}</div> 
           </div>
         </Card>
       </div>

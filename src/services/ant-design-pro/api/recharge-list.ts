@@ -31,10 +31,10 @@ export async function removeRechargeList(params?: { [key: string]: any }, option
   });
 }
 
-/** 导出充值列表记录 DELETE /pc/api/payment/recharge/export */
+/** 导出充值列表记录 GET /pc/api/payment/recharge/export */
 export async function exportRechargeList(params?: { [key: string]: any }, options?: { [key: string]: any }) {
   return request<Record<string, any>>(`/pc/api/payment/recharge/export`, {
-    method: 'POST',
+    method: 'GET',
     data: params,
     ...(options || {}),
   });

@@ -40,10 +40,10 @@ export async function rejectRoomRefund(params?: { [key: string]: any }, options?
   });
 }
 
-/** 导出退款记录 POST /pc/api/room/refund/export */
+/** 导出退款记录 GET /pc/api/room/refund/export */
 export async function exportRoomRefund(params?: { [key: string]: any }, options?: { [key: string]: any }) {
   return request<API.RoomRefundListItem>('/pc/api/room/refund/export', {
-    method: 'POST',
+    method: 'GET',
     data: params,
     ...(options || {}),
   });

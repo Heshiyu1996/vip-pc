@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   PageContainer,
 } from '@ant-design/pro-components';
@@ -8,6 +8,9 @@ import { getVipList, rechargeAmount } from '@/services/ant-design-pro/api';
 import md5 from 'md5';
 import { EChannel } from '@/common/config';
 import './index.less';
+import { getParams } from '@/common/tools';
+
+const defaultCardId = getParams('cardId');
 
 const mockLevelData = [
   {
@@ -45,7 +48,7 @@ const LevelEnumConfig = (() => {
 })();
 
 const Recharge: React.FC = () => {
-  const [searchText, setSearchText] = useState<string>();
+  const [searchText, setSearchText] = useState<string>(defaultCardId);
   const [amount, setAmount] = useState<number>();
   const [password, setPassword] = useState<string>();
   const [vipInfo, setVipInfo] = useState<API.RuleListItem>({});
@@ -64,6 +67,13 @@ const Recharge: React.FC = () => {
       setVipInfo(info);
     })
   }
+  
+  // 当url携带cardId时，自动触发搜索
+  useEffect(() => {
+    if (defaultCardId) {
+      onSearch(defaultCardId);
+    }
+  }, [defaultCardId]);
 
   // 重置
   const handleReset = () => {

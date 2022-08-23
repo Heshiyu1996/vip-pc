@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState } from 'react';
 import type { ActionType, ProColumns, ProFormInstance } from '@ant-design/pro-components';
 import {
   PageContainer,
@@ -12,7 +12,7 @@ import EditModal from './components/editModal';
 import AddModal from './components/addModal';
 
 // url携带参数时的查找逻辑
-const urlCardId = getParams('cardId');
+const defaultCardId = getParams('cardId')
 
 const mocChannelData = [
   {
@@ -179,6 +179,11 @@ const RechargeList: React.FC = () => {
         actionRef={actionRef}
         rowKey="id"
         formRef={formRef}
+        form={{
+          initialValues: {
+            vipCardId: defaultCardId
+          }
+        }}
         search={{
           labelWidth: 120,
         }}

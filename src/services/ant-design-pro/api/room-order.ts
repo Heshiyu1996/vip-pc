@@ -40,10 +40,10 @@ export async function rejectRoomOrder(params?: { [key: string]: any }, options?:
   });
 }
 
-/** 导出订房记录 POST /pc/api/room/order/export */
+/** 导出订房记录 GET /pc/api/room/order/export */
 export async function exportRoomOrder(params?: { [key: string]: any }, options?: { [key: string]: any }) {
   return request<API.RoomRefundListItem>('/pc/api/room/order/export', {
-    method: 'POST',
+    method: 'GET',
     data: params,
     ...(options || {}),
   });

@@ -118,5 +118,5 @@ function exportRechargeList(req: Request, res: Response, u: string, b: Request) 
 export default {
   'GET /api/payment/recharge/list': getRechargeList,
   'DELETE /api/payment/recharge/*': removeRechargeList,
-  'POST /api/payment/recharge/export': exportRechargeList,
+  'GET /api/payment/recharge/export': exportRechargeList,
 };

@@ -42,10 +42,10 @@ export async function removeRoomArrangeList(params?: { [key: string]: any }, opt
   });
 }
 
-/** 导出排房列表记录 DELETE /pc/api/room/arrangement/export */
+/** 导出排房列表记录 GET /pc/api/room/arrangement/export */
 export async function exportRoomArrangeList(params?: { [key: string]: any }, options?: { [key: string]: any }) {
   return request<Record<string, any>>(`/pc/api/room/arrangement/export`, {
-    method: 'POST',
+    method: 'GET',
     data: params,
     ...(options || {}),
   });

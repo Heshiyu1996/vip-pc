@@ -118,5 +118,5 @@ function exportConsumptionList(req: Request, res: Response, u: string, b: Reques
 export default {
   'GET /api/payment/consumption/list': getConsumptionList,
   'DELETE /api/payment/consumption/*': removeConsumptionList,
-  'POST /api/payment/consumption/export': exportConsumptionList,
+  'GET /api/payment/consumption/export': exportConsumptionList,
 };

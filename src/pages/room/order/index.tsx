@@ -8,9 +8,11 @@ import { Button, message } from 'antd';
 import ConfirmModal from './components/confirmModal';
 import RejectModal from './components/rejectModal';
 import { getRoomOrderList, exportRoomOrder } from '@/services/ant-design-pro/api';
-import { download } from '@/common/tools';
+import { download, getParams } from '@/common/tools';
 import moment from 'moment';
 import './index.less';
+
+const defaultCardId = getParams('cardId')
 
 const mockChannelData = [
   {
@@ -163,6 +165,11 @@ const RoomOrder: React.FC = () => {
       <ProTable<API.RoomOrderListItem, API.PageParams>
         className="u-room-order"
         headerTitle="查询结果"
+        form={{
+          initialValues: {
+            vipCardId: defaultCardId
+          }
+        }}
         actionRef={actionRef}
         formRef={formRef}
         rowKey="id"

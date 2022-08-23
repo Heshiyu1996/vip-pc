@@ -34,7 +34,7 @@ export async function removeConsumptionList(params?: { [key: string]: any }, opt
 /** 导出消费列表记录 DELETE /pc/api/payment/consumption/export */
 export async function exportConsumptionList(params?: { [key: string]: any }, options?: { [key: string]: any }) {
   return request<Record<string, any>>(`/pc/api/payment/consumption/export`, {
-    method: 'POST',
+    method: 'GET',
     data: params,
     ...(options || {}),
   });

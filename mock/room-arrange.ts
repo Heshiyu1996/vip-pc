@@ -138,5 +138,5 @@ export default {
   'GET /api/room/arrange/list': getRoomArrangeList,
   'GET /api/room/arrange/detail/*': getRoomArrangeDetail,
   'DELETE /api/room/arrange/*': removeRoomArrangeList,
-  'POST /api/room/arrange/export': exportRoomArrangeList,
+  'GET /api/room/arrange/export': exportRoomArrangeList,
 };

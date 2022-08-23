@@ -8,8 +8,10 @@ import { Button, message } from 'antd';
 import ConfirmModal from './components/confirmModal';
 import RejectModal from './components/rejectModal';
 import { getRoomRefundList, exportRoomRefund } from '@/services/ant-design-pro/api';
-import { download } from '@/common/tools';
+import { download, getParams } from '@/common/tools';
 import './index.less';
+
+const defaultCardId = getParams('cardId')
 
 const mockChannelData = [
   {
@@ -165,6 +167,11 @@ const RoomRefund: React.FC = () => {
         headerTitle="查询结果"
         actionRef={actionRef}
         formRef={formRef}
+        form={{
+          initialValues: {
+            vipCardId: defaultCardId
+          }
+        }}
         rowKey="id"
         toolBarRender={() => [
           <Button key="primary" onClick={handleExport}>

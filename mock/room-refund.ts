@@ -133,5 +133,5 @@ export default {
   'GET /api/room/refund/list': getRoomRefundList,
   'PUT /api/room/refund/accept/*': acceptRoomRefund,
   'PUT /api/room/refund/reject/*': rejectRoomRefund,
-  'POST /api/room/refund/export': exportRoomRefund,
+  'GET /api/room/refund/export': exportRoomRefund,
 };

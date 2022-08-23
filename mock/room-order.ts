@@ -145,5 +145,5 @@ export default {
   'GET /api/room/order/list': getRoomOrderList,
   'PUT /api/room/order/confirm/*': confirmRoomOrder,
   'PUT /api/room/order/reject/*': rejectRoomOrder,
-  'POST /api/room/order/export': exportRoomOrder,
+  'GET /api/room/order/export': exportRoomOrder,
 };

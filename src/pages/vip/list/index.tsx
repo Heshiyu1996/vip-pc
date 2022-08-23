@@ -214,13 +214,13 @@ const TableList: React.FC = () => {
               支付管理
             </Col>
             <Col span={6}>
-              <Button onClick={() => window.open(`/payment/recharge-list?cardId=${currentRow?.id}`)}>会员卡充值</Button>
+              <Button onClick={() => window.open(`/payment/recharge?cardId=${currentRow?.id}`)}>会员卡充值</Button>
             </Col>
             <Col span={6}>
-              <Button onClick={() => window.open(`/payment/recharge-list?cardId=${currentRow?.id}`)}>查询消费记录</Button>
+              <Button onClick={() => window.open(`/payment/recharge-list?cardId=${currentRow?.id}`)}>查询充值记录</Button>
             </Col>
             <Col span={6}>
-              <Button onClick={() => window.open(`/payment/recharge-list?cardId=${currentRow?.id}`)}>查询消费记录</Button>
+              <Button onClick={() => window.open(`/payment/consumption-list?cardId=${currentRow?.id}`)}>查询消费记录</Button>
             </Col>
           </Row>
 
@@ -229,10 +229,10 @@ const TableList: React.FC = () => {
               订房管理
             </Col>
             <Col span={6}>
-              <Button onClick={() => window.open(`/payment/recharge-list?cardId=${currentRow?.id}`)}>查询订房记录</Button>
+              <Button onClick={() => window.open(`/room/order?cardId=${currentRow?.id}`)}>查询订房记录</Button>
             </Col>
             <Col span={6}>
-              <Button onClick={() => window.open(`/payment/recharge-list?cardId=${currentRow?.id}`)}>查询退款记录</Button>
+              <Button onClick={() => window.open(`/room/refund?cardId=${currentRow?.id}`)}>查询退款记录</Button>
             </Col>
           </Row>
         </>
