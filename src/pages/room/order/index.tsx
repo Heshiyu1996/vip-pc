@@ -81,7 +81,8 @@ const RoomOrder: React.FC = () => {
       const res = await exportRoomOrder(params);
       const { data } = res || {};
       if (!data) throw new Error();
-      download('', data);
+      const filename = getParams(data, 'filename');
+      download(data, filename);
       hide();
       message.success('导出成功!');
     } catch (error) {

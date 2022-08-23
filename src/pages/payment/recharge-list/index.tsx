@@ -74,7 +74,8 @@ const RechargeList: React.FC = () => {
       const res = await exportRechargeList(params);
       const { data } = res || {};
       if (!data) throw new Error();
-      download('', data);
+      const filename = getParams(data, 'filename');
+      download(data, filename);
       hide();
       message.success('导出成功!');
     } catch (error) {

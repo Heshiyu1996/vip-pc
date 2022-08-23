@@ -71,10 +71,10 @@ const handleRemove = async (selectedItem: API.RuleListItem) => {
     
     try {
       const res = await exportConsumptionList(params);
-      console.log(res, 33);
       const { data } = res || {};
       if (!data) throw new Error();
-      download('', data);
+      const filename = getParams(data, 'filename');
+      download(data, filename);
       hide();
       message.success('导出成功!');
     } catch (error) {
