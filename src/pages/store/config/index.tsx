@@ -1,10 +1,3 @@
-/*
- * @Author: 宇仔(heshiyu.hsy@mybank.cn)
- * @Date: 2022-08-15 14:25:39
- * @LastEditTime: 2022-08-15 19:49:32
- * @LastEditors: 宇仔(heshiyu.hsy@mybank.cn)
- * @Description: 
- */
 import { useState, useRef } from 'react';
 import type { ActionType } from '@ant-design/pro-components';
 import { ProList } from '@ant-design/pro-components';
