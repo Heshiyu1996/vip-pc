@@ -7,8 +7,9 @@ import {
   ProFormRadio,
   ProFormUploadButton,
 } from '@ant-design/pro-components';
-import { message } from 'antd';
+import { message, Upload } from 'antd';
 import { addRoomConfig } from '@/services/ant-design-pro/api';
+import { ValidFileType } from '@/common/config';
 
 interface IProps {
   visible: boolean;
@@ -44,6 +45,15 @@ const AddModal: React.FC<IProps> = (props) => {
       return false;
     }
   };
+
+  const beforeUpload = (file: File) => {
+    const isImage = ValidFileType.includes(file.type);
+    if (!isImage) {
+      message.error(`${file.name} 不是图片类型`);
+      return Upload.LIST_IGNORE;
+    }
+    return true;
+  }
 
   return (
     <ModalForm
@@ -114,9 +124,10 @@ const AddModal: React.FC<IProps> = (props) => {
           data: {
             module: 'room',
             key: 'room-config',
-          }
+          },
+          beforeUpload
         }}
-        extra="支持扩展名：.jpg .png"
+        extra="支持扩展名：.jpg .jpeg .png"
         label="客房图片"
         rules={[
           {

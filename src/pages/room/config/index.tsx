@@ -5,7 +5,7 @@ import {
   PageContainer,
   ProTable,
 } from '@ant-design/pro-components';
-import { Button, message, Image, Table, Space } from 'antd';
+import { Button, message, Image, Table, Space, Popconfirm } from 'antd';
 import AddModal from './components/addModal';
 import EditModal from './components/editModal';
 import EditMultiPriceModal from './components/edit-multi-price-modal';
@@ -158,9 +158,18 @@ const RoomConfig: React.FC = () => {
           编辑
         </Button>
         ,
-        <Button key='remove' type="link" size="small" danger onClick={() => handleRemove(record)}>
-          删除
-        </Button>,
+
+        <Popconfirm
+          key={record.id}
+          title="确定删除吗?"
+          onConfirm={() => handleRemove(record)}
+          okText="确定"
+          cancelText="取消"
+        >
+          <Button key='remove' type="link" size="small" danger>
+            删除
+          </Button>
+        </Popconfirm>
       ],
     },
   ];

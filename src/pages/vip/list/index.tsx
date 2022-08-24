@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns, ProDescriptionsItemProps } from '@ant-design/pro-components';
 import {
@@ -6,46 +6,11 @@ import {
   ProTable,
   ProDescriptions,
 } from '@ant-design/pro-components';
-import { Drawer, Button, message, Row, Col } from 'antd';
-import { removeVip, getVipList } from '@/services/ant-design-pro/api';
+import { Drawer, Button, message, Row, Col, Popconfirm } from 'antd';
+import { removeVip, getVipList, getVipConfigList } from '@/services/ant-design-pro/api';
 import EditModal from './components/editModal';
 import AddModal from './components/addModal';
 import './index.less';
-
-const mockLevelData = [
-  {
-    id: '0',
-    levelName: '普通用户',
-  },
-  {
-    id: '1',
-    levelName: '一级',
-  },
-  {
-    id: '2',
-    levelName: '二级',
-  },
-  {
-    id: '3',
-    levelName: '三级',
-  },
-  {
-    id: '4',
-    levelName: '四级',
-  },
-  {
-    id: '5',
-    levelName: '五级',
-  },
-];
-
-const LevelEnumConfig = (() => {
-  const map = {};
-  mockLevelData.forEach((item) => {
-    map[item.id] = item.levelName;
-  });
-  return map;
-})();
 
 const TableList: React.FC = () => {
   const [showDetail, setShowDetail] = useState<boolean>(false);
@@ -65,6 +30,22 @@ const TableList: React.FC = () => {
     handleReload();
   }
 
+
+  const [vipConfigList, setVipConfigList] = useState<any>();
+  useEffect(() => {
+    getVipConfigList({}).then((res) => {
+      // 默认“全部”
+      const configList = [
+        { id: '', levelName: '全部' }
+      ];
+      configList.push(...res?.data || []);
+      const map = {};
+      configList.forEach((item) => {
+        map[item.id] = item.levelName;
+      });
+      setVipConfigList(map);
+    })
+  }, []);
   const columns: ProColumns<API.RuleListItem>[] = [
     {
       title: '会员卡号',
@@ -95,9 +76,7 @@ const TableList: React.FC = () => {
     {
       title: '当前等级',
       dataIndex: 'currentLevelCode',
-      hideInForm: true,
-      valueEnum: LevelEnumConfig,
-      renderText: (val: string) => LevelEnumConfig[val],
+      valueEnum: vipConfigList,
     },
     {
       title: '身份证号',
@@ -128,9 +107,17 @@ const TableList: React.FC = () => {
           编辑
         </Button>
         ,
-        <Button key='remove' type="link" size="small" danger onClick={() => handleRemove(record)}>
-          删除
-        </Button>,
+        <Popconfirm
+          key={record.id}
+          title="确定删除吗?"
+          onConfirm={() => handleRemove(record)}
+          okText="确定"
+          cancelText="取消"
+        >
+          <Button key='remove' type="link" size="small" danger>
+            删除
+          </Button>
+        </Popconfirm>,
       ],
     },
   ];

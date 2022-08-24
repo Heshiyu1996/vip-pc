@@ -31,3 +31,5 @@ export interface IFile {
   url: string;
   exist?: boolean;
 }
+
+export const ValidFileType = ['image/png', 'image/jpg', 'image/jpeg'];

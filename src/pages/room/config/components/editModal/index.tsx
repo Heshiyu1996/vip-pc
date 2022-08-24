@@ -8,10 +8,10 @@ import {
   ProFormDigit,
   ProFormTextArea,
 } from '@ant-design/pro-components';
-import { message } from 'antd';
+import { message, Upload } from 'antd';
 import { editRoomConfig } from '@/services/ant-design-pro/api';
 import { handlePreviewImageList } from '@/common/tools';
-import { IFile } from '@/common/config';
+import { IFile, ValidFileType } from '@/common/config';
 
 interface IProps {
   values: { [key: string]: any };
@@ -84,6 +84,15 @@ const EditModal: React.FC<IProps> = (props) => {
     }
   };
 
+  const beforeUpload = (file: File) => {
+    const isImage = ValidFileType.includes(file.type);
+    if (!isImage) {
+      message.error(`${file.name} 不是图片类型`);
+      return Upload.LIST_IGNORE;
+    }
+    return true;
+  }
+
   return (
     <ModalForm
       formRef={formRef}
@@ -155,14 +164,14 @@ const EditModal: React.FC<IProps> = (props) => {
         ]}
       />
 
-      {/* TODO: 上传相关还没有处理 */}
       <ProFormUploadButton
         action="/pc/api/common/upload"
         fieldProps={{
           data: {
             module: 'room',
             key: 'room-config',
-          }
+          },
+          beforeUpload
         }}
         extra="支持扩展名：.jpg .png"
         label="客房图片"

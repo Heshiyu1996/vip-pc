@@ -2,15 +2,18 @@ import React, { useRef, useState, useEffect } from 'react';
 import type { ProFormInstance, ProColumns } from '@ant-design/pro-components';
 import {
   ModalForm,
+  ProFormGroup,
   ProFormText,
   ProTable,
 } from '@ant-design/pro-components';
+import { Button } from 'antd';
 import moment from 'moment';
 import { getRoomArrangeDetail } from '@/services/ant-design-pro/api';
 
 interface IProps {
   values: { [key: string]: any };
   visible: boolean;
+  onOk: any;
   onVisibleChange: React.Dispatch<React.SetStateAction<boolean>>;
 }
 export type FormValueType = {
@@ -51,13 +54,13 @@ const EditModal: React.FC<IProps> = (props) => {
   useEffect(() => {
     if (!visible) {
       setTableListDataSource([]);
+      props.onOk();
     }
   }, [visible]);
 
   const columns: ProColumns<TableListItem>[] = [
     {
       title: '预订单号',
-      width: 80,
       dataIndex: 'id',
     },
     {
@@ -70,7 +73,20 @@ const EditModal: React.FC<IProps> = (props) => {
   return (
     <ModalForm
       formRef={formRef}
+      readonly
+      layout="horizontal"
       title="查看预订情况"
+      submitter={{
+        render: () => <Button
+          type="primary"
+          key="ok"
+          onClick={() => {
+            props.onVisibleChange(false);
+          }}
+        >
+          好的
+        </Button>,
+      }}
       visible={visible}
       onVisibleChange={onVisibleChange}
     >
@@ -86,28 +102,30 @@ const EditModal: React.FC<IProps> = (props) => {
         width="md"
         name="id"
       />
-      <ProFormText
-        label="客房类型"
-        rules={[
-          {
-            required: true,
-            message: '客房类型必填!',
-          },
-        ]}
-        width="md"
-        name="roomType"
-      />
-      <ProFormText
-        label="余量情况"
-        rules={[
-          {
-            required: true,
-            message: '余量情况必填!',
-          },
-        ]}
-        width="md"
-        name="restAmount"
-      />
+      <ProFormGroup label="">
+        <ProFormText
+          label="客房类型"
+          rules={[
+            {
+              required: true,
+              message: '客房类型必填!',
+            },
+          ]}
+          width="md"
+          name="roomType"
+        />
+        <ProFormText
+          label="余量情况"
+          rules={[
+            {
+              required: true,
+              message: '余量情况必填!',
+            },
+          ]}
+          width="md"
+          name="restAmount"
+        />
+      </ProFormGroup>
 
       <ProTable<TableListItem>
         dataSource={tableListDataSource}
@@ -118,6 +136,7 @@ const EditModal: React.FC<IProps> = (props) => {
         columns={columns}
         search={false}
         dateFormatter="string"
+        toolBarRender={false}
       />
     </ModalForm>
   );

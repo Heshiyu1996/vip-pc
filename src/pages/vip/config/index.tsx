@@ -5,7 +5,7 @@ import {
   PageContainer,
   ProTable,
 } from '@ant-design/pro-components';
-import { Button, message } from 'antd';
+import { Button, message, Popconfirm } from 'antd';
 import EditModal from './components/editModal';
 import AddModal from './components/addModal';
 import { removeVipConfig, getVipConfigList } from '@/services/ant-design-pro/api';
@@ -88,9 +88,17 @@ const TableList: React.FC = () => {
           编辑
         </Button>
         ,
-        <Button key='remove' type="link" size="small" danger onClick={() => handleRemove(record)}>
-          删除
-        </Button>,
+        <Popconfirm
+          key={record.id}
+          title="确定删除吗?"
+          onConfirm={() => handleRemove(record)}
+          okText="确定"
+          cancelText="取消"
+        >
+          <Button key='remove' type="link" size="small" danger>
+            删除
+          </Button>
+        </Popconfirm>,
       ],
     },
   ];

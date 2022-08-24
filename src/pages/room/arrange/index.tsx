@@ -88,7 +88,7 @@ const ArrangeList: React.FC = () => {
       dataIndex: 'restAmount',
       hideInSearch: true,
       valueType: 'textarea',
-      renderText: (val: string, record: API.RoomArrangeListItem) => `(${val} / ${record.restAmount})`,
+      renderText: (val: string, record: API.RoomArrangeListItem) => `(${val} / ${record.totalAmount})`,
     },
     {
       title: '操作',

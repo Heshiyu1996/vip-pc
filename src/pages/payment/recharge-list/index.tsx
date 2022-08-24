@@ -4,7 +4,7 @@ import {
   PageContainer,
   ProTable,
 } from '@ant-design/pro-components';
-import { Button, message } from 'antd';
+import { Button, message, Popconfirm } from 'antd';
 import { removeRechargeList, getRechargeList, exportRechargeList } from '@/services/ant-design-pro/api';
 import moment from 'moment';
 import { download, getParams } from '@/common/tools';
@@ -159,16 +159,24 @@ const RechargeList: React.FC = () => {
       key: 'showTime',
       hideInSearch: true,
       sorter: true,
-      renderText: (val: string) => moment().format('YYYY-MM-DD HH:mm:ss'),
+      renderText: (val: string) => moment(val).format('YYYY-MM-DD HH:mm:ss'),
     },
     {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => 
-        <Button key='remove' type="link" size="small" danger onClick={() => handleRemove(record)}>
-          删除
-        </Button>
+        <Popconfirm
+          key={record.id}
+          title="确定删除吗?"
+          onConfirm={() => handleRemove(record)}
+          okText="确定"
+          cancelText="取消"
+        >
+          <Button key='remove' type="link" size="small" danger>
+            删除
+          </Button>
+        </Popconfirm>
       ,
     },
   ];

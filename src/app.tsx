@@ -1,7 +1,9 @@
 import Footer from '@/components/Footer';
 import RightContent from '@/components/RightContent';
 import type { Settings as LayoutSettings } from '@ant-design/pro-components';
-import { PageLoading, SettingDrawer } from '@ant-design/pro-components';
+import { PageLoading, 
+  // SettingDrawer
+} from '@ant-design/pro-components';
 import type { RunTimeLayoutConfig, RequestConfig } from 'umi';
 import { history } from 'umi';
 import defaultSettings from '../config/defaultSettings';
@@ -73,7 +75,8 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
       return (
         <>
           {children}
-          {!props.location?.pathname?.includes('/login') && (
+          {/* 主题配置-右侧蓝色齿轮 */}
+          {/* {!props.location?.pathname?.includes('/login') && (
             <SettingDrawer
               disableUrlParams
               enableDarkTheme
@@ -85,7 +88,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
                 }));
               }}
             />
-          )}
+          )} */}
         </>
       );
     },
