@@ -30,7 +30,6 @@ const TableList: React.FC = () => {
     handleReload();
   }
 
-
   const [vipConfigList, setVipConfigList] = useState<any>();
   useEffect(() => {
     getVipConfigList({}).then((res) => {

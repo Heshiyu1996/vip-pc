@@ -19,6 +19,8 @@ interface IProps {
   onVisibleChange: React.Dispatch<React.SetStateAction<boolean>>;
   onOk: () => void;
 }
+
+const FILE_MAX_SIZE = 5;
 export type FormValueType = {
   id:           string;
   amount:       number;
@@ -85,10 +87,18 @@ const EditModal: React.FC<IProps> = (props) => {
   };
 
   const beforeUpload = (file: File) => {
+    console.log(file, 1234);
+    
     const isImage = ValidFileType.includes(file.type);
     if (!isImage) {
       message.error(`${file.name} 不是图片类型`);
       return Upload.LIST_IGNORE;
+    }
+    // 校验文件大小
+    const isLarge = file.size > FILE_MAX_SIZE * 1024 * 1024;
+    if (isLarge) {
+        message.error(`文件大小不能超过${FILE_MAX_SIZE}M哦`);
+        return Upload.LIST_IGNORE;
     }
     return true;
   }
@@ -173,7 +183,7 @@ const EditModal: React.FC<IProps> = (props) => {
           },
           beforeUpload
         }}
-        extra="支持扩展名：.jpg .png"
+        extra="支持扩展名：.jpg .jpeg .png"
         label="客房图片"
         rules={[
           {

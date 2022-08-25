@@ -4,48 +4,13 @@ import {
 } from '@ant-design/pro-components';
 import { Input, InputNumber, Row, Col, Descriptions, Button, message, Modal } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
-import { getVipList, rechargeAmount } from '@/services/ant-design-pro/api';
+import { getVipConfigList, getVipList, rechargeAmount } from '@/services/ant-design-pro/api';
 import md5 from 'md5';
 import { EChannel } from '@/common/config';
 import './index.less';
 import { getParams } from '@/common/tools';
 
 const defaultCardId = getParams('cardId');
-
-const mockLevelData = [
-  {
-    id: '0',
-    levelName: '普通用户',
-  },
-  {
-    id: '1',
-    levelName: '一级',
-  },
-  {
-    id: '2',
-    levelName: '二级',
-  },
-  {
-    id: '3',
-    levelName: '三级',
-  },
-  {
-    id: '4',
-    levelName: '四级',
-  },
-  {
-    id: '5',
-    levelName: '五级',
-  },
-];
-
-const LevelEnumConfig = (() => {
-  const map = {};
-  mockLevelData.forEach((item) => {
-    map[item.id] = item.levelName;
-  });
-  return map;
-})();
 
 const Recharge: React.FC = () => {
   const [searchText, setSearchText] = useState<string>(defaultCardId);
@@ -54,6 +19,22 @@ const Recharge: React.FC = () => {
   const [vipInfo, setVipInfo] = useState<API.RuleListItem>({});
 
   const [isLoading, setIsLoading] = useState<boolean>();
+
+  const [vipConfigList, setVipConfigList] = useState<any>();
+  useEffect(() => {
+    getVipConfigList({}).then((res) => {
+      // 默认“全部”
+      const configList = [
+        { id: '', levelName: '全部' }
+      ];
+      configList.push(...res?.data || []);
+      const map = {};
+      configList.forEach((item) => {
+        map[item.id] = item.levelName;
+      });
+      setVipConfigList(map);
+    })
+  }, []);
 
   const onSearch = (val: string) => {
     getVipList({ id: val }).then((res) => {
@@ -156,7 +137,7 @@ const Recharge: React.FC = () => {
                   <Descriptions.Item label="会员卡号">{vipInfo?.id}</Descriptions.Item>
                   <Descriptions.Item label="会员名字">{vipInfo?.ownerName}</Descriptions.Item>
                   <Descriptions.Item label="手机号">{vipInfo?.mobileNumber}</Descriptions.Item>
-                  <Descriptions.Item label="当前等级">{LevelEnumConfig[vipInfo?.currentLevelCode]}</Descriptions.Item>
+                  <Descriptions.Item label="当前等级">{vipConfigList[vipInfo?.currentLevelCode]}</Descriptions.Item>
                 </Descriptions>
               </Col>
             </Row>

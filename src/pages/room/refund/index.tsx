@@ -10,6 +10,7 @@ import RejectModal from './components/rejectModal';
 import { getRoomRefundList, exportRoomRefund } from '@/services/ant-design-pro/api';
 import { download, getParams } from '@/common/tools';
 import './index.less';
+import moment from 'moment';
 
 const defaultCardId = getParams('cardId')
 
@@ -131,6 +132,7 @@ const RoomRefund: React.FC = () => {
     {
       title: '预订时间',
       dataIndex: 'orderStartDate',
+      render: (_, record) => `${moment(record.orderStartDate).format('YYYY-MM-DD HH:mm:ss')} ~ ${moment(record.orderEndDate).format('YYYY-MM-DD HH:mm:ss')}`,
     },
     {
       title: '申请时间',
