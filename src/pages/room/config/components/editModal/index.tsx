@@ -8,10 +8,10 @@ import {
   ProFormDigit,
   ProFormTextArea,
 } from '@ant-design/pro-components';
-import { message, Upload } from 'antd';
+import { message } from 'antd';
 import { editRoomConfig } from '@/services/ant-design-pro/api';
-import { handlePreviewImageList } from '@/common/tools';
-import { IFile, ValidFileType } from '@/common/config';
+import { handlePreviewImageList, beforeUpload } from '@/common/tools';
+import { IFile } from '@/common/config';
 
 interface IProps {
   values: { [key: string]: any };
@@ -20,7 +20,6 @@ interface IProps {
   onOk: () => void;
 }
 
-const FILE_MAX_SIZE = 5;
 export type FormValueType = {
   id:           string;
   amount:       number;
@@ -85,23 +84,6 @@ const EditModal: React.FC<IProps> = (props) => {
       return false;
     }
   };
-
-  const beforeUpload = (file: File) => {
-    console.log(file, 1234);
-    
-    const isImage = ValidFileType.includes(file.type);
-    if (!isImage) {
-      message.error(`${file.name} 不是图片类型`);
-      return Upload.LIST_IGNORE;
-    }
-    // 校验文件大小
-    const isLarge = file.size > FILE_MAX_SIZE * 1024 * 1024;
-    if (isLarge) {
-        message.error(`文件大小不能超过${FILE_MAX_SIZE}M哦`);
-        return Upload.LIST_IGNORE;
-    }
-    return true;
-  }
 
   return (
     <ModalForm

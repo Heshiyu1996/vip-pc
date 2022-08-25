@@ -7,9 +7,9 @@ import {
   ProFormRadio,
   ProFormUploadButton,
 } from '@ant-design/pro-components';
-import { message, Upload } from 'antd';
+import { message } from 'antd';
 import { addRoomConfig } from '@/services/ant-design-pro/api';
-import { ValidFileType } from '@/common/config';
+import { beforeUpload } from '@/common/tools';
 
 interface IProps {
   visible: boolean;
@@ -45,15 +45,6 @@ const AddModal: React.FC<IProps> = (props) => {
       return false;
     }
   };
-
-  const beforeUpload = (file: File) => {
-    const isImage = ValidFileType.includes(file.type);
-    if (!isImage) {
-      message.error(`${file.name} 不是图片类型`);
-      return Upload.LIST_IGNORE;
-    }
-    return true;
-  }
 
   return (
     <ModalForm

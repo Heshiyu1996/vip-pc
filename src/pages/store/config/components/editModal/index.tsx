@@ -5,10 +5,9 @@ import {
   ProFormText,
   ProFormUploadButton,
 } from '@ant-design/pro-components';
-import { message, Upload } from 'antd';
+import { message } from 'antd';
 import { editStoreConfig } from '@/services/ant-design-pro/api';
-import { handlePreviewImageList } from '@/common/tools';
-import { ValidFileType } from '@/common/config';
+import { handlePreviewImageList, beforeUpload } from '@/common/tools';
 
 interface IProps {
   values: { [key: string]: any };
@@ -65,15 +64,6 @@ const EditModal: React.FC<IProps> = (props) => {
       return false;
     }
   };
-
-  const beforeUpload = (file: File) => {
-    const isImage = ValidFileType.includes(file.type);
-    if (!isImage) {
-      message.error(`${file.name} 不是图片类型`);
-      return Upload.LIST_IGNORE;
-    }
-    return true;
-  }
 
   return (
     <ModalForm

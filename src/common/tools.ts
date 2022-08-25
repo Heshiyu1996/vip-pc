@@ -1,4 +1,6 @@
 import { request } from 'umi';
+import { message, Upload } from 'antd';
+import { ValidFileType } from './config';
 import type { IFile } from './config';
 
 export function download (href: string, title: string) {
@@ -49,4 +51,20 @@ export const handlePreviewImageList = (imgList: string[]): IFile[] => {
     }
   ))
   return fileList;
+}
+
+const FILE_MAX_SIZE = 5;
+export const beforeUpload = (file: File) => {
+  const isImage = ValidFileType.includes(file.type);
+  if (!isImage) {
+    message.error(`${file.name} 不是图片类型`);
+    return Upload.LIST_IGNORE;
+  }
+  // 校验文件大小
+  const isLarge = file.size > FILE_MAX_SIZE * 1024 * 1024;
+  if (isLarge) {
+      message.error(`文件大小不能超过${FILE_MAX_SIZE}M哦`);
+      return Upload.LIST_IGNORE;
+  }
+  return true;
 }
