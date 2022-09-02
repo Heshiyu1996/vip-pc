@@ -53,7 +53,7 @@ export const handlePreviewImageList = (imgList: string[]): IFile[] => {
   return fileList;
 }
 
-const FILE_MAX_SIZE = 5;
+const FILE_MAX_SIZE = 20;
 export const beforeUpload = (file: File) => {
   const isImage = ValidFileType.includes(file.type);
   if (!isImage) {
