@@ -43,7 +43,6 @@ const RoomConfig: React.FC = () => {
 
   const [visibleEditMultiPriceModal, setVisibleEditMultiPriceModal] = useState<boolean>(false);
   const [visibleEditMultiCountModal, setVisibleEditMultiCountModal] = useState<boolean>(false);
-  const [currentSelectedRowKey, setCurrentSelectedRowKey] = useState<(string | number)[]>();
 
   const handleReload = () => {
     if (actionRef.current) {
@@ -57,7 +56,7 @@ const RoomConfig: React.FC = () => {
     setVisibleEditMultiPriceModal(false);
     setVisibleEditMultiCountModal(false);
     setCurrentRow(undefined);
-    setCurrentSelectedRowKey(undefined);
+    // setCurrentSelectedRowKey(undefined);
     handleReload();
   }
 
@@ -83,13 +82,11 @@ const RoomConfig: React.FC = () => {
 
   const formRef = useRef<ProFormInstance>();
 
-  const handleEditRoomConfigPrice = (selectedRowKeys: (string | number)[]) => {
-    setCurrentSelectedRowKey(selectedRowKeys);
+  const handleEditRoomConfigPrice = () => {
     setVisibleEditMultiPriceModal(true);
   }
 
-  const handleEditRoomConfigCount = (selectedRowKeys: (string | number)[]) => {
-    setCurrentSelectedRowKey(selectedRowKeys);
+  const handleEditRoomConfigCount = () => {
     setVisibleEditMultiCountModal(true);
   }
 
@@ -183,41 +180,49 @@ const RoomConfig: React.FC = () => {
         search={{
           labelWidth: 120,
         }}
-        rowSelection={{
-          // 自定义选择项参考: https://ant.design/components/table-cn/#components-table-demo-row-selection-custom
-          // 注释该行则默认不显示下拉选项
-          selections: [Table.SELECTION_ALL, Table.SELECTION_INVERT],
-        }}
-        tableAlertRender={({ selectedRowKeys, selectedRows, onCleanSelected }) => (
-          <Space size={24}>
-              已选 {selectedRowKeys.length} 项
-              <a style={{ marginLeft: 8 }} onClick={onCleanSelected}>
-                取消选择
-              </a>
-          </Space>
-        )}
-        tableAlertOptionRender={({ selectedRowKeys }) => {
-          return (
+        // rowSelection={{
+        //   // 自定义选择项参考: https://ant.design/components/table-cn/#components-table-demo-row-selection-custom
+        //   // 注释该行则默认不显示下拉选项
+        //   selections: [Table.SELECTION_ALL, Table.SELECTION_INVERT],
+        // }}
+        // tableAlertRender={({ selectedRowKeys, selectedRows, onCleanSelected }) => (
+        //   <Space size={24}>
+        //       已选 {selectedRowKeys.length} 项
+        //       <a style={{ marginLeft: 8 }} onClick={onCleanSelected}>
+        //         取消选择
+        //       </a>
+        //   </Space>
+        // )}
+        // tableAlertOptionRender={({ selectedRowKeys }) => {
+        //   return (
+        //     <Space size={16}>
+        //       <Button key="multi-price" onClick={() => handleEditRoomConfigPrice(selectedRowKeys)}>
+        //         批量修改价格
+        //       </Button>
+        //       <Button key="multi-count" onClick={() => handleEditRoomConfigCount(selectedRowKeys)}>
+        //         批量修改数量
+        //       </Button>
+        //     </Space>
+        //   );
+        // }}
+        toolBarRender={() => [
             <Space size={16}>
-              <Button key="multi-price" onClick={() => handleEditRoomConfigPrice(selectedRowKeys)}>
+              <Button key="multi-price" onClick={() => handleEditRoomConfigPrice()}>
                 批量修改价格
               </Button>
-              <Button key="multi-count" onClick={() => handleEditRoomConfigCount(selectedRowKeys)}>
+              <Button key="multi-count" onClick={() => handleEditRoomConfigCount()}>
                 批量修改数量
               </Button>
-            </Space>
-          );
-        }}
-        toolBarRender={() => [
-          <Button
-            type="primary"
-            key="primary"
-            onClick={() => {
-              setVisibleAddModal(true);
-            }}
-          >
-            <PlusOutlined /> 新增
-          </Button>,
+              <Button
+                type="primary"
+                key="primary"
+                onClick={() => {
+                  setVisibleAddModal(true);
+                }}
+              >
+                  <PlusOutlined /> 新增
+              </Button>
+            </Space>,
         ]}
         request={getRoomConfigList}
         columns={columns}
@@ -230,10 +235,10 @@ const RoomConfig: React.FC = () => {
       <EditModal values={currentRow || {}} visible={visibleEditModal} onVisibleChange={setVisibleEditModal} onOk={onRefresh} />
 
       {/* 弹框：批量编辑价格 */}
-      <EditMultiPriceModal values={currentSelectedRowKey || {}} visible={visibleEditMultiPriceModal} onVisibleChange={setVisibleEditMultiPriceModal} onOk={onRefresh} />
+      <EditMultiPriceModal visible={visibleEditMultiPriceModal} onVisibleChange={setVisibleEditMultiPriceModal} onOk={onRefresh} />
     
       {/* 弹框：批量编辑数量 */}
-      <EditMultiCountModal values={currentSelectedRowKey || {}} visible={visibleEditMultiCountModal} onVisibleChange={setVisibleEditMultiCountModal} onOk={onRefresh} />
+      <EditMultiCountModal visible={visibleEditMultiCountModal} onVisibleChange={setVisibleEditMultiCountModal} onOk={onRefresh} />
     </PageContainer>
   );
 };
