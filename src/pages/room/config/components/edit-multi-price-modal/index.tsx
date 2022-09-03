@@ -54,10 +54,9 @@ const DefaultColumns = [
 const EditMultiPriceModal: React.FC<IProps> = (props) => {
   const { visible, onVisibleChange, onOk } = props;
   const [visibleDayGroup, setVisibleDayGroup] = useState(true);
-  const [selectedDay, setSelectedDay] = useState([]);
+  const [selectedDays, setSelectedDays] = useState([]);
   const [dayList, setDayList] = useState(DefaultDayList);
-  const [selectedDate, setSelectedDate] = useState([]);
-  const [dateList, setDateList] = useState([]);
+  const [selectedDates, setSelectedDates] = useState([]);
 
   const DayMap = useMemo(() => {
     const map = {};
@@ -71,16 +70,29 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
   const [columns, setColumn] = useState(DefaultColumns);
 
   const formRef = useRef<ProFormInstance>();
-  window.formRef = formRef;
+  const tableRef = useRef();
+  const priceListRef = useRef({});
 
   const handleEdit = async (fields: FormValueType) => {
     const hide = message.loading('正在更新');
+    
+    const priceList = [];
+    for (const key in priceListRef?.current) {
+      const [startDate, endDate, dayOrigin] = key?.split('|');
+      const priceMap = priceListRef?.current[key] || {};
+      const list = Object.keys(priceMap).map((roomId) => ({ roomId, price: priceMap[roomId] }));
+      const priceItem = {
+        startDate,
+        endDate,
+        day: dayOrigin?.split(','),
+        list
+      };
+      priceList.push(priceItem);
+    };
+    console.log(priceList, 2992);
 
     try {
-      await editRoomConfigPrice({
-        ids: fields.ids,
-        price: fields.price,
-      });
+      await editRoomConfigPrice({ priceList });
       hide();
       message.success('编辑成功!');
       return true;
@@ -97,6 +109,8 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
       roomId: item.value,
       roomType: item.label
     }));
+    // 清空表格数据
+    tableRef.current.reset();
     setTableListDataSource(newData);
   }
 
@@ -104,77 +118,96 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
     const dayGroup = formRef.current?.getFieldValue('dayGroup');
     if (!dayGroup?.length) return;
 
-    const newSelectedDay = [...selectedDay];
+    const newSelectedDay = [...selectedDays];
     newSelectedDay.push(dayGroup);
-    setSelectedDay(newSelectedDay);
+    setSelectedDays(newSelectedDay);
   }
 
   const addDateGroup = () => {
-    const dateGroup = formRef.current?.getFieldValue('dateGroup');
+    const dateGroupOrigin = formRef.current?.getFieldValue('dateGroup');
+    if (!dateGroupOrigin?.length) return;
+
+    // 直接转成 'YYYY-MM-DD~YYYY-MM-DD' 格式再存储
+    const dateGroup = dateGroupOrigin?.map((date) => moment(date).format('YYYY-MM-DD')).join('~');
     
-    if (!dateGroup?.length) return;
-    // 将所选日期转为字符串数组格式：['2022-08-31~2022-09-01', '2022-08-31~2022-09-01']
-    const selectedDateText = selectedDate.map((dates) => dates?.map((date) => moment(date).format('YYYY-MM-DD'))?.join('~'));
-    const dateGroupText = dateGroup.map((date) => moment(date).format('YYYY-MM-DD')).join('~');
-    
-    const isTheSame = selectedDateText.includes(dateGroupText);
+    const isTheSame = selectedDates.includes(dateGroup);
     if (isTheSame) return;
 
     // 判断是否有交叉（此校验放到后端）
-    const newSelectedDate = [...selectedDate];
+    const newSelectedDate = [...selectedDates];
     newSelectedDate.push(dateGroup);
-    setSelectedDate(newSelectedDate);
+    console.log(newSelectedDate, dateGroup, 333);
+    
+    setSelectedDates(newSelectedDate);
   }
 
   const handleChangePrice = (price, params) => {
     const { day, roomId } = params;
-    // 1. 拿到所选日期组
-    const dateGroup = []
-    // 2. 遍历所选日期，去生成 priceList
-    dateGroup.map((date) => ({
-      startDate: 1,
-      endDate: 1,
-      day,
-      // TODO: 要先写dateList的逻辑
-      // list:
-    }))
+    console.log(selectedDates, 999)
+    // 遍历所选日期，去生成 priceListRef 的 id
+    selectedDates.forEach((date) => {
+      const [startDate, endDate] = date?.split('~');
+      const id = `${startDate}|${endDate}|${day?.join(',')}`;
+      console.log(priceListRef.current[id], 1996)
+      const targetPriceItem = priceListRef.current[id] || {};
+      targetPriceItem[roomId] = price;
+    });
   }
   // 「星期组别」已选值发生变化
   useEffect(() => {
     // 更新“待选项”（置灰、恢复）
     const selectedDayAll = [];
-    selectedDay?.forEach((item) => selectedDayAll.push(...item));
+    selectedDays?.forEach((item) => selectedDayAll.push(...item));
     const newDayList = dayList.map((day) => ({ ...day, disabled: selectedDayAll.includes(day.value) }));
     setDayList(newDayList);
     formRef.current?.setFieldValue('dayGroup', []);
 
     // 更新column
-    const priceColumns = selectedDay.map((dayGroup) => (
+    const priceColumns = selectedDays.map((dayGroup) => (
       {
         title: `适用\r星期${dayGroup?.map((day) => DayMap[day]).join('、')}`,
         dataIndex: `price-${dayGroup?.join('-')}`,
-        render: (dom, entity) => {
-          const params = {
+        render: (dom, entity) => <InputNumber
+          placeholder='请输入'
+          controls={false}
+          addonAfter="元"
+          onChange={(val) => handleChangePrice(val, {
             day: dayGroup,
             roomId: entity.roomId
-          };
-          console.log(dom, entity, 555);
-          return <InputNumber
-            placeholder='请输入'
-            controls={false}
-            addonAfter="元"
-            onChange={(val) => handleChangePrice(val, params)}
-          />
-        }
+          })}
+        />
       }
     ))
     const newColumns = columns.slice(0, 2).concat(priceColumns);
     setColumn(newColumns);
-  }, [selectedDay]);
+
+    // 清空表格数据
+    tableRef.current.reset();
+    // setTableListDataSource([]);
+  }, [selectedDays, selectedDates]);
+
+  // 「星期组别」、「日期组别」已选值发生变化
+  useEffect(() => {
+    if (!selectedDays?.length && !selectedDates?.length) return;
+    console.log(selectedDates, 777)
+    // 清空 priceList 记录
+    priceListRef.current = {};
+    selectedDates.forEach((date) => {
+      const [startDate, endDate] = date?.split('~');
+      selectedDays.forEach((day) => {
+        const priceItem = {}
+        // 前端侧 id 作为唯一标识
+        const id = `${startDate}|${endDate}|${day?.join(',')}`;
+        priceListRef.current[id] = priceItem;
+      });
+    })
+    console.log(priceListRef.current, 123123);
+    
+  }, [selectedDays, selectedDates]);
 
   const removeDayGroup = (idx) => {
-    selectedDay.splice(idx, 1);
-    setSelectedDay([...selectedDay]);
+    selectedDays.splice(idx, 1);
+    setSelectedDays([...selectedDays]);
   }
 
   return (
@@ -207,7 +240,7 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
         initialValue="0"
         options={[
           { value: '0', label: '按星期' },
-          { value: '1', label: '按日期' },
+          { value: '1', label: '按日期', disabled: true },
         ]}
         fieldProps={{
           onChange: (e) => {
@@ -229,8 +262,8 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
                 <div className='icon increase' onClick={addDayGroup} />
               }
             />
-            {!!selectedDay?.length && <div className='day-selected-wrapper'>
-              {selectedDay.map((group, idx) => 
+            {!!selectedDays?.length && <div className='day-selected-wrapper'>
+              {selectedDays.map((group, idx) => 
                 <div className='item' key={group}>
                   已选组{idx + 1}：{group?.map((day) => DayMap[day]).join('、')}
                   <div className='icon decrease' onClick={() => removeDayGroup(idx)} />
@@ -249,10 +282,10 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
                 <div className='icon increase' onClick={addDateGroup} />
               }
             />
-            {!!selectedDate?.length && <div className='day-selected-wrapper'>
-              {selectedDate.map((group, idx) => 
-                <div className='item' key={group}>
-                  已选组{idx + 1}：{group?.map((day) => moment(day).format('YYYY-MM-DD')).join('~')}
+            {!!selectedDates?.length && <div className='day-selected-wrapper'>
+              {selectedDates.map((date, idx) => 
+                <div className='item' key={date}>
+                  已选组{idx + 1}：{date}
                   <div className='icon decrease' onClick={() => removeDayGroup(idx)} />
                 </div>)
               }
@@ -281,6 +314,7 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
       />
 
       <ProTable
+        actionRef={tableRef}
         dataSource={tableListDataSource}
         rowKey="roomId"
         pagination={{
