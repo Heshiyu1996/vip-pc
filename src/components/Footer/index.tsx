@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
       links={[
         {
           key: '1',
-          title: '祥顺控股',
+          title: '翔顺控股',
           href: '',
           blankTarget: true,
         },

@@ -12,7 +12,7 @@ const Settings: LayoutSettings & {
   fixedHeader: false,
   fixSiderbar: true,
   colorWeak: false,
-  title: '祥顺金水台VIP管理系统',
+  title: '翔顺金水台VIP管理系统',
   pwa: false,
   logo: '/logo.png',
   iconfontUrl: '',

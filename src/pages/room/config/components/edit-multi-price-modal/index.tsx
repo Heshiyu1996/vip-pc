@@ -163,7 +163,7 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
               label="星期组别"
               options={dayList}
               addonAfter={
-                <div className='icon increase' onClick={addDayGroup}>添加</div>
+                <div className='icon increase' onClick={addDayGroup} />
               }
               rules={[
                 {
@@ -176,7 +176,7 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
               {selectedDay.map((group, idx) => 
                 <div className='item' key={group}>
                   已选组{idx + 1}: {group?.map((day) => DayMap[day]).join('、')}
-                  <div className='icon decrease' onClick={() => removeDayGroup(idx)}>删除</div>
+                  <div className='icon decrease' onClick={() => removeDayGroup(idx)} />
                 </div>)
               }
             </div>}
