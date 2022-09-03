@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import type { ProFormInstance } from '@ant-design/pro-components';
 import {
   ModalForm,
@@ -9,6 +9,7 @@ import {
 } from '@ant-design/pro-components';
 import { message } from 'antd';
 import { editRoomConfigPrice, getRoomConfigList } from '@/services/ant-design-pro/api';
+import './index.less';
 
 interface IProps {
   visible: boolean;
@@ -24,25 +25,16 @@ const FormLayout = {
   labelCol: { span: 3 },
   wrapperCol: { span: 18 },
 }
-const DayList = [
+
+const DefaultDayList = [
   { label: '一', value: 'Mon' },
   { label: '二', value: 'Tue' },
   { label: '三', value: 'Wed' },
   { label: '四', value: 'Thur' },
   { label: '五', value: 'Fri' },
   { label: '六', value: 'Sat' },
-  { label: '七', value: 'Sun' },
+  { label: '日', value: 'Sun' },
 ];
-
-const DayMap =  (() => {
-  const map = {};
-  DayList.forEach((item) => {
-    map[item.value] = item.label;
-  });
-  return map;
-})();
-
-
 const DefaultColumns = [
   {
     title: '房型ID',
@@ -58,6 +50,15 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
   const { visible, onVisibleChange, onOk } = props;
   const [visibleDayGroup, setVisibleDayGroup] = useState(true);
   const [selectedDay, setSelectedDay] = useState([]);
+  const [dayList, setDayList] = useState(DefaultDayList);
+
+  const DayMap = useMemo(() => {
+    const map = {};
+    dayList.forEach((item) => {
+      map[item.value] = item.label;
+    });
+    return map;
+  }, [dayList]);
 
   const [tableListDataSource, setTableListDataSource] = useState([]);
   const [columns, setColumn] = useState(DefaultColumns);
@@ -93,11 +94,30 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
 
   const addDayGroup = () => {
     const dayGroup = formRef.current?.getFieldValue('dayGroup');
-    setSelectedDay(dayGroup);
+    if (!dayGroup?.length) return;
+
+    const newSelectedDay = [...selectedDay];
+    newSelectedDay.push(dayGroup);
+    setSelectedDay(newSelectedDay);
+  }
+
+  // 刷新「星期组别」选项（置灰、恢复）
+  useEffect(() => {
+    const selectedDayAll = [];
+    selectedDay?.forEach((item) => selectedDayAll.push(...item));
+    const newDayList = dayList.map((day) => ({ ...day, disabled: selectedDayAll.includes(day.value) }));
+    setDayList(newDayList);
+    formRef.current?.setFieldValue('dayGroup', []);
+  }, [selectedDay]);
+
+  const removeDayGroup = (idx) => {
+    selectedDay.splice(idx, 1);
+    setSelectedDay([...selectedDay]);
   }
 
   return (
     <ModalForm
+      className='u-edit-multi-price-modal'
       formRef={formRef}
       title="批量修改价格"
       visible={true || visible}
@@ -141,7 +161,7 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
             <ProFormCheckbox.Group
               name="dayGroup"
               label="星期组别"
-              options={DayList}
+              options={dayList}
               addonAfter={
                 <div className='icon increase' onClick={addDayGroup}>添加</div>
               }
@@ -152,9 +172,14 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
                 },
               ]}
             />
-            <div className='day-selected-wrapper'>
-              已选组1: {selectedDay.map((id) => DayMap[id]).join('、')}
-            </div>
+            {!!selectedDay?.length && <div className='day-selected-wrapper'>
+              {selectedDay.map((group, idx) => 
+                <div className='item' key={group}>
+                  已选组{idx + 1}: {group?.map((day) => DayMap[day]).join('、')}
+                  <div className='icon decrease' onClick={() => removeDayGroup(idx)}>删除</div>
+                </div>)
+              }
+            </div>}
           </>
       }
 
