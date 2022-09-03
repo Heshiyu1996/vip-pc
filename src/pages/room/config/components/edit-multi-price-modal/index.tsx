@@ -6,8 +6,10 @@ import {
   ProTable,
   ProFormCheckbox,
   ProFormSelect,
+  ProFormDateRangePicker,
 } from '@ant-design/pro-components';
-import { message } from 'antd';
+import { message, InputNumber } from 'antd';
+import moment from 'moment';
 import { editRoomConfigPrice, getRoomConfigList } from '@/services/ant-design-pro/api';
 import './index.less';
 
@@ -39,10 +41,13 @@ const DefaultColumns = [
   {
     title: '房型ID',
     dataIndex: 'roomId',
+    hideInTable: true,
   },
   {
     title: '房型',
     dataIndex: 'roomType',
+    // with: 80,
+    fixed: 'left',
   }
 ]
 
@@ -51,6 +56,8 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
   const [visibleDayGroup, setVisibleDayGroup] = useState(true);
   const [selectedDay, setSelectedDay] = useState([]);
   const [dayList, setDayList] = useState(DefaultDayList);
+  const [selectedDate, setSelectedDate] = useState([]);
+  const [dateList, setDateList] = useState([]);
 
   const DayMap = useMemo(() => {
     const map = {};
@@ -64,6 +71,7 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
   const [columns, setColumn] = useState(DefaultColumns);
 
   const formRef = useRef<ProFormInstance>();
+  window.formRef = formRef;
 
   const handleEdit = async (fields: FormValueType) => {
     const hide = message.loading('正在更新');
@@ -101,13 +109,67 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
     setSelectedDay(newSelectedDay);
   }
 
-  // 刷新「星期组别」选项（置灰、恢复）
+  const addDateGroup = () => {
+    const dateGroup = formRef.current?.getFieldValue('dateGroup');
+    
+    if (!dateGroup?.length) return;
+    // 将所选日期转为字符串数组格式：['2022-08-31~2022-09-01', '2022-08-31~2022-09-01']
+    const selectedDateText = selectedDate.map((dates) => dates?.map((date) => moment(date).format('YYYY-MM-DD'))?.join('~'));
+    const dateGroupText = dateGroup.map((date) => moment(date).format('YYYY-MM-DD')).join('~');
+    
+    const isTheSame = selectedDateText.includes(dateGroupText);
+    if (isTheSame) return;
+
+    // 判断是否有交叉（此校验放到后端）
+    const newSelectedDate = [...selectedDate];
+    newSelectedDate.push(dateGroup);
+    setSelectedDate(newSelectedDate);
+  }
+
+  const handleChangePrice = (price, params) => {
+    const { day, roomId } = params;
+    // 1. 拿到所选日期组
+    const dateGroup = []
+    // 2. 遍历所选日期，去生成 priceList
+    dateGroup.map((date) => ({
+      startDate: 1,
+      endDate: 1,
+      day,
+      // TODO: 要先写dateList的逻辑
+      // list:
+    }))
+  }
+  // 「星期组别」已选值发生变化
   useEffect(() => {
+    // 更新“待选项”（置灰、恢复）
     const selectedDayAll = [];
     selectedDay?.forEach((item) => selectedDayAll.push(...item));
     const newDayList = dayList.map((day) => ({ ...day, disabled: selectedDayAll.includes(day.value) }));
     setDayList(newDayList);
     formRef.current?.setFieldValue('dayGroup', []);
+
+    // 更新column
+    const priceColumns = selectedDay.map((dayGroup) => (
+      {
+        title: `适用\r星期${dayGroup?.map((day) => DayMap[day]).join('、')}`,
+        dataIndex: `price-${dayGroup?.join('-')}`,
+        render: (dom, entity) => {
+          const params = {
+            day: dayGroup,
+            roomId: entity.roomId
+          };
+          console.log(dom, entity, 555);
+          return <InputNumber
+            placeholder='请输入'
+            controls={false}
+            addonAfter="元"
+            onChange={(val) => handleChangePrice(val, params)}
+          />
+        }
+      }
+    ))
+    const newColumns = columns.slice(0, 2).concat(priceColumns);
+    setColumn(newColumns);
   }, [selectedDay]);
 
   const removeDayGroup = (idx) => {
@@ -162,20 +224,35 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
               name="dayGroup"
               label="星期组别"
               options={dayList}
+              required
               addonAfter={
                 <div className='icon increase' onClick={addDayGroup} />
               }
-              rules={[
-                {
-                  required: true,
-                  message: '请选择星期组别!',
-                },
-              ]}
             />
             {!!selectedDay?.length && <div className='day-selected-wrapper'>
               {selectedDay.map((group, idx) => 
                 <div className='item' key={group}>
-                  已选组{idx + 1}: {group?.map((day) => DayMap[day]).join('、')}
+                  已选组{idx + 1}：{group?.map((day) => DayMap[day]).join('、')}
+                  <div className='icon decrease' onClick={() => removeDayGroup(idx)} />
+                </div>)
+              }
+            </div>}
+
+            <ProFormDateRangePicker
+              name="dateGroup"
+              label="日期组别"
+              required
+              fieldProps={{
+                format: 'YYYY-MM-DD'
+              }}
+              addonAfter={
+                <div className='icon increase' onClick={addDateGroup} />
+              }
+            />
+            {!!selectedDate?.length && <div className='day-selected-wrapper'>
+              {selectedDate.map((group, idx) => 
+                <div className='item' key={group}>
+                  已选组{idx + 1}：{group?.map((day) => moment(day).format('YYYY-MM-DD')).join('~')}
                   <div className='icon decrease' onClick={() => removeDayGroup(idx)} />
                 </div>)
               }
@@ -214,6 +291,7 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
         search={false}
         dateFormatter="string"
         toolBarRender={false}
+        scroll={{ x: 600 }}
       />
     </ModalForm>
   );
