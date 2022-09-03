@@ -11,7 +11,7 @@ export default {
   'menu.payment.consumption-list': '消费记录',
 
   'menu.room': '订房管理',
-  'menu.room.arrange': '排房',
+  'menu.room.arrange': '房态房价配置',
   'menu.room.config': '客房配置',
   'menu.room.order': '订房记录',
   'menu.room.refund': '退款申请',

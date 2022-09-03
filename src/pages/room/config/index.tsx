@@ -180,31 +180,6 @@ const RoomConfig: React.FC = () => {
         search={{
           labelWidth: 120,
         }}
-        // rowSelection={{
-        //   // 自定义选择项参考: https://ant.design/components/table-cn/#components-table-demo-row-selection-custom
-        //   // 注释该行则默认不显示下拉选项
-        //   selections: [Table.SELECTION_ALL, Table.SELECTION_INVERT],
-        // }}
-        // tableAlertRender={({ selectedRowKeys, selectedRows, onCleanSelected }) => (
-        //   <Space size={24}>
-        //       已选 {selectedRowKeys.length} 项
-        //       <a style={{ marginLeft: 8 }} onClick={onCleanSelected}>
-        //         取消选择
-        //       </a>
-        //   </Space>
-        // )}
-        // tableAlertOptionRender={({ selectedRowKeys }) => {
-        //   return (
-        //     <Space size={16}>
-        //       <Button key="multi-price" onClick={() => handleEditRoomConfigPrice(selectedRowKeys)}>
-        //         批量修改价格
-        //       </Button>
-        //       <Button key="multi-count" onClick={() => handleEditRoomConfigCount(selectedRowKeys)}>
-        //         批量修改数量
-        //       </Button>
-        //     </Space>
-        //   );
-        // }}
         toolBarRender={() => [
             <Space size={16}>
               <Button key="multi-price" onClick={() => handleEditRoomConfigPrice()}>

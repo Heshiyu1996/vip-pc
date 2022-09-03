@@ -47,7 +47,7 @@ const EditModal: React.FC<IProps> = (props) => {
     }
     formRef?.current?.setFieldsValue(values);
 
-    // 查询排房详情
+    // 查询房态房价配置详情
     getTableData(id);
   }, [props.values]);
 
