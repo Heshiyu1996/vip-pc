@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import {
   PageContainer,
 } from '@ant-design/pro-components';
-import { Input, InputNumber, Row, Col, Descriptions, Button, message, Modal } from 'antd';
+import { Input, InputNumber, Row, Col, Descriptions, Button, message, Modal, Select } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
 import { getVipConfigList, getVipList, rechargeAmount } from '@/services/ant-design-pro/api';
 import md5 from 'md5';
@@ -13,6 +13,7 @@ import { getParams } from '@/common/tools';
 const defaultCardId = getParams('cardId');
 
 const Recharge: React.FC = () => {
+  const [ifSearchById, setIfSearchById] = useState<boolean>(true);
   const [searchText, setSearchText] = useState<string>(defaultCardId);
   const [amount, setAmount] = useState<number>();
   const [password, setPassword] = useState<string>();
@@ -37,10 +38,17 @@ const Recharge: React.FC = () => {
   }, []);
 
   const onSearch = (val: string) => {
-    getVipList({ id: val }).then((res) => {
+    const params = {};
+    if (ifSearchById) {
+      params.id = val;
+    } else {
+      params.mobileNumber = val;
+    }
+    getVipList(params).then((res) => {
       const { data } = res;
       if (!data?.length) {
-        message.error('会员卡号不存在，请重新输入!');
+        message.error(ifSearchById ? '会员卡号不存在，请重新输入!' : '会员手机号不存在，请重新输入!');
+        setVipInfo({});
         return;
       }
 
@@ -49,6 +57,18 @@ const Recharge: React.FC = () => {
     })
   }
   
+  const onChangeSearchType = (type) => {
+    console.log(type);
+    // 按照“会员卡号”搜索
+    if (type === 'id') {
+      setIfSearchById(true);
+    }
+    // 按照“手机号”搜索
+    else {
+      setIfSearchById(false);
+    }
+  }
+
   // 当url携带cardId时，自动触发搜索
   useEffect(() => {
     if (defaultCardId) {
@@ -115,18 +135,24 @@ const Recharge: React.FC = () => {
               充值账户：
             </Col>
             <Col span={18}>
-              <Input.Search
-                placeholder='请输入会员卡号'
-                enterButton="查找"
-                size="large"
-                allowClear
-                value={searchText}
-                onChange={(e) => {
-                  setSearchText(e.target.value);
-                }}
-                onSearch={onSearch}
-                style={{ maxWidth: 522, width: '100%' }}
-              />
+              <Input.Group compact>
+                <Select className='u-search-type' style={{ width: '30%' }} defaultValue="id" onChange={onChangeSearchType}>
+                  <Select.Option value="id">会员卡号</Select.Option>
+                  <Select.Option value="mobileNumber">手机号</Select.Option>
+                </Select>
+                <Input.Search
+                  placeholder={`${ ifSearchById ? '请输入会员卡号' : '请输入会员手机号'}`}
+                  enterButton="查找"
+                  size="large"
+                  allowClear
+                  value={searchText}
+                  onChange={(e) => {
+                    setSearchText(e.target.value);
+                  }}
+                  onSearch={onSearch}
+                  style={{ maxWidth: 440, width: '70%' }}
+                />
+              </Input.Group>
             </Col>
           </Row>
 

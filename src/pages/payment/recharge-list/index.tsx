@@ -46,8 +46,8 @@ const RechargeList: React.FC = () => {
   }
 
   // 删除指定行
-  const handleRemove = async (selectedItem: API.RuleListItem) => {
-    const hide = message.loading('正在删除');
+  const handleRefund = async (selectedItem: API.RuleListItem) => {
+    const hide = message.loading('正在退款');
     if (!selectedItem) return true;
   
     try {
@@ -55,12 +55,12 @@ const RechargeList: React.FC = () => {
         id: selectedItem.id,
       });
       hide();
-      message.success('删除成功!');
+      message.success('退款成功!');
       handleReload();
       return true;
     } catch (error) {
       hide();
-      message.error('删除失败，请稍后重试!');
+      message.error('退款失败，请稍后重试!');
       return false;
     }
   };
@@ -168,13 +168,13 @@ const RechargeList: React.FC = () => {
       render: (_, record) => 
         <Popconfirm
           key={record.id}
-          title="确定删除吗?"
-          onConfirm={() => handleRemove(record)}
+          title="确定退款吗?"
+          onConfirm={() => handleRefund(record)}
           okText="确定"
           cancelText="取消"
         >
           <Button key='remove' type="link" size="small" danger>
-            删除
+            退款
           </Button>
         </Popconfirm>
       ,

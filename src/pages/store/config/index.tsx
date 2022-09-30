@@ -33,6 +33,7 @@ export default () => {
   return (
     <>
       <ProList<IItem>
+        className='u-store-config'
         headerTitle="店铺配置"
         rowKey="id"
         // dataSource={dataSource}

@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
-import type { ProFormInstance } from '@ant-design/pro-components';
+import type { ProFormInstance} from '@ant-design/pro-components';
+import { ProFormTextArea } from '@ant-design/pro-components';
 import {
   ModalForm,
   ProFormText,
@@ -10,7 +11,7 @@ import { editStoreConfig } from '@/services/ant-design-pro/api';
 import { handlePreviewImageList, beforeUpload } from '@/common/tools';
 
 interface IProps {
-  values: { [key: string]: any };
+  values: Record<string, any>;
   visible: boolean;
   onVisibleChange: React.Dispatch<React.SetStateAction<boolean>>;
   onOk: () => void;
@@ -103,7 +104,7 @@ const EditModal: React.FC<IProps> = (props) => {
         width="md"
         name="label"
       />
-      <ProFormText
+      <ProFormTextArea
         label="内容"
         rules={[
           {
