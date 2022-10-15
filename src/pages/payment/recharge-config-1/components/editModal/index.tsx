@@ -3,10 +3,9 @@ import type { ProFormInstance } from '@ant-design/pro-components';
 import {
   ModalForm,
   ProFormText,
-  ProFormDigit,
 } from '@ant-design/pro-components';
 import { message } from 'antd';
-import { editRoomConfigCount } from '@/services/ant-design-pro/api';
+import { editVip } from '@/services/ant-design-pro/api';
 
 interface IProps {
   values: { [key: string]: any };
@@ -15,18 +14,22 @@ interface IProps {
   onOk: () => void;
 }
 export type FormValueType = {
-  ids: string[];
-  amount: string;
+  ownerName: string;
+  mobileNumber: string;
+  identityNumber: string;
 } & Partial<API.RuleListItem>;
 
-const EditMultiCountModal: React.FC<IProps> = (props) => {
+const EditModal: React.FC<IProps> = (props) => {
   const { visible, onVisibleChange, onOk } = props;
 
   const formRef = useRef<ProFormInstance>();
 
   useEffect(() => {
     const values = {
-      ids: props.values,
+      id: props.values.cardId,
+      ownerName: props.values.ownerName,
+      mobileNumber: props.values.mobileNumber,
+      identityNumber: props.values.identityNumber,
     }
     formRef?.current?.setFieldsValue(values);
   }, [props.values]);
@@ -35,9 +38,10 @@ const EditMultiCountModal: React.FC<IProps> = (props) => {
     const hide = message.loading('正在更新');
 
     try {
-      await editRoomConfigCount({
-        ids: fields.ids,
-        amount: fields.amount,
+      await editVip({
+        ownerName: fields.ownerName,
+        mobileNumber: fields.mobileNumber,
+        identityNumber: fields.identityNumber,
       });
       hide();
       message.success('编辑成功!');
@@ -52,11 +56,11 @@ const EditMultiCountModal: React.FC<IProps> = (props) => {
   return (
     <ModalForm
       formRef={formRef}
-      title="批量修改数量"
+      title="编辑会员卡"
       visible={visible}
       onVisibleChange={onVisibleChange}
       onFinish={async (value) => {
-        const success = await handleEdit(value);
+        const success = await handleEdit(value as API.RuleListItem);
         if (success) {
           onVisibleChange(false);
           onOk();
@@ -65,33 +69,52 @@ const EditMultiCountModal: React.FC<IProps> = (props) => {
     >
       <ProFormText
         disabled
-        label="客房编码"
+        label="会员卡号"
         rules={[
           {
             required: true,
-            message: '客房编码必填!',
+            message: '会员卡号必填!',
           },
         ]}
         width="md"
-        name="ids"
+        name="id"
       />
-      
-      <ProFormDigit
-        label="数量"
+      <ProFormText
+        label="名字"
         rules={[
           {
             required: true,
-            message: '数量必填!',
+            message: '名字必填!',
           },
         ]}
         width="md"
-        addonAfter="间"
-        fieldProps={{ controls: false }}
-        min={0}
-        name="amount"
+        name="ownerName"
+      />
+
+      <ProFormText
+        label="手机号"
+        rules={[
+          {
+            required: true,
+            message: '手机号必填!',
+          },
+        ]}
+        width="md"
+        name="mobileNumber"
+      />
+      <ProFormText
+        label="身份证号"
+        rules={[
+          {
+            required: true,
+            message: '身份证号必填!',
+          },
+        ]}
+        width="md"
+        name="identityNumber"
       />
     </ModalForm>
   );
 };
 
-export default EditMultiCountModal;
+export default EditModal;

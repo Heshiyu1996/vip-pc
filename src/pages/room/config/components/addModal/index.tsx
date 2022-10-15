@@ -54,7 +54,8 @@ const AddModal: React.FC<IProps> = (props) => {
       {...FormLayout}
       layout="horizontal"
       initialValues={{
-        vipDiscount: true
+        vipDiscount: false,
+        enableRoomTicket: false,
       }}
       onVisibleChange={onVisibleChange}
       onFinish={async (value) => {
@@ -97,6 +98,27 @@ const AddModal: React.FC<IProps> = (props) => {
       <ProFormRadio.Group
         name="vipDiscount"
         label="是否参与会员优惠"
+        options={[
+          {
+            value: true,
+            label: '是',
+          },
+          {
+            value: false,
+            label: '否',
+          },
+        ]}
+      />
+
+      <ProFormRadio.Group
+        name="enableRoomTicket"
+        label="是否可使用住房券"
+        rules={[
+          {
+            required: true,
+            message: '是否可使用住房券必填!',
+          }
+        ]}
         options={[
           {
             value: true,

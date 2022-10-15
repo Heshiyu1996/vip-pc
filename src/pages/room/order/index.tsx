@@ -7,12 +7,14 @@ import {
 import { Button, message } from 'antd';
 import ConfirmModal from './components/confirmModal';
 import RejectModal from './components/rejectModal';
+import DrawerDetail from './components/drawer-detail';
 import { getRoomOrderList, exportRoomOrder } from '@/services/ant-design-pro/api';
 import { download, getParams } from '@/common/tools';
 import moment from 'moment';
 import './index.less';
 
 const defaultCardId = getParams('cardId')
+const defaultOrderStatusCode = getParams('orderStatusCode');
 
 const mockChannelData = [
   {
@@ -57,6 +59,8 @@ const StatusEnumConfig = (() => {
 })();
 
 const RoomOrder: React.FC = () => {
+  const [showDetail, setShowDetail] = useState<boolean>(false);
+
   const [visibleRejectModal, setVisibleRejectModal] = useState<boolean>(false);
 
   const [visibleConfirmModal, setVisibleConfirmModal] = useState<boolean>(false);
@@ -128,7 +132,7 @@ const RoomOrder: React.FC = () => {
     {
       title: '状态',
       dataIndex: 'orderStatusCode',
-      hideInSearch: true,
+      valueEnum: StatusEnumConfig,
       render: (_, record) => <span className={`status-${record.orderStatusCode}`}>{StatusEnumConfig[record.orderStatusCode]}</span>,
     },
     {
@@ -137,13 +141,35 @@ const RoomOrder: React.FC = () => {
       renderText: (val: string) => moment(val).format('YYYY-MM-DD HH:mm:ss'),
     },
     {
+      title: '确认号',
+      dataIndex: 'identifyCode',
+      hideInForm: true,
+      hideInSearch: true,
+    },
+    {
+      title: '价格',
+      dataIndex: 'totalPrice',
+      hideInForm: true,
+      hideInSearch: true,
+      renderText: (val: string) => val ? `${val}元` : '-',
+    },
+    {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => {
-        if (record.orderStatusCode !== 'NEW') return null;
+        const opList = [
+          <Button key='edit' type="link" size="small" onClick={() => {
+            setShowDetail(true);
+            setCurrentRow(record);
+          }}>
+            查看详情
+          </Button>
+        ]
 
-        return [
+        if (record.orderStatusCode !== 'NEW') return opList;
+
+        return opList.concat([
           <Button key='edit' type="link" size="small" onClick={() => {
             setVisibleConfirmModal(true);
             setCurrentRow(record);
@@ -157,7 +183,7 @@ const RoomOrder: React.FC = () => {
           }}>
             拒绝
           </Button>,
-        ]
+        ])
       },
     },
   ];
@@ -168,7 +194,8 @@ const RoomOrder: React.FC = () => {
         headerTitle="查询结果"
         form={{
           initialValues: {
-            vipCardId: defaultCardId
+            vipCardId: defaultCardId,
+            orderStatusCode: defaultOrderStatusCode,
           }
         }}
         actionRef={actionRef}
@@ -189,6 +216,17 @@ const RoomOrder: React.FC = () => {
 
       {/* 弹框：拒绝 */}
       <RejectModal values={currentRow || {}} visible={visibleRejectModal} onVisibleChange={setVisibleRejectModal} onOk={onEditOk} />
+
+      {/* 详情抽屉 */}
+      <DrawerDetail 
+        visible={showDetail && !!currentRow?.id}
+        values={currentRow}
+        columns={columns}
+        onClose={() => {
+          setCurrentRow(undefined);
+          setShowDetail(false);
+        }}
+      />
     </PageContainer>
   );
 };

@@ -11,8 +11,10 @@ import { getRoomRefundList, exportRoomRefund } from '@/services/ant-design-pro/a
 import { download, getParams } from '@/common/tools';
 import './index.less';
 import moment from 'moment';
+import DrawerDetail from './components/drawer-detail';
 
-const defaultCardId = getParams('cardId')
+const defaultCardId = getParams('cardId');
+const defaultRefundStatusCode = getParams('refundStatusCode');
 
 const mockChannelData = [
   {
@@ -57,6 +59,8 @@ const StatusEnumConfig = (() => {
 })();
 
 const RoomRefund: React.FC = () => {
+  const [showDetail, setShowDetail] = useState<boolean>(false);
+
   const [visibleRejectModal, setVisibleRejectModal] = useState<boolean>(false);
 
   const [visibleConfirmModal, setVisibleConfirmModal] = useState<boolean>(false);
@@ -121,13 +125,14 @@ const RoomRefund: React.FC = () => {
       title: '退款进度',
       dataIndex: 'refundStatusCode',
       valueEnum: StatusEnumConfig,
-      hideInTable: true,
+      renderText: (val: string) => <span className={`status-${val}`}>{StatusEnumConfig[val]}</span>
+      // hideInTable: true,
     },
     {
       title: '退款进度',
       dataIndex: 'refundStatusCode',
       hideInSearch: true,
-      render: (val: string) => <span className={`status-${val}`}>{StatusEnumConfig[val]}</span>
+      renderText: (val: string) => <span className={`status-${val}`}>{StatusEnumConfig[val]}</span>
     },
     {
       title: '预订时间',
@@ -139,13 +144,35 @@ const RoomRefund: React.FC = () => {
       dataIndex: 'createTime',
     },
     {
+      title: '确认号',
+      dataIndex: 'identifyCode',
+      hideInForm: true,
+      hideInSearch: true,
+    },
+    {
+      title: '价格',
+      dataIndex: 'totalPrice',
+      hideInForm: true,
+      hideInSearch: true,
+      renderText: (val: string) => val ? `${val}元` : '-',
+    },
+    {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => {
+        const opList = [
+          <Button key='edit' type="link" size="small" onClick={() => {
+            setShowDetail(true);
+            setCurrentRow(record);
+          }}>
+            查看详情
+          </Button>
+        ]
+
         if (record.refundStatusCode !== 'NEW') return null;
 
-        return [
+        return opList.concat([
           <Button key='edit' type="link" size="small" onClick={() => {
             setVisibleConfirmModal(true);
             setCurrentRow(record);
@@ -159,7 +186,7 @@ const RoomRefund: React.FC = () => {
           }}>
             拒绝
           </Button>,
-        ]
+        ])
       },
     },
   ];
@@ -172,7 +199,8 @@ const RoomRefund: React.FC = () => {
         formRef={formRef}
         form={{
           initialValues: {
-            vipCardId: defaultCardId
+            vipCardId: defaultCardId,
+            refundStatusCode: defaultRefundStatusCode,
           }
         }}
         rowKey="id"
@@ -191,6 +219,17 @@ const RoomRefund: React.FC = () => {
 
       {/* 弹框：拒绝 */}
       <RejectModal values={currentRow || {}} visible={visibleRejectModal} onVisibleChange={setVisibleRejectModal} onOk={onEditOk} />
+
+      {/* 详情抽屉 */}
+      <DrawerDetail 
+        visible={showDetail && !!currentRow?.id}
+        values={currentRow}
+        columns={columns}
+        onClose={() => {
+          setCurrentRow(undefined);
+          setShowDetail(false);
+        }}
+      />
     </PageContainer>
   );
 };

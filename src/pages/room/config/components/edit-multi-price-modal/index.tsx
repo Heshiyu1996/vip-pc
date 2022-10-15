@@ -10,7 +10,7 @@ import {
 } from '@ant-design/pro-components';
 import { message, InputNumber } from 'antd';
 import moment from 'moment';
-import { editRoomConfigPrice, getRoomConfigList } from '@/services/ant-design-pro/api';
+import { editRoomConfigPrice, editRoomConfigAmount, getRoomConfigList } from '@/services/ant-design-pro/api';
 import './index.less';
 
 interface IProps {
@@ -50,9 +50,14 @@ const DefaultColumns = [
     fixed: 'left',
   }
 ]
+enum EOpType {
+  price,
+  amount
+}
 
-const EditMultiPriceModal: React.FC<IProps> = (props) => {
+const EditMultiModal: React.FC<IProps> = (props) => {
   const { visible, onVisibleChange, onOk } = props;
+  const [opType, setOpType] = useState(EOpType.price);
   const [visibleDayGroup, setVisibleDayGroup] = useState(true);
   const [selectedDays, setSelectedDays] = useState([]);
   const [dayList, setDayList] = useState(DefaultDayList);
@@ -73,10 +78,10 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
   const tableRef = useRef();
   const priceListRef = useRef({});
 
-  const handleEdit = async (fields: FormValueType) => {
+  const handleEdit = async () => {
     const hide = message.loading('正在更新');
     
-    const priceList = [];
+    const configList = [];
     for (const key in priceListRef?.current) {
       const [startDate, endDate, dayOrigin] = key?.split('|');
       const priceMap = priceListRef?.current[key] || {};
@@ -87,12 +92,16 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
         day: dayOrigin?.split(','),
         list
       };
-      priceList.push(priceItem);
+      configList.push(priceItem);
     };
-    console.log(priceList, 2992);
+    console.log(configList, 2992);
 
     try {
-      await editRoomConfigPrice({ priceList });
+      if (opType === EOpType.price) {
+        await editRoomConfigPrice({ configList });
+      } else {
+        await editRoomConfigAmount({ configList });
+      }
       hide();
       message.success('编辑成功!');
       return true;
@@ -165,12 +174,12 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
     // 更新column
     const priceColumns = selectedDays.map((dayGroup) => (
       {
-        title: `适用\r星期${dayGroup?.map((day) => DayMap[day]).join('、')}`,
+        title: `每周${dayGroup?.map((day) => DayMap[day]).join('/')}`,
         dataIndex: `price-${dayGroup?.join('-')}`,
         render: (dom, entity) => <InputNumber
           placeholder='请输入'
           controls={false}
-          addonAfter="元"
+          addonAfter={`${opType === EOpType.price ? '元' : '间'}`}
           onChange={(val) => handleChangePrice(val, {
             day: dayGroup,
             roomId: entity.roomId
@@ -182,15 +191,15 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
     setColumn(newColumns);
 
     // 清空表格数据
-    tableRef.current.reset();
+    tableRef?.current?.reset();
     // setTableListDataSource([]);
-  }, [selectedDays, selectedDates]);
+  }, [selectedDays, selectedDates, opType]);
 
   // 「星期组别」、「日期组别」已选值发生变化
   useEffect(() => {
     if (!selectedDays?.length && !selectedDates?.length) return;
     console.log(selectedDates, 777)
-    // 清空 priceList 记录
+    // 清空 configList 记录
     priceListRef.current = {};
     selectedDates.forEach((date) => {
       const [startDate, endDate] = date?.split('~');
@@ -214,8 +223,8 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
     <ModalForm
       className='u-edit-multi-price-modal'
       formRef={formRef}
-      title="批量修改价格"
-      visible={true || visible}
+      title="批量修改"
+      visible={visible}
       layout="horizontal"
       {...FormLayout}
       onVisibleChange={onVisibleChange}
@@ -227,6 +236,28 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
         }
       }}
     >
+
+      <ProFormRadio.Group
+        label="修改内容"
+        rules={[
+          {
+            required: true,
+            message: '请选择修改内容!',
+          },
+        ]}
+        name="opType"
+        initialValue={EOpType.price}
+        options={[
+          { value: EOpType.price, label: '房价' },
+          { value: EOpType.amount, label: '数量' },
+        ]}
+        fieldProps={{
+          onChange: (e) => {
+            const type = e.target.value;
+            setOpType(type);
+          }
+        }}
+      />
 
       <ProFormRadio.Group
         label="类别"
@@ -273,7 +304,7 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
 
             <ProFormDateRangePicker
               name="dateGroup"
-              label="日期组别"
+              label="日期时间段"
               required
               fieldProps={{
                 format: 'YYYY-MM-DD'
@@ -313,6 +344,11 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
         }}
       />
 
+      <div className='tip'>
+        在 <b>{selectedDates?.map((date) => date).join('、')} </b>这段日期内，
+        给 <b>每周{selectedDays.map((group) => group?.map((day) => DayMap[day]).join('/')).join('、每周')}</b>配置不同的{opType === EOpType.price ? '价格' : '数量'}
+      </div>
+
       <ProTable
         actionRef={tableRef}
         dataSource={tableListDataSource}
@@ -331,4 +367,4 @@ const EditMultiPriceModal: React.FC<IProps> = (props) => {
   );
 };
 
-export default EditMultiPriceModal;
+export default EditMultiModal;

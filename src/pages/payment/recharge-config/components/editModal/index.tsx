@@ -3,9 +3,12 @@ import type { ProFormInstance } from '@ant-design/pro-components';
 import {
   ModalForm,
   ProFormText,
+  ProFormDigit,
+  ProFormSelect,
 } from '@ant-design/pro-components';
 import { message } from 'antd';
-import { editVip } from '@/services/ant-design-pro/api';
+import { editRechargeConfig } from '@/services/ant-design-pro/api';
+import { CheckInOptions, BirthdayOptions } from '@/common/config'
 
 interface IProps {
   values: Record<string, any>;
@@ -13,11 +16,7 @@ interface IProps {
   onVisibleChange: React.Dispatch<React.SetStateAction<boolean>>;
   onOk: () => void;
 }
-export type FormValueType = {
-  ownerName: string;
-  mobileNumber: string;
-  identityNumber: string;
-} & Partial<API.RuleListItem>;
+export type FormValueType = API.RechargeConfigListItem;
 
 const EditModal: React.FC<IProps> = (props) => {
   const { visible, onVisibleChange, onOk } = props;
@@ -27,9 +26,9 @@ const EditModal: React.FC<IProps> = (props) => {
   useEffect(() => {
     const values = {
       id: props.values.id,
-      ownerName: props.values.ownerName,
-      mobileNumber: props.values.mobileNumber,
-      identityNumber: props.values.identityNumber,
+      amount: props.values.amount,
+      giftAmount: props.values.giftAmount,
+      roomTicketAmount: props.values.roomTicketAmount,
     }
     formRef?.current?.setFieldsValue(values);
   }, [props.values]);
@@ -38,11 +37,11 @@ const EditModal: React.FC<IProps> = (props) => {
     const hide = message.loading('正在更新');
 
     try {
-      await editVip({
+      await editRechargeConfig({
         id: fields.id,
-        ownerName: fields.ownerName,
-        mobileNumber: fields.mobileNumber,
-        identityNumber: fields.identityNumber,
+        amount: fields.amount,
+        giftAmount: fields.giftAmount,
+        roomTicketAmount: fields.roomTicketAmount,
       });
       hide();
       message.success('编辑成功!');
@@ -57,65 +56,59 @@ const EditModal: React.FC<IProps> = (props) => {
   return (
     <ModalForm
       formRef={formRef}
-      title="编辑会员卡"
+      title="编辑充值配置"
       visible={visible}
-      modalProps={{
-        zIndex: 1001
-      }}
       onVisibleChange={onVisibleChange}
       onFinish={async (value) => {
-        const success = await handleEdit(value as API.RuleListItem);
+        const success = await handleEdit(value as API.VipConfigListItem);
         if (success) {
           onVisibleChange(false);
           onOk();
         }
       }}
     >
-      <ProFormText
-        disabled
-        label="会员卡号"
+      <ProFormDigit
+        label="充值面额"
         rules={[
           {
             required: true,
-            message: '会员卡号必填!',
+            message: '充值面额必填!',
           },
         ]}
         width="md"
-        name="id"
+        addonAfter="元"
+        fieldProps={{controls: false}}
+        name="amount"
       />
-      <ProFormText
-        label="名字"
+      <ProFormDigit
+        label="赠送金"
         rules={[
           {
             required: true,
-            message: '名字必填!',
+            message: '赠送金必填!',
           },
         ]}
         width="md"
-        name="ownerName"
+        addonAfter="元"
+        fieldProps={{controls: false}}
+        min={0}
+        max={10}
+        name="giftAmount"
       />
-
-      <ProFormText
-        label="手机号"
+      <ProFormDigit
+        label="住房券数量"
         rules={[
           {
             required: true,
-            message: '手机号必填!',
+            message: '住房券数量必填!',
           },
         ]}
         width="md"
-        name="mobileNumber"
-      />
-      <ProFormText
-        label="身份证号"
-        rules={[
-          {
-            required: true,
-            message: '身份证号必填!',
-          },
-        ]}
-        width="md"
-        name="identityNumber"
+        addonAfter="张"
+        fieldProps={{controls: false}}
+        min={0}
+        max={10}
+        name="roomTicketAmount"
       />
     </ModalForm>
   );

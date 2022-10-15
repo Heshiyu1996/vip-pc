@@ -1,38 +1,16 @@
 import React, { useRef, useState } from 'react';
-import type { ActionType, ProColumns, ProFormInstance } from '@ant-design/pro-components';
+import { PlusOutlined } from '@ant-design/icons';
+import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import {
   PageContainer,
   ProTable,
 } from '@ant-design/pro-components';
-import { Button, message, Popconfirm, Tag } from 'antd';
-import { removeConsumptionList, getConsumptionList, exportConsumptionList } from '@/services/ant-design-pro/api';
-import moment from 'moment';
-import { download, getParams } from '@/common/tools';
+import { Button, message, Popconfirm } from 'antd';
 import EditModal from './components/editModal';
 import AddModal from './components/addModal';
+import { removeRechargeConfig, getRechargeConfigList } from '@/services/ant-design-pro/api';
 
-const defaultCardId = getParams('cardId')
-
-const mocChannelData = [
-  {
-    id: '0',
-    levelName: '微信',
-  },
-  {
-    id: '1',
-    levelName: '线下',
-  },
-];
-
-const ChannelEnumConfig = (() => {
-  const map = {};
-  mocChannelData.forEach((item) => {
-    map[item.id] = item.levelName;
-  });
-  return map;
-})();
-
-const ConsumptionList: React.FC = () => {
+const RechargeConfig: React.FC = () => {
   const [visibleAddModal, setVisibleAddModal] = useState<boolean>(false);
 
   const [visibleEditModal, setVisibleEditModal] = useState<boolean>(false);
@@ -44,25 +22,25 @@ const ConsumptionList: React.FC = () => {
     }
   }
 
-// 删除指定行
-const handleRemove = async (selectedItem: API.RuleListItem) => {
-  const hide = message.loading('正在删除');
-  if (!selectedItem) return true;
-
-  try {
-    await removeConsumptionList({
-      id: selectedItem.id,
-    });
-    hide();
-    message.success('删除成功!');
-    handleReload();
-    return true;
-  } catch (error) {
-    hide();
-    message.error('删除失败，请稍后重试!');
-    return false;
-  }
-};
+  // 删除指定行
+  const handleRefund = async (selectedItem: API.RuleListItem) => {
+    const hide = message.loading('正在删除');
+    if (!selectedItem) return true;
+  
+    try {
+      await removeRechargeConfig({
+        id: selectedItem.id,
+      });
+      hide();
+      message.success('删除成功!');
+      handleReload();
+      return true;
+    } catch (error) {
+      hide();
+      message.error('删除失败，请稍后重试!');
+      return false;
+    }
+  };
 
   const formRef = useRef<ProFormInstance>();
   const handleExport = async () => {
@@ -70,7 +48,7 @@ const handleRemove = async (selectedItem: API.RuleListItem) => {
     const params = formRef.current?.getFieldsValue();
     
     try {
-      const res = await exportConsumptionList(params);
+      const res = await exportRechargeList(params);
       const { data } = res || {};
       if (!data) throw new Error();
       const filename = getParams(data, 'filename');
@@ -91,6 +69,18 @@ const handleRemove = async (selectedItem: API.RuleListItem) => {
 
   const columns: ProColumns<API.RuleListItem>[] = [
     {
+      title: '流水号',
+      dataIndex: 'id',
+      valueType: 'textarea',
+      hideInSearch: true,
+    },
+    {
+      title: '流水号',
+      dataIndex: 'flowId',
+      valueType: 'textarea',
+      hideInTable: true,
+    },
+    {
       title: '会员卡号',
       dataIndex: 'cardId',
       render: (dom, entity) => {
@@ -109,18 +99,19 @@ const handleRemove = async (selectedItem: API.RuleListItem) => {
       valueType: 'textarea',
     },
     {
-      title: '流水号',
-      dataIndex: 'id',
-      valueType: 'textarea',
-    },
-    {
       title: '渠道',
       dataIndex: 'channel',
       valueEnum: ChannelEnumConfig,
       renderText: (val: string) => ChannelEnumConfig[val],
     },
     {
-      title: '消费时间',
+      title: '充值金额',
+      dataIndex: 'amount',
+      hideInSearch: true,
+      valueType: 'textarea',
+    },
+    {
+      title: '充值时间',
       dataIndex: 'createTime',
       key: 'showTime',
       valueType: 'dateRange',
@@ -139,73 +130,49 @@ const handleRemove = async (selectedItem: API.RuleListItem) => {
       },
     },
     {
-      title: '消费时间',
+      title: '充值时间',
       dataIndex: 'createTime',
       valueType: 'dateTime',
       key: 'showTime',
       hideInSearch: true,
+      sorter: true,
       renderText: (val: string) => moment(val).format('YYYY-MM-DD HH:mm:ss'),
-    },
-    {
-      title: '消费金额',
-      dataIndex: 'amount',
-      hideInSearch: true,
-      valueType: 'textarea',
-    },
-    {
-      title: '是否使用了住房券',
-      dataIndex: 'useRoomTicket',
-      hideInSearch: true,
-      renderText: (val: boolean) => val ? <Tag color='success'>是</Tag> : <Tag color='error'>否</Tag>
-    },
-    {
-      title: '消费金',
-      dataIndex: 'giftAmount',
-      hideInSearch: true,
-      valueType: 'textarea',
-      renderText: (val: string) => val ? `${val}元` : '-',
     },
     {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => 
-
-      <Popconfirm
-        key={record.id}
-        title="确定删除吗?"
-        onConfirm={() => handleRemove(record)}
-        okText="确定"
-        cancelText="取消"
-      >
-        <Button key='remove' type="link" size="small" danger>
-          删除
-        </Button>
-      </Popconfirm>
+        <Popconfirm
+          key={record.id}
+          title="确定退款吗?"
+          onConfirm={() => handleRefund(record)}
+          okText="确定"
+          cancelText="取消"
+        >
+          <Button key='remove' type="link" size="small" danger>
+            退款
+          </Button>
+        </Popconfirm>
       ,
     },
   ];
+
   return (
     <PageContainer>
       <ProTable<API.RuleListItem, API.PageParams>
         headerTitle="查询结果"
         actionRef={actionRef}
         rowKey="id"
-        formRef={formRef}
-        form={{
-          initialValues: {
-            vipCardId: defaultCardId
-          }
-        }}
-        search={{
-          labelWidth: 120,
-        }}
+        search={false}
         toolBarRender={() => [
-          <Button key="primary" onClick={handleExport}>
-            导出
+          <Button key="primary" onClick={() => {
+            setVisibleAddModal(true)
+          }}>
+            <PlusOutlined /> 新增
           </Button>,
         ]}
-        request={getConsumptionList}
+        request={getRechargeConfigList}
         columns={columns}
       />
 
@@ -218,4 +185,4 @@ const handleRemove = async (selectedItem: API.RuleListItem) => {
   );
 };
 
-export default ConsumptionList;
+export default RechargeConfig;

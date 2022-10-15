@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import {
@@ -6,14 +6,11 @@ import {
   ProTable,
 } from '@ant-design/pro-components';
 import { Button, message, Popconfirm } from 'antd';
-import { removeVip, getVipList, getVipConfigList } from '@/services/ant-design-pro/api';
 import EditModal from './components/editModal';
 import AddModal from './components/addModal';
-import DrawerDetail from './components/drawer-detail';
-import './index.less';
+import { removeRechargeConfig, getRechargeConfigList } from '@/services/ant-design-pro/api';
 
-const TableList: React.FC = () => {
-  const [showDetail, setShowDetail] = useState<boolean>(false);
+const RechargeConfig: React.FC = () => {
   const [visibleAddModal, setVisibleAddModal] = useState<boolean>(false);
 
   const [visibleEditModal, setVisibleEditModal] = useState<boolean>(false);
@@ -29,30 +26,13 @@ const TableList: React.FC = () => {
     setCurrentRow(undefined);
     handleReload();
   }
-
-  const [vipConfigList, setVipConfigList] = useState<any>();
-  useEffect(() => {
-    getVipConfigList({}).then((res) => {
-      // 默认“全部”
-      const configList = [
-        { id: '', levelName: '全部' }
-      ];
-      configList.push(...res?.data || []);
-      const map = {};
-      configList.forEach((item) => {
-        map[item.id] = item.levelName;
-      });
-      setVipConfigList(map);
-    })
-  }, []);
-
   // 删除指定行
   const handleRemove = async (selectedItem: API.RuleListItem) => {
     const hide = message.loading('正在删除');
     if (!selectedItem) return true;
   
     try {
-      await removeVip({
+      await removeRechargeConfig({
         id: selectedItem.id,
       });
       hide();
@@ -65,60 +45,31 @@ const TableList: React.FC = () => {
       return false;
     }
   };
+
   const columns: ProColumns<API.RuleListItem>[] = [
     {
-      title: '会员卡号',
+      title: 'ID',
       dataIndex: 'id',
-      valueType: 'textarea',
-      render: (dom, entity) => {
-        return (
-          <a
-            onClick={() => {
-              setCurrentRow(entity);
-              setShowDetail(true);
-            }}
-          >
-            {dom}
-          </a>
-        );
-      },
-    },
-    {
-      title: '名字',
-      dataIndex: 'ownerName',
-    },
-    {
-      title: '手机号',
-      dataIndex: 'mobileNumber',
-      valueType: 'textarea',
-    },
-    {
-      title: '当前等级',
-      dataIndex: 'currentLevelCode',
-      valueEnum: vipConfigList,
-    },
-    {
-      title: '身份证号',
-      dataIndex: 'identityNumber',
-      valueType: 'textarea',
-    },
-    {
-      title: '会员卡余额',
-      dataIndex: 'totalBalance',
-      valueType: 'textarea',
-    },
-    {
-      title: '赠送金额',
-      dataIndex: 'giftBalance',
-      valueType: 'textarea',
-      hideInSearch: true,
       hideInTable: true,
+    },
+    {
+      title: '充值额度',
+      dataIndex: 'amount',
+    },
+    {
+      title: '赠送金',
+      dataIndex: 'giftAmount',
+      renderText: (val: string) => val ? `${val}元` : '-',
+    },
+    {
+      title: '住房券',
+      dataIndex: 'roomTicketAmount',
+      renderText: (val: string) => val ? `${val}张` : '-',
     },
     {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
-      hideInDescriptions: true,
       render: (_, record) => [
         <Button key='edit' type="link" size="small" onClick={() => {
           setVisibleEditModal(true);
@@ -141,16 +92,14 @@ const TableList: React.FC = () => {
       ],
     },
   ];
-
   return (
     <PageContainer>
       <ProTable<API.RuleListItem, API.PageParams>
         headerTitle="查询结果"
         actionRef={actionRef}
         rowKey="id"
-        search={{
-          labelWidth: 120,
-        }}
+        // 无查询表单
+        search={false}
         toolBarRender={() => [
           <Button
             type="primary"
@@ -162,7 +111,7 @@ const TableList: React.FC = () => {
             <PlusOutlined /> 新增
           </Button>,
         ]}
-        request={getVipList}
+        request={getRechargeConfigList}
         columns={columns}
       />
 
@@ -171,19 +120,8 @@ const TableList: React.FC = () => {
 
       {/* 弹框：编辑 */}
       <EditModal values={currentRow || {}} visible={visibleEditModal} onVisibleChange={setVisibleEditModal} onOk={onEditOk} />
-
-      {/* 详情抽屉 */}
-      <DrawerDetail 
-        visible={showDetail && !!currentRow?.id}
-        values={currentRow || {}}
-        columns={columns}
-        onClose={() => {
-          setCurrentRow(undefined);
-          setShowDetail(false);
-        }}
-      />
     </PageContainer>
   );
 };
 
-export default TableList;
+export default RechargeConfig;

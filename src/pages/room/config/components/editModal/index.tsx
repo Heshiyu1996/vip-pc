@@ -11,10 +11,10 @@ import {
 import { message } from 'antd';
 import { editRoomConfig } from '@/services/ant-design-pro/api';
 import { handlePreviewImageList, beforeUpload } from '@/common/tools';
-import { IFile } from '@/common/config';
+import type { IFile } from '@/common/config';
 
 interface IProps {
-  values: { [key: string]: any };
+  values: Record<string, any>;
   visible: boolean;
   onVisibleChange: React.Dispatch<React.SetStateAction<boolean>>;
   onOk: () => void;
@@ -29,6 +29,7 @@ export type FormValueType = {
   roomFacility: string;
   roomType:     string;
   vipDiscount:  boolean;
+  enableRoomTicket: boolean;
 };
 
 const FormLayout = {
@@ -47,6 +48,7 @@ const EditModal: React.FC<IProps> = (props) => {
       roomType: props.values.roomType,
       price: props.values.price,
       vipDiscount: props.values.vipDiscount,
+      enableRoomTicket: props.values.enableRoomTicket,
       images: handlePreviewImageList(props.values.images),
       amount: props.values.amount,
       roomFacility: props.values.roomFacility,
@@ -64,6 +66,7 @@ const EditModal: React.FC<IProps> = (props) => {
         roomType: fields.roomType,
         price: fields.price,
         vipDiscount: fields.vipDiscount,
+        enableRoomTicket: fields.enableRoomTicket,
         images: fields.images?.map((item) => {
           if (item.exist) {
             return item.url;
@@ -156,6 +159,26 @@ const EditModal: React.FC<IProps> = (props) => {
         ]}
       />
 
+      <ProFormRadio.Group
+        name="enableRoomTicket"
+        label="是否可使用住房券"
+        rules={[
+          {
+            required: true,
+            message: '是否可使用住房券必填!',
+          },
+        ]}
+        options={[
+          {
+            value: true,
+            label: '是',
+          },
+          {
+            value: false,
+            label: '否',
+          },
+        ]}
+      />
       <ProFormUploadButton
         action="/pc/api/common/upload"
         fieldProps={{

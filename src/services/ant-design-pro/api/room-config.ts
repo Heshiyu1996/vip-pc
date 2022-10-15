@@ -48,6 +48,15 @@ export async function editRoomConfigPrice(params?: { [key: string]: any }, optio
   });
 }
 
+/** （新）批量编辑客房配置数量 PUT /api/room/arragement/amount/batchUpdate */
+export async function editRoomConfigAmount(params?: { [key: string]: any }, options?: { [key: string]: any }) {
+  return request<API.RoomConfigListItem>(`/pc/api/room/arrangement/amount/batchUpdate`, {
+    method: 'PUT',
+    data: params,
+    ...(options || {}),
+  });
+}
+
 /** 批量编辑客房配置价格 PUT /pc/api/room/config/amount/edit */
 export async function editRoomConfigCount(params?: { [key: string]: any }, options?: { [key: string]: any }) {
   return request<API.RoomConfigListItem>(`/pc/api/room/config/amount/edit`, {

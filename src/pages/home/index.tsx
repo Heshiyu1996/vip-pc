@@ -1,4 +1,5 @@
 import { PageContainer } from '@ant-design/pro-components';
+import { history } from 'umi';
 import { Card } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { getHomeData } from '@/services/ant-design-pro/api'
@@ -34,11 +35,11 @@ const Home: React.FC = () => {
     <PageContainer>
       <div className='u-home'>
         <Card className='todo-board'>
-          <div className='item-wrapper'>
+          <div className='item-wrapper' onClick={() => history.push('/room/order?orderStatusCode=NEW')}>
             <div className='label'>待办订房申请</div>
             <div className='value'>{todoCountForBooking}个</div> 
           </div>
-          <div className='item-wrapper'>
+          <div className='item-wrapper' onClick={() => history.push('/room/refund?refundStatusCode=NEW')}>
             <div className='label'>待办退款申请</div>
             <div className='value'>{todoCountForRefunding}个</div> 
           </div>

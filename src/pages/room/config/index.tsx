@@ -5,11 +5,12 @@ import {
   PageContainer,
   ProTable,
 } from '@ant-design/pro-components';
-import { Button, message, Image, Table, Space, Popconfirm } from 'antd';
+import { Button, message, Image, Space, Popconfirm } from 'antd';
 import AddModal from './components/addModal';
 import EditModal from './components/editModal';
-import EditMultiPriceModal from './components/edit-multi-price-modal';
-import EditMultiCountModal from './components/edit-multi-count-modal';
+// import EditMultiPriceModal from './components/edit-multi-price-modal';
+// import EditMultiCountModal from './components/edit-multi-count-modal';
+import EditMultiModal from './components/edit-multi-price-modal';
 import { getRoomConfigList, removeRoomConfig } from '@/services/ant-design-pro/api';
 import './index.less';
 
@@ -36,13 +37,37 @@ const VipDiscountEnumConfig = (() => {
   return map;
 })();
 
+const mockEnableRoomTicket = [
+  {
+    id: null,
+    levelName: '全部',
+  },
+  {
+    id: true,
+    levelName: '是',
+  },
+  {
+    id: false,
+    levelName: '否',
+  },
+];
+
+const EnableRoomTicketEnumConfig = (() => {
+  const map = {};
+  mockEnableRoomTicket.forEach((item) => {
+    map[item.id] = item.levelName;
+  });
+  return map;
+})();
+
 const RoomConfig: React.FC = () => {
   const [visibleAddModal, setVisibleAddModal] = useState<boolean>(false);
   const [visibleEditModal, setVisibleEditModal] = useState<boolean>(false);
   const [currentRow, setCurrentRow] = useState<API.RoomConfigListItem>();
 
-  const [visibleEditMultiPriceModal, setVisibleEditMultiPriceModal] = useState<boolean>(false);
-  const [visibleEditMultiCountModal, setVisibleEditMultiCountModal] = useState<boolean>(false);
+  // const [visibleEditMultiPriceModal, setVisibleEditMultiPriceModal] = useState<boolean>(false);
+  // const [visibleEditMultiCountModal, setVisibleEditMultiCountModal] = useState<boolean>(false);
+  const [visibleEditMultiModal, setVisibleEditMultiModal] = useState<boolean>(false);
 
   const handleReload = () => {
     if (actionRef.current) {
@@ -53,8 +78,9 @@ const RoomConfig: React.FC = () => {
   const onRefresh = () => {
     setVisibleAddModal(false);
     setVisibleEditModal(false);
-    setVisibleEditMultiPriceModal(false);
-    setVisibleEditMultiCountModal(false);
+    // setVisibleEditMultiPriceModal(false);
+    // setVisibleEditMultiCountModal(false);
+    setVisibleEditMultiModal(false);
     setCurrentRow(undefined);
     // setCurrentSelectedRowKey(undefined);
     handleReload();
@@ -83,12 +109,13 @@ const RoomConfig: React.FC = () => {
   const formRef = useRef<ProFormInstance>();
 
   const handleEditRoomConfigPrice = () => {
-    setVisibleEditMultiPriceModal(true);
+    // setVisibleEditMultiPriceModal(true);
+    setVisibleEditMultiModal(true);
   }
 
-  const handleEditRoomConfigCount = () => {
-    setVisibleEditMultiCountModal(true);
-  }
+  // const handleEditRoomConfigCount = () => {
+  //   setVisibleEditMultiCountModal(true);
+  // }
 
   const actionRef = useRef<ActionType>();
   const columns: ProColumns<API.RoomConfigListItem>[] = [
@@ -129,6 +156,11 @@ const RoomConfig: React.FC = () => {
       title: '是否参与会员优惠',
       dataIndex: 'vipDiscount',
       valueEnum: VipDiscountEnumConfig,
+    },
+    {
+      title: '是否可使用住房券',
+      dataIndex: 'enableRoomTicket',
+      valueEnum: EnableRoomTicketEnumConfig,
     },
     {
       title: '客房图片',
@@ -183,11 +215,11 @@ const RoomConfig: React.FC = () => {
         toolBarRender={() => [
             <Space size={16}>
               <Button key="multi-price" onClick={() => handleEditRoomConfigPrice()}>
-                批量修改价格
+                批量修改房价/数量
               </Button>
-              <Button key="multi-count" onClick={() => handleEditRoomConfigCount()}>
+              {/* <Button key="multi-count" onClick={() => handleEditRoomConfigCount()}>
                 批量修改数量
-              </Button>
+              </Button> */}
               <Button
                 type="primary"
                 key="primary"
@@ -209,11 +241,11 @@ const RoomConfig: React.FC = () => {
       {/* 弹框：编辑 */}
       <EditModal values={currentRow || {}} visible={visibleEditModal} onVisibleChange={setVisibleEditModal} onOk={onRefresh} />
 
-      {/* 弹框：批量编辑价格 */}
-      <EditMultiPriceModal visible={visibleEditMultiPriceModal} onVisibleChange={setVisibleEditMultiPriceModal} onOk={onRefresh} />
+      {/* 弹框：批量编辑 */}
+      <EditMultiModal visible={visibleEditMultiModal} onVisibleChange={setVisibleEditMultiModal} onOk={onRefresh} />
     
       {/* 弹框：批量编辑数量 */}
-      <EditMultiCountModal visible={visibleEditMultiCountModal} onVisibleChange={setVisibleEditMultiCountModal} onOk={onRefresh} />
+      {/* <EditMultiCountModal visible={visibleEditMultiCountModal} onVisibleChange={setVisibleEditMultiCountModal} onOk={onRefresh} /> */}
     </PageContainer>
   );
 };

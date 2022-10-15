@@ -23,6 +23,7 @@ export default [
         icon: 'smile',
         component: './payment/consumption-list',
       },
+      { path: '/payment/recharge-config', name: '充值配置', icon: 'smile', component: './payment/recharge-config' },
     ],
   },
   {
@@ -42,7 +43,10 @@ export default [
     name: '店铺管理',
     icon: 'crown',
     access: 'canAdmin',
-    routes: [{ path: '/store/config', name: '店铺配置', icon: 'smile', component: './store/config' }],
+    routes: [
+      { path: '/store/config', name: '店铺配置', icon: 'smile', component: './store/config' },
+      { path: '/store/activity-config', name: '活动配置', icon: 'smile', component: './store/activity-config' }
+    ],
   },
   {
     path: '/user',
