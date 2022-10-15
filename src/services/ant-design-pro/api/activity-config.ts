@@ -31,7 +31,7 @@ export async function addActivityConfig(params?: Record<string, any>, options?: 
 
 /** 编辑热门活动 PUT /pc/api/store/activity/{id} */
 export async function editActivityConfig(params?: Record<string, any>, options?: Record<string, any>) {
-  return request<Record<string, any>>(`/pc/api/store/activity/${params.id}`, {
+  return request<Record<string, any>>(`/pc/api/store/activity/edit/${params.id}`, {
     method: 'PUT',
     data: params,
     ...(options || {}),
