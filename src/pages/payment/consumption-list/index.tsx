@@ -194,7 +194,7 @@ const handleRemove = async (selectedItem: API.RuleListItem) => {
         formRef={formRef}
         form={{
           initialValues: {
-            vipCardId: defaultCardId
+            cardId: defaultCardId
           }
         }}
         search={{

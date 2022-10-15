@@ -190,7 +190,7 @@ const RechargeList: React.FC = () => {
         formRef={formRef}
         form={{
           initialValues: {
-            vipCardId: defaultCardId
+            cardId: defaultCardId
           }
         }}
         search={{

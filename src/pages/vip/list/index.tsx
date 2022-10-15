@@ -67,21 +67,9 @@ const TableList: React.FC = () => {
   };
   const columns: ProColumns<API.RuleListItem>[] = [
     {
-      title: '会员卡号',
+      title: '卡号',
       dataIndex: 'id',
       valueType: 'textarea',
-      render: (dom, entity) => {
-        return (
-          <a
-            onClick={() => {
-              setCurrentRow(entity);
-              setShowDetail(true);
-            }}
-          >
-            {dom}
-          </a>
-        );
-      },
     },
     {
       title: '名字',
@@ -94,25 +82,32 @@ const TableList: React.FC = () => {
     },
     {
       title: '当前等级',
-      dataIndex: 'currentLevelCode',
-      valueEnum: vipConfigList,
+      dataIndex: 'currentLevel',
     },
     {
       title: '身份证号',
       dataIndex: 'identityNumber',
       valueType: 'textarea',
+      hideInTable: true,
     },
     {
-      title: '会员卡余额',
+      title: '余额',
       dataIndex: 'totalBalance',
       valueType: 'textarea',
     },
     {
-      title: '赠送金额',
+      title: '赠送金',
       dataIndex: 'giftBalance',
       valueType: 'textarea',
       hideInSearch: true,
-      hideInTable: true,
+      // hideInTable: true,
+    },
+    {
+      title: '住房券',
+      dataIndex: 'roomTicket',
+      valueType: 'textarea',
+      hideInSearch: true,
+      // hideInTable: true,
     },
     {
       title: '操作',
@@ -120,6 +115,12 @@ const TableList: React.FC = () => {
       valueType: 'option',
       hideInDescriptions: true,
       render: (_, record) => [
+        <Button key='detail' type="link" size="small" onClick={() => {
+          setCurrentRow(record);
+          setShowDetail(true);
+        }}>
+          查看详情
+        </Button>,
         <Button key='edit' type="link" size="small" onClick={() => {
           setVisibleEditModal(true);
           setCurrentRow(record);
