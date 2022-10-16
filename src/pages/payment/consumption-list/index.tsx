@@ -1,10 +1,11 @@
 import React, { useRef, useState } from 'react';
+import { history } from 'umi';
 import type { ActionType, ProColumns, ProFormInstance } from '@ant-design/pro-components';
 import {
   PageContainer,
   ProTable,
 } from '@ant-design/pro-components';
-import { Button, message, Popconfirm, Tag } from 'antd';
+import { Button, message, Popconfirm } from 'antd';
 import { removeConsumptionList, getConsumptionList, exportConsumptionList } from '@/services/ant-design-pro/api';
 import moment from 'moment';
 import { download, getParams } from '@/common/tools';
@@ -91,12 +92,17 @@ const handleRemove = async (selectedItem: API.RuleListItem) => {
 
   const columns: ProColumns<API.RuleListItem>[] = [
     {
+      title: '流水号',
+      dataIndex: 'id',
+      valueType: 'textarea',
+    },
+    {
       title: '会员卡号',
       dataIndex: 'cardId',
       render: (dom, entity) => {
         return (
           <a
-            onClick={() => setCurrentRow(entity)}
+            onClick={() => history.push(`/vip/list?cardId=${entity.cardId}`)}
           >
             {dom}
           </a>
@@ -109,15 +115,21 @@ const handleRemove = async (selectedItem: API.RuleListItem) => {
       valueType: 'textarea',
     },
     {
-      title: '流水号',
-      dataIndex: 'id',
-      valueType: 'textarea',
-    },
-    {
       title: '渠道',
       dataIndex: 'channel',
       valueEnum: ChannelEnumConfig,
       renderText: (val: string) => ChannelEnumConfig[val],
+    },
+    {
+      title: '消费方式',
+      dataIndex: 'assetsTypeText',
+      hideInSearch: true,
+      valueType: 'textarea',
+    },
+    {
+      title: '金额/数量',
+      dataIndex: 'amount',
+      valueType: 'textarea',
     },
     {
       title: '消费时间',
@@ -145,25 +157,6 @@ const handleRemove = async (selectedItem: API.RuleListItem) => {
       key: 'showTime',
       hideInSearch: true,
       renderText: (val: string) => moment(val).format('YYYY-MM-DD HH:mm:ss'),
-    },
-    {
-      title: '消费金额',
-      dataIndex: 'amount',
-      hideInSearch: true,
-      valueType: 'textarea',
-    },
-    {
-      title: '是否使用了住房券',
-      dataIndex: 'useRoomTicket',
-      hideInSearch: true,
-      renderText: (val: boolean) => val ? <Tag color='success'>是</Tag> : <Tag color='error'>否</Tag>
-    },
-    {
-      title: '消费金',
-      dataIndex: 'giftAmount',
-      hideInSearch: true,
-      valueType: 'textarea',
-      renderText: (val: string) => val ? `${val}元` : '-',
     },
     {
       title: '操作',

@@ -112,11 +112,6 @@ const RoomRefund: React.FC = () => {
       renderText: (val: string) => ChannelEnumConfig[val],
     },
     {
-      title: '退款金额',
-      dataIndex: 'amount',
-      hideInSearch: true,
-    },
-    {
       title: '预订天数',
       dataIndex: 'orderDays',
       hideInSearch: true,
@@ -150,9 +145,8 @@ const RoomRefund: React.FC = () => {
       hideInSearch: true,
     },
     {
-      title: '价格',
-      dataIndex: 'totalPrice',
-      hideInForm: true,
+      title: '金额',
+      dataIndex: 'amount',
       hideInSearch: true,
       renderText: (val: string) => val ? `${val}元` : '-',
     },

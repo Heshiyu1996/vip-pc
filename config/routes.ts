@@ -16,6 +16,7 @@ export default [
     access: 'canAdmin',
     routes: [
       { path: '/payment/recharge', name: '充值', icon: 'smile', component: './payment/recharge' },
+      { path: '/payment/recharge-config', name: '充值配置', icon: 'smile', component: './payment/recharge-config' },
       { path: '/payment/recharge-list', name: '充值记录', icon: 'smile', component: './payment/recharge-list' },
       {
         path: '/payment/consumption-list',
@@ -23,7 +24,6 @@ export default [
         icon: 'smile',
         component: './payment/consumption-list',
       },
-      { path: '/payment/recharge-config', name: '充值配置', icon: 'smile', component: './payment/recharge-config' },
     ],
   },
   {

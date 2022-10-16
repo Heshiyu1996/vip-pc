@@ -81,7 +81,6 @@ const AddModal: React.FC<IProps> = (props) => {
         addonAfter="元"
         fieldProps={{controls: false}}
         min={0}
-        max={10}
         name="giftAmount"
       />
       <ProFormDigit
@@ -96,7 +95,6 @@ const AddModal: React.FC<IProps> = (props) => {
         addonAfter="张"
         fieldProps={{controls: false}}
         min={0}
-        max={10}
         name="roomTicketAmount"
       />
     </ModalForm>

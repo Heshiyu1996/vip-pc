@@ -1,8 +1,8 @@
 import { useState, useRef } from 'react';
 import type { ActionType } from '@ant-design/pro-components';
 import { ProList } from '@ant-design/pro-components';
-import { Button, Image } from 'antd';
-import { getActivityConfigList } from '@/services/ant-design-pro/api';
+import { Button, Image, message, Popconfirm } from 'antd';
+import { getActivityConfigList, removeActivityConfig } from '@/services/ant-design-pro/api';
 import AddModal from './components/addModal';
 import EditModal from './components/editModal';
 import './index.less';
@@ -37,6 +37,26 @@ export default () => {
     setVisibleAddModal(false);
     handleReload();
   }
+
+  // 删除指定行
+  const handleRemove = async (selectedItem: API.RuleListItem) => {
+    const hide = message.loading('正在删除');
+    if (!selectedItem) return true;
+  
+    try {
+      await removeActivityConfig({
+        id: selectedItem.id,
+      });
+      hide();
+      message.success('删除成功!');
+      handleReload();
+      return true;
+    } catch (error) {
+      hide();
+      message.error('删除失败，请稍后重试!');
+      return false;
+    }
+  };
 
   return (
     <>
@@ -86,12 +106,25 @@ export default () => {
 
           actions: {
             render: (_, record) => {
-              return <Button key='edit' type="link" size="small" onClick={() => {
-                setVisibleEditModal(true);
-                setCurrentRow(record);
-              }}>
-                编辑
-              </Button>;
+              return [
+                <Button key='edit' type="link" size="small" onClick={() => {
+                  setVisibleEditModal(true);
+                  setCurrentRow(record);
+                }}>
+                  编辑
+                </Button>,
+                <Popconfirm
+                  key={record.id}
+                  title="确定删除吗?"
+                  onConfirm={() => handleRemove(record)}
+                  okText="确定"
+                  cancelText="取消"
+                >
+                  <Button key='remove' type="link" size="small" danger>
+                    删除
+                  </Button>
+                </Popconfirm>
+              ];
             },
           },
         }}

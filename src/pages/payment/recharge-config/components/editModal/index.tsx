@@ -2,13 +2,10 @@ import React, { useRef, useEffect } from 'react';
 import type { ProFormInstance } from '@ant-design/pro-components';
 import {
   ModalForm,
-  ProFormText,
   ProFormDigit,
-  ProFormSelect,
 } from '@ant-design/pro-components';
 import { message } from 'antd';
 import { editRechargeConfig } from '@/services/ant-design-pro/api';
-import { CheckInOptions, BirthdayOptions } from '@/common/config'
 
 interface IProps {
   values: Record<string, any>;
@@ -68,6 +65,12 @@ const EditModal: React.FC<IProps> = (props) => {
       }}
     >
       <ProFormDigit
+        hidden
+        width="md"
+        fieldProps={{controls: false}}
+        name="id"
+      />
+      <ProFormDigit
         label="充值面额"
         rules={[
           {
@@ -92,7 +95,6 @@ const EditModal: React.FC<IProps> = (props) => {
         addonAfter="元"
         fieldProps={{controls: false}}
         min={0}
-        max={10}
         name="giftAmount"
       />
       <ProFormDigit
@@ -107,7 +109,6 @@ const EditModal: React.FC<IProps> = (props) => {
         addonAfter="张"
         fieldProps={{controls: false}}
         min={0}
-        max={10}
         name="roomTicketAmount"
       />
     </ModalForm>

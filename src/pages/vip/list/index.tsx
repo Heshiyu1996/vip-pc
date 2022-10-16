@@ -7,10 +7,13 @@ import {
 } from '@ant-design/pro-components';
 import { Button, message, Popconfirm } from 'antd';
 import { removeVip, getVipList, getVipConfigList } from '@/services/ant-design-pro/api';
+import { getParams } from '@/common/tools';
 import EditModal from './components/editModal';
 import AddModal from './components/addModal';
 import DrawerDetail from './components/drawer-detail';
 import './index.less';
+
+const defaultCardId = getParams('cardId')
 
 const TableList: React.FC = () => {
   const [showDetail, setShowDetail] = useState<boolean>(false);
@@ -151,6 +154,11 @@ const TableList: React.FC = () => {
         rowKey="id"
         search={{
           labelWidth: 120,
+        }}
+        form={{
+          initialValues: {
+            id: defaultCardId
+          }
         }}
         toolBarRender={() => [
           <Button

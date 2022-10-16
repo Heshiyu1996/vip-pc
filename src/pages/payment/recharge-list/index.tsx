@@ -128,7 +128,13 @@ const RechargeList: React.FC = () => {
       renderText: (val: string) => ChannelEnumConfig[val],
     },
     {
-      title: '充值金额',
+      title: '充值方式',
+      dataIndex: 'assetsTypeText',
+      hideInSearch: true,
+      valueType: 'textarea',
+    },
+    {
+      title: '金额/数量',
       dataIndex: 'amount',
       hideInSearch: true,
       valueType: 'textarea',
