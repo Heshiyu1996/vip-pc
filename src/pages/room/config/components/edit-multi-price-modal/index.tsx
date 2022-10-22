@@ -85,7 +85,7 @@ const EditMultiModal: React.FC<IProps> = (props) => {
     for (const key in priceListRef?.current) {
       const [startDate, endDate, dayOrigin] = key?.split('|');
       const priceMap = priceListRef?.current[key] || {};
-      const list = Object.keys(priceMap).map((roomId) => ({ roomId, price: priceMap[roomId] }));
+      const list = Object.keys(priceMap).map((roomId) => ({ roomId, [opType === EOpType.price ? 'price' : 'amount']: priceMap[roomId] }));
       const priceItem = {
         startDate,
         endDate,

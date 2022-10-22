@@ -16,25 +16,6 @@ import './index.less';
 const defaultCardId = getParams('cardId')
 const defaultOrderStatusCode = getParams('orderStatusCode');
 
-const mockChannelData = [
-  {
-    id: '0',
-    levelName: '微信',
-  },
-  {
-    id: '1',
-    levelName: '线下',
-  },
-];
-
-const ChannelEnumConfig = (() => {
-  const map = {};
-  mockChannelData.forEach((item) => {
-    map[item.id] = item.levelName;
-  });
-  return map;
-})();
-
 const mockStatusData = [
   {
     id: 'NEW',
@@ -100,6 +81,7 @@ const RoomOrder: React.FC = () => {
     {
       title: '订单号',
       dataIndex: 'id',
+      hideInDescriptions: true,
     },
     {
       title: '名字',
@@ -116,9 +98,7 @@ const RoomOrder: React.FC = () => {
     },
     {
       title: '支付渠道',
-      dataIndex: 'transactionChannelId',
-      valueEnum: ChannelEnumConfig,
-      renderText: (val: string) => ChannelEnumConfig[val],
+      dataIndex: 'transactionChannel',
     },
     {
       title: '预订天数',
@@ -152,6 +132,25 @@ const RoomOrder: React.FC = () => {
       hideInForm: true,
       hideInSearch: true,
       renderText: (val: string) => val ? `${val}元` : '-',
+    },
+    {
+      title: '详情',
+      dataIndex: 'remark',
+      hideInForm: true,
+      hideInSearch: true,
+      hideInTable: true,
+    },
+    {
+      title: '客人电话',
+      dataIndex: 'contactNumber',
+      hideInForm: true,
+      hideInSearch: true,
+      hideInTable: true,
+    },
+    {
+      title: '操作人',
+      dataIndex: 'updater',
+      hideInSearch: true,
     },
     {
       title: '操作',

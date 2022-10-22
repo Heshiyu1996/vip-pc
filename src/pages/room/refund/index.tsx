@@ -120,8 +120,8 @@ const RoomRefund: React.FC = () => {
       title: '退款进度',
       dataIndex: 'refundStatusCode',
       valueEnum: StatusEnumConfig,
-      renderText: (val: string) => <span className={`status-${val}`}>{StatusEnumConfig[val]}</span>
-      // hideInTable: true,
+      renderText: (val: string) => <span className={`status-${val}`}>{StatusEnumConfig[val]}</span>,
+      hideInTable: true,
     },
     {
       title: '退款进度',
@@ -149,6 +149,11 @@ const RoomRefund: React.FC = () => {
       dataIndex: 'amount',
       hideInSearch: true,
       renderText: (val: string) => val ? `${val}元` : '-',
+    },
+    {
+      title: '操作人',
+      dataIndex: 'updater',
+      hideInSearch: true,
     },
     {
       title: '操作',

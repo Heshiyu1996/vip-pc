@@ -22,7 +22,7 @@ export async function getRechargeConfigList(
 
 /** 新增充值配置 POST /pc/api/payment/rechargeConfig/add */
 export async function addRechargeConfig(params?: Record<string, any>, options?: Record<string, any>) {
-  return request<API.RechargeConfigListItem>('/pc/api/room/rechargeConfig/add', {
+  return request<API.RechargeConfigListItem>('/pc/api/payment/rechargeConfig/add', {
     method: 'POST',
     data: params,
     ...(options || {}),

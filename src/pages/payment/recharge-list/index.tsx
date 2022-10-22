@@ -140,6 +140,11 @@ const RechargeList: React.FC = () => {
       valueType: 'textarea',
     },
     {
+      title: '操作人',
+      dataIndex: 'updater',
+      hideInSearch: true,
+    },
+    {
       title: '充值时间',
       dataIndex: 'createTime',
       key: 'showTime',
