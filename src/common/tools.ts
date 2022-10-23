@@ -1,6 +1,6 @@
 import { request } from 'umi';
 import { message, Upload } from 'antd';
-import { ValidFileType } from './config';
+import { ValidFileType, DayMap } from './config';
 import type { IFile } from './config';
 
 export function download (href: string, title: string) {
@@ -10,7 +10,7 @@ export function download (href: string, title: string) {
   a.click();
 }
 
-export const getParams = (key, url = window.location.href): string | { [key: string]: any } => {
+export const getParams = (key, url = window.location.href): string | Record<string, any> => {
   const query = url.split('?')[1] || '';
   const vars = query.split('&');
   const map = {};
@@ -25,7 +25,7 @@ export const getParams = (key, url = window.location.href): string | { [key: str
   return map[key];
 }
 
-export const requestList = <T>(url: string, options?: { [key: string]: any },) => {
+export const requestList = <T>(url: string, options?: Record<string, any>,) => {
   return request<T>(url, options).then((res: T) => {
     const { success, msg, data } = res;
     const modifiedRes = {
@@ -67,4 +67,33 @@ export const beforeUpload = (file: File) => {
       return Upload.LIST_IGNORE;
   }
   return true;
+}
+
+export const getDayCount = (date = '2022-10') => {
+  const [year, month] = date.split('-').map((item) => Number(item));
+  const day = new Date(year, month, 0);
+  return day.getDate();
+}
+
+export const getDayList = (date = '2022-01') => {
+  console.log(date, 4441);
+  const [year, month] = date.split('-').map((item) => Number(item));
+  
+  // 先拿到当前月的最大天数
+  const maxDayCount = getDayCount(date);
+
+  // 日期列表（['2022-10-01', '2022-10-02'...]）
+  const dateList = [];
+  const dateListWithoutYear = [];
+  const dayList = [];
+  for (let day = 1; day <= maxDayCount; day++) {
+    const currentDate = `${month}-${day}`;
+    const currentDay = new Date(currentDate).getDay();
+    dateList.push(currentDate);
+    
+    const currentDateWithoutYear = `${year}-${month}-${day}`;
+    dateListWithoutYear.push(currentDateWithoutYear)
+    dayList.push(currentDay);
+  }
+  return { dateList, dayList, dateListWithoutYear };
 }
