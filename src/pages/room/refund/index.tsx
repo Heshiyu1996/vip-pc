@@ -169,7 +169,7 @@ const RoomRefund: React.FC = () => {
           </Button>
         ]
 
-        if (record.refundStatusCode !== 'NEW') return null;
+        if (record.refundStatusCode !== 'NEW') return opList;
 
         return opList.concat([
           <Button key='edit' type="link" size="small" onClick={() => {

@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   ModalForm,
-  ProFormTextArea,
   ProFormRadio,
 } from '@ant-design/pro-components';
 import { message } from 'antd';
@@ -9,18 +8,17 @@ import { rejectRoomOrder } from '@/services/ant-design-pro/api';
 import './index.less';
 
 interface IProps {
-  values: { [key: string]: any };
+  values: Record<string, any>;
   visible: boolean;
   onVisibleChange: React.Dispatch<React.SetStateAction<boolean>>;
   onOk: () => void;
 }
 export type FormValueType = {
-  message?: string;
+  sendSms?: string;
 } & Partial<API.RuleListItem>;
 
 const RejectModal: React.FC<IProps> = (props) => {
   const { visible, onVisibleChange, onOk } = props;
-  const [visibleMessage, setVisibleMessage] = useState(true);
 
   const handleConfirm = async (fields: FormValueType) => {
     const hide = message.loading('正在操作');
@@ -28,7 +26,7 @@ const RejectModal: React.FC<IProps> = (props) => {
     try {
       await rejectRoomOrder({
         id: props.values.id,
-        message: fields.message,
+        sendSms: fields.sendSms,
       });
       hide();
       message.success('操作成功!');
@@ -65,27 +63,16 @@ const RejectModal: React.FC<IProps> = (props) => {
             message: '是否发送短信必填!',
           },
         ]}
-        name="willSendMessage"
-        initialValue="是"
-        options={['是', '否']}
-        fieldProps={{
-          onChange: (e) => {
-            const visible = e.target.value === '是';
-            setVisibleMessage(visible);
-          }
-        }}
+        name="sendSms"
+        initialValue={true}
+        options={[{
+          value: true,
+          label: '是'
+        }, {
+          value: false,
+          label: '否'
+        }]}
       />
-     {visibleMessage && <ProFormTextArea
-        label="短信内容"
-        rules={[
-          {
-            required: true,
-            message: '短信内容必填!',
-          },
-        ]}
-        width="md"
-        name="message"
-      />}
     </ModalForm>
   );
 };

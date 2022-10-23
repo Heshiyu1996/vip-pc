@@ -5,8 +5,12 @@ import {
   PageContainer,
   ProTable,
 } from '@ant-design/pro-components';
-import { Button, message, Popconfirm } from 'antd';
-import { removeConsumptionList, getConsumptionList, exportConsumptionList } from '@/services/ant-design-pro/api';
+import { Button, message, 
+  // Popconfirm
+ } from 'antd';
+import { 
+  // removeConsumptionList, 
+  getConsumptionList, exportConsumptionList } from '@/services/ant-design-pro/api';
 import moment from 'moment';
 import { download, getParams } from '@/common/tools';
 import EditModal from './components/editModal';
@@ -46,24 +50,24 @@ const ConsumptionList: React.FC = () => {
   }
 
 // 删除指定行
-const handleRemove = async (selectedItem: API.RuleListItem) => {
-  const hide = message.loading('正在删除');
-  if (!selectedItem) return true;
+// const handleRemove = async (selectedItem: API.RuleListItem) => {
+//   const hide = message.loading('正在删除');
+//   if (!selectedItem) return true;
 
-  try {
-    await removeConsumptionList({
-      id: selectedItem.id,
-    });
-    hide();
-    message.success('删除成功!');
-    handleReload();
-    return true;
-  } catch (error) {
-    hide();
-    message.error('删除失败，请稍后重试!');
-    return false;
-  }
-};
+//   try {
+//     await removeConsumptionList({
+//       id: selectedItem.id,
+//     });
+//     hide();
+//     message.success('删除成功!');
+//     handleReload();
+//     return true;
+//   } catch (error) {
+//     hide();
+//     message.error('删除失败，请稍后重试!');
+//     return false;
+//   }
+// };
 
   const formRef = useRef<ProFormInstance>();
   const handleExport = async () => {
@@ -158,25 +162,25 @@ const handleRemove = async (selectedItem: API.RuleListItem) => {
       hideInSearch: true,
       renderText: (val: string) => moment(val).format('YYYY-MM-DD HH:mm:ss'),
     },
-    {
-      title: '操作',
-      dataIndex: 'option',
-      valueType: 'option',
-      render: (_, record) => 
+    // {
+    //   title: '操作',
+    //   dataIndex: 'option',
+    //   valueType: 'option',
+    //   render: (_, record) => 
 
-      <Popconfirm
-        key={record.id}
-        title="确定删除吗?"
-        onConfirm={() => handleRemove(record)}
-        okText="确定"
-        cancelText="取消"
-      >
-        <Button key='remove' type="link" size="small" danger>
-          删除
-        </Button>
-      </Popconfirm>
-      ,
-    },
+    //   <Popconfirm
+    //     key={record.id}
+    //     title="确定删除吗?"
+    //     onConfirm={() => handleRemove(record)}
+    //     okText="确定"
+    //     cancelText="取消"
+    //   >
+    //     <Button key='remove' type="link" size="small" danger>
+    //       删除
+    //     </Button>
+    //   </Popconfirm>
+    //   ,
+    // },
   ];
   return (
     <PageContainer>

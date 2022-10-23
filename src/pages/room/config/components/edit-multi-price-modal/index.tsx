@@ -236,7 +236,6 @@ const EditMultiModal: React.FC<IProps> = (props) => {
         }
       }}
     >
-
       <ProFormRadio.Group
         label="修改内容"
         rules={[
@@ -271,7 +270,7 @@ const EditMultiModal: React.FC<IProps> = (props) => {
         initialValue="0"
         options={[
           { value: '0', label: '按星期' },
-          { value: '1', label: '按日期', disabled: true },
+          // { value: '1', label: '按日期', disabled: true },
         ]}
         fieldProps={{
           onChange: (e) => {
@@ -346,7 +345,7 @@ const EditMultiModal: React.FC<IProps> = (props) => {
 
       <div className='tip'>
         在 <b>{selectedDates?.map((date) => date).join('、')} </b>这段日期内，
-        给 <b>每周{selectedDays.map((group) => group?.map((day) => DayMap[day]).join('/')).join('、每周')}</b>配置不同的{opType === EOpType.price ? '价格' : '数量'}
+        给 <b>每周{selectedDays.map((group) => group?.map((day) => DayMap[day]).join('/')).join('、每周')}</b> 配置不同的{opType === EOpType.price ? '价格' : '数量'}
       </div>
 
       <ProTable

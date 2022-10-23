@@ -39,6 +39,30 @@ const StatusEnumConfig = (() => {
   return map;
 })();
 
+const mockChannelData = [
+  {
+    id: 0,
+    levelName: '卡内余额',
+  },
+  {
+    id: 1,
+    levelName: '微信支付',
+  },
+  {
+    id: 2,
+    levelName: '住房券',
+  },
+];
+
+const ChannelEnumConfig = (() => {
+  const map = {};
+  mockChannelData.forEach((item) => {
+    map[item.id] = item.levelName;
+  });
+  return map;
+})();
+
+
 const RoomOrder: React.FC = () => {
   const [showDetail, setShowDetail] = useState<boolean>(false);
 
@@ -95,6 +119,12 @@ const RoomOrder: React.FC = () => {
       title: '客房类型',
       dataIndex: 'roomType',
       hideInSearch: true,
+    },
+    {
+      title: '支付渠道',
+      dataIndex: 'transactionChannelId',
+      hideInTable: true,
+      valueEnum: ChannelEnumConfig,
     },
     {
       title: '支付渠道',
