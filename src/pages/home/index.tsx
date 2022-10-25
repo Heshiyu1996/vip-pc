@@ -43,7 +43,7 @@ const Home: React.FC = () => {
             <div className='label'>待办退款申请</div>
             <div className='value'>{todoCountForRefunding}个</div> 
           </div>
-          <div className='item-wrapper'>
+          <div className='item-wrapper' onClick={() => history.push('/room/arrange')}>
             <div className='label'>客房预订比例</div>
             <div className='value'>{countForBooked}/{totalCountForBooking}</div> 
           </div>

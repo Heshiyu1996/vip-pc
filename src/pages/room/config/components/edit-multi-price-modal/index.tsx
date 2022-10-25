@@ -219,6 +219,11 @@ const EditMultiModal: React.FC<IProps> = (props) => {
     setSelectedDays([...selectedDays]);
   }
 
+  const removeDateGroup = (idx) => {
+    selectedDates.splice(idx, 1);
+    setSelectedDates([...selectedDates]);
+  }
+
   return (
     <ModalForm
       className='u-edit-multi-price-modal'
@@ -316,7 +321,7 @@ const EditMultiModal: React.FC<IProps> = (props) => {
               {selectedDates.map((date, idx) => 
                 <div className='item' key={date}>
                   已选组{idx + 1}：{date}
-                  <div className='icon decrease' onClick={() => removeDayGroup(idx)} />
+                  <div className='icon decrease' onClick={() => removeDateGroup(idx)} />
                 </div>)
               }
             </div>}

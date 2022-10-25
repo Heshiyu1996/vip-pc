@@ -1,18 +1,19 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import type { ProColumns, ProFormInstance } from '@ant-design/pro-components';
 import { LightFilter, ProFormDatePicker } from '@ant-design/pro-components';
 import {
   PageContainer,
   ProTable,
 } from '@ant-design/pro-components';
-import { getRoomArrangeList } from '@/services/ant-design-pro/api';
+import { getRoomArrangeStatusList } from '@/services/ant-design-pro/api';
 import EditModal from './components/editModal';
 import { getDayList } from '@/common/tools';
 import './index.less';
 import moment from 'moment';
 import { DayMap } from '@/common/config';
 
-const monthFormat = 'YYYY/MM';
+const monthFormat = 'YYYY-MM';
+const defaultDate = `${new Date().getFullYear()}-${new Date().getMonth() + 1}`;
 const DefaultColumns = [
   {
     title: '客房类型',
@@ -20,19 +21,9 @@ const DefaultColumns = [
     width: 160,
     fixed: 'left',
     hideInSearch: true,
-  },
-  // { title: 'Column 1', dataIndex: 'address', key: '1' },
-  // {
-  //   title: '操作',
-  //   dataIndex: 'option',
-  //   valueType: 'option',
-  //   render: (_, record) => 
-  //     <Button key='detail' type="link" size="small" onClick={() => handleDetail(record)}>
-  //       查看预订情况
-  //     </Button>
-  //   ,
-  // },
+  }
 ];
+
 
 const ArrangeList: React.FC = () => {
   const [visibleEditModal, setVisibleEditModal] = useState<boolean>(false);
@@ -42,22 +33,38 @@ const ArrangeList: React.FC = () => {
 
   const [columns, setColumns] = useState< ProColumns<API.RoomArrangeListItem>[]>(DefaultColumns);
   
-  // // 查看预订情况
-  // const handleDetail = async (selectedItem: API.RoomArrangeListItem) => {
-  //   setVisibleEditModal(true);
-  //   setCurrentRow(selectedItem);
-  // };
+  // 查看预订情况
+  const edit = async (selectedItem: API.RoomArrangeListItem) => {
+    setVisibleEditModal(true);
+    setCurrentRow(selectedItem);
+  };
 
   const onClose = () => {
     setVisibleEditModal(false);
     setCurrentRow({});
-    
+  }
+
+  // 获取房态列表
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const fetchData = async (month) => {
+    try {
+      setLoading(true);
+      const params = {
+        month,
+        // roomType: '豪华双床房'
+      }
+      const res = await getRoomArrangeStatusList(params);
+      setData(res?.data || {});
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+    }
   }
 
   const onChangeMonthPicker = (date) => {
     if (!date) return;
     const dateGroup = moment(date).format(monthFormat)
-    console.log(dateGroup, 412321);
     const { dateList, dayList, dateListWithoutYear } = getDayList(dateGroup);
 
     console.log(dateList, 1);
@@ -68,26 +75,43 @@ const ArrangeList: React.FC = () => {
     dateListWithoutYear?.forEach((date, index) => {
       const col = {
         title: `${date}\n${DayMap[dayList[index]]}`,
-        dataIndex: dateList[index],
+        // dataIndex: dateList[index],
+        dataIndex: date,
         width: 120,
+        render: (item) => {
+          const isEmpty = (item?.totalAmount - item?.bookAmount) !== 0;
+
+          return <div className={`u-status-cell ${isEmpty ? 'empty' : ''}`} onClick={() => edit(item)}>
+            {isEmpty && <div className='icon-empty'>罄</div>}
+            <div className='value'>{item?.totalAmount ?? '-'}/{(item?.totalAmount - item?.bookAmount) || '-'}/{item?.bookAmount ?? '-'}</div>
+            <div className='label'>总/剩/售</div>
+            <div className='price'>￥{item?.price ?? '-'}</div>
+          </div>
+        }
       };
       additionColumns.push(col);
     })
-    const newColumns = columns.concat(additionColumns);
-    console.log(newColumns, 4949494949);
-    
+    const newColumns = DefaultColumns.concat(additionColumns);
     setColumns(newColumns);
+    // 请求数据
+    fetchData(dateGroup);
   }
+
+  useEffect(() => {
+    onChangeMonthPicker(moment(defaultDate));
+  }, []);
 
   return (
     <PageContainer>
       <ProTable<API.RoomArrangeListItem, API.PageParams>
-        rowKey="id"
+        rowKey="roomType"
         className='u-room-status-table'
         formRef={formRef}
         search={false}
-        request={getRoomArrangeList}
-        scroll={{ x: 1300 }}
+        loading={loading}
+        // request={getRoomArrangeList}
+        dataSource={data}
+        scroll={{ x: 1300, y: 1000 }}
         toolbar={{
           // search: {
           //   onSearch: (value) => {
@@ -96,13 +120,18 @@ const ArrangeList: React.FC = () => {
           // },
           filter: (
             <LightFilter>
-              <ProFormDatePicker name="startdate" placeholder="请选择月份" fieldProps={{ 
-                defaultValue: moment('2015-01', monthFormat),
-                // format: monthFormat,
-                picker: "month",
-                format: 'YYYY-MM',
-                onChange: onChangeMonthPicker
-              }} />
+              <ProFormDatePicker
+                name="startdate"
+                placeholder="请选择月份"
+                initialValue={moment(defaultDate, monthFormat)}
+                fieldProps={{ 
+                  // defaultValue: moment('2015-01', monthFormat),
+                  // format: monthFormat,
+                  picker: "month",
+                  format: 'YYYY-MM',
+                  onChange: onChangeMonthPicker
+                }}
+              />
             </LightFilter>
           ),
         }}

@@ -3,6 +3,43 @@
     white-space: break-spaces;
     text-align: center;
   }
+
+  .u-status-cell {
+    display: inline-block;
+    position: relative;
+    width: 90%;
+    height: 90%;
+    padding: 10px;
+    cursor: pointer;
+
+    .value {
+
+    }
+
+    .label {
+      color: #666;
+    }
+
+    .price {
+      font-weight: bold;
+    }
+
+    &.empty {
+      background-color: #eee;
+    }
+
+    .icon-empty {
+      background-color: #333;
+      width: 14px;
+      height: 14px;
+      line-height: 14px;
+      font-size: 12px;
+      color: #FFF;
+      position: absolute;
+      top: 0;
+      right: 0;
+    }
+  }
 }
 
 .u-image-list {

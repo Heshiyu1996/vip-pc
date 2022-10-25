@@ -1,4 +1,5 @@
 import { Button, message, notification } from 'antd';
+import "moment/locale/zh-cn";
 import defaultSettings from '../config/defaultSettings';
 const { pwa } = defaultSettings;
 const isHttps = document.location.protocol === 'https:';

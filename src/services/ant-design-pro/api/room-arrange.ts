@@ -52,3 +52,18 @@ export async function exportRoomArrangeList(params?: { [key: string]: any }, opt
     ...(options || {}),
   });
 }
+
+
+/** 查询房态 GET /pc/api/room/arrangement/status */
+export async function getRoomArrangeStatusList(
+  params: {},
+  options?: { [key: string]: any },
+) {
+  return requestList<API.RoomArrangeList>('/pc/api/room/arrangement/status', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  });
+}
