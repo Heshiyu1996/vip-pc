@@ -67,3 +67,12 @@ export async function getRoomArrangeStatusList(
     ...(options || {}),
   });
 }
+
+/** 编辑房态 PUT /api/room/arrangement/status/edit/{roomType} */
+export async function editRoomArrangeStatus(params?: { [key: string]: any }, options?: { [key: string]: any }) {
+  return request<Record<string, any>>(`/pc/api/room/arrangement/status/edit/${params.roomType}`, {
+    method: 'PUT',
+    data: params,
+    ...(options || {}),
+  });
+}

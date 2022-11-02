@@ -8,9 +8,9 @@ import {
 import { getRoomArrangeStatusList } from '@/services/ant-design-pro/api';
 import EditModal from './components/editModal';
 import { getDayList } from '@/common/tools';
-import './index.less';
 import moment from 'moment';
 import { DayMap } from '@/common/config';
+import './index.less';
 
 const monthFormat = 'YYYY-MM';
 const defaultDate = `${new Date().getFullYear()}-${new Date().getMonth() + 1}`;
@@ -26,6 +26,8 @@ const DefaultColumns = [
 
 
 const ArrangeList: React.FC = () => {
+  const [currentDate, setCurrentDate] = useState<any>(moment(defaultDate));
+
   const [visibleEditModal, setVisibleEditModal] = useState<boolean>(false);
   const [currentRow, setCurrentRow] = useState<API.RuleListItem>();
 
@@ -33,16 +35,11 @@ const ArrangeList: React.FC = () => {
 
   const [columns, setColumns] = useState< ProColumns<API.RoomArrangeListItem>[]>(DefaultColumns);
   
-  // 查看预订情况
+  // 查看房态
   const edit = async (selectedItem: API.RoomArrangeListItem) => {
     setVisibleEditModal(true);
     setCurrentRow(selectedItem);
   };
-
-  const onClose = () => {
-    setVisibleEditModal(false);
-    setCurrentRow({});
-  }
 
   // 获取房态列表
   const [data, setData] = useState([]);
@@ -52,7 +49,6 @@ const ArrangeList: React.FC = () => {
       setLoading(true);
       const params = {
         month,
-        // roomType: '豪华双床房'
       }
       const res = await getRoomArrangeStatusList(params);
       setData(res?.data || {});
@@ -64,25 +60,32 @@ const ArrangeList: React.FC = () => {
 
   const onChangeMonthPicker = (date) => {
     if (!date) return;
-    const dateGroup = moment(date).format(monthFormat)
-    const { dateList, dayList, dateListWithoutYear } = getDayList(dateGroup);
+    setCurrentDate(moment(date));
 
-    console.log(dateList, 1);
-    console.log(dayList, 2);
-    console.log(dateListWithoutYear, 3);
+    const dateGroup = moment(date).format(monthFormat)
+    const { dateList, dayList } = getDayList(dateGroup);
 
     const additionColumns = [];
-    dateListWithoutYear?.forEach((date, index) => {
+    dateList?.forEach((date, index) => {
       const col = {
         title: `${date}\n${DayMap[dayList[index]]}`,
-        // dataIndex: dateList[index],
         dataIndex: date,
         width: 120,
-        render: (item) => {
-          const isEmpty = (item?.totalAmount - item?.bookAmount) !== 0;
+        render: (item, record) => {
+          const isEmpty = (item?.totalAmount - item?.bookAmount) === 0;
+          
+          const info = {
+            roomType: record.roomType,
+            date,
+            isOpen: item.isOpen,
+            amountDesc: `${item?.totalAmount ?? '-'}/${(item?.totalAmount - item?.bookAmount) || '-'}/${item?.bookAmount ?? '-'}`,
+            totalAmount: item.totalAmount,
+            price: item.price,
+          }
 
-          return <div className={`u-status-cell ${isEmpty ? 'empty' : ''}`} onClick={() => edit(item)}>
+          return <div className={`u-status-cell ${isEmpty ? 'empty' : ''} ${!item.isOpen ? 'close' : ''}`} onClick={() => edit(info)}>
             {isEmpty && <div className='icon-empty'>罄</div>}
+            {!item.isOpen && <div className='icon-close'>关</div>}
             <div className='value'>{item?.totalAmount ?? '-'}/{(item?.totalAmount - item?.bookAmount) || '-'}/{item?.bookAmount ?? '-'}</div>
             <div className='label'>总/剩/售</div>
             <div className='price'>￥{item?.price ?? '-'}</div>
@@ -100,6 +103,12 @@ const ArrangeList: React.FC = () => {
   useEffect(() => {
     onChangeMonthPicker(moment(defaultDate));
   }, []);
+
+  const onOk = () => {
+    setVisibleEditModal(false);
+    setCurrentRow({});
+    onChangeMonthPicker(currentDate)
+  }
 
   return (
     <PageContainer>
@@ -137,8 +146,8 @@ const ArrangeList: React.FC = () => {
         }}
         columns={columns}
       />
-      {/* 弹框：查看预订情况 */}
-      <EditModal values={currentRow || {}} visible={visibleEditModal} onVisibleChange={setVisibleEditModal} onOk={onClose} />
+      {/* 弹框：编辑房态 */}
+      <EditModal values={currentRow || {}} visible={visibleEditModal} onVisibleChange={setVisibleEditModal} onOk={onOk} />
     </PageContainer>
   );
 };

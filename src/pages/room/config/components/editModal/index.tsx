@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
-import type { ProFormInstance } from '@ant-design/pro-components';
+import type { ProFormInstance} from '@ant-design/pro-components';
+import { ProFormSelect } from '@ant-design/pro-components';
 import {
   ModalForm,
   ProFormText,
@@ -25,6 +26,7 @@ export type FormValueType = {
   amount:       number;
   images:       string[] | IFile[];
   policyDesc:   string;
+  giftPackages:   string;
   price:        number;
   roomFacility: string;
   roomType:     string;
@@ -53,6 +55,7 @@ const EditModal: React.FC<IProps> = (props) => {
       amount: props.values.amount,
       roomFacility: props.values.roomFacility,
       policyDesc: props.values.policyDesc,
+      giftPackages: props.values.giftPackages,
     }
     formRef?.current?.setFieldsValue(values);
   }, [props.values]);
@@ -77,6 +80,7 @@ const EditModal: React.FC<IProps> = (props) => {
         amount: fields.amount,
         roomFacility: fields.roomFacility,
         policyDesc: fields.policyDesc,
+        giftPackages: fields.giftPackages,
       });
       hide();
       message.success('编辑成功!');
@@ -225,6 +229,11 @@ const EditModal: React.FC<IProps> = (props) => {
         ]}
         width="sm"
         name="roomFacility"
+      />
+      <ProFormTextArea
+        label="入住礼包"
+        width="sm"
+        name="giftPackages"
       />
       <ProFormTextArea
         label="入住及取消政策"

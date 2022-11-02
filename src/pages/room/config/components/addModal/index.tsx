@@ -179,6 +179,11 @@ const AddModal: React.FC<IProps> = (props) => {
         name="roomFacility"
       />
       <ProFormTextArea
+        label="入住礼包"
+        width="sm"
+        name="giftPackages"
+      />
+      <ProFormTextArea
         label="入住及取消政策"
         rules={[
           {

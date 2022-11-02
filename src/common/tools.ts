@@ -87,11 +87,11 @@ export const getDayList = (date = '2022-01') => {
   const dateListWithoutYear = [];
   const dayList = [];
   for (let day = 1; day <= maxDayCount; day++) {
-    const currentDate = `${month}-${day}`;
+    const currentDate = `${year}-${month}-${day}`;
     const currentDay = new Date(currentDate).getDay();
     dateList.push(currentDate);
     
-    const currentDateWithoutYear = `${year}-${month}-${day}`;
+    const currentDateWithoutYear = `${month}-${day}`;
     dateListWithoutYear.push(currentDateWithoutYear)
     dayList.push(currentDay);
   }
