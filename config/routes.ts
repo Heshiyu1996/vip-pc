@@ -16,6 +16,7 @@ export default [
     access: 'canAdmin',
     routes: [
       { path: '/payment/recharge', name: '充值', icon: 'smile', component: './payment/recharge' },
+      { path: '/payment/consumpt', name: '核销', icon: 'smile', component: './payment/consumpt' },
       { path: '/payment/recharge-config', name: '充值配置', icon: 'smile', component: './payment/recharge-config' },
       { path: '/payment/recharge-list', name: '充值记录', icon: 'smile', component: './payment/recharge-list' },
       {
@@ -34,7 +35,7 @@ export default [
     routes: [
       { path: '/room/arrange', name: '房态房价配置', icon: 'smile', component: './room/arrange' },
       { path: '/room/config', name: '客房配置', icon: 'smile', component: './room/config' },
-      { path: '/room/order', name: '订房记录', icon: 'smile', component: './room/order' },
+      { path: '/room/order', name: '订单记录', icon: 'smile', component: './room/order' },
       { path: '/room/refund', name: '退款申请', icon: 'smile', component: './room/refund' },
     ],
   },

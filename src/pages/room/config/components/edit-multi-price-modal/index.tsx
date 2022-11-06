@@ -224,6 +224,15 @@ const EditMultiModal: React.FC<IProps> = (props) => {
     setSelectedDates([...selectedDates]);
   }
 
+  useEffect(() => {
+    if (!visible) {
+      formRef?.current?.resetFields();
+      setSelectedDays([]);
+      setSelectedDates([]);
+      setTableListDataSource([]);
+    }
+  }, [visible, formRef]);
+
   return (
     <ModalForm
       className='u-edit-multi-price-modal'
@@ -311,7 +320,8 @@ const EditMultiModal: React.FC<IProps> = (props) => {
               label="日期时间段"
               required
               fieldProps={{
-                format: 'YYYY-MM-DD'
+                format: 'YYYY-MM-DD',
+                onBlur: addDateGroup
               }}
               addonAfter={
                 <div className='icon increase' onClick={addDateGroup} />

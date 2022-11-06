@@ -1,0 +1,37 @@
+.u-consumption {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 80px;
+
+  .ant-row {
+    margin-bottom: 20px;
+  }
+
+  .u-consumption-form {
+    width: 620px;
+
+    .u-search-type {
+      .ant-select-selector {
+        display: flex;
+        align-items: center;
+        height: 40px;
+      }
+
+      .ant-select-selection-item {
+        font-size: 16px;
+      }
+    }
+  }
+
+  .u-col {
+    display: flex;
+    align-items: center;
+
+    &::before {
+      margin-right: 2px;
+      color: red;
+      content: '*';
+    }
+  }
+}

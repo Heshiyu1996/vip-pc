@@ -5,27 +5,42 @@ import {
   PageContainer,
   ProTable,
 } from '@ant-design/pro-components';
-import { Button, message, 
+import { Button, message, Modal, 
   // Popconfirm
  } from 'antd';
 import { 
-  // removeConsumptionList, 
-  getConsumptionList, exportConsumptionList } from '@/services/ant-design-pro/api';
+  removeConsumptionList, 
+  getConsumptionList, 
+  exportConsumptionList
+} from '@/services/ant-design-pro/api';
 import moment from 'moment';
 import { download, getParams } from '@/common/tools';
 import EditModal from './components/editModal';
 import AddModal from './components/addModal';
 
+const { confirm } = Modal;
 const defaultCardId = getParams('cardId')
 
 const mocChannelData = [
   {
-    id: '0',
-    levelName: '微信',
+    id: 0,
+    levelName: '卡内余额',
   },
   {
-    id: '1',
+    id: 1,
+    levelName: '微信支付',
+  },
+  {
+    id: 2,
+    levelName: '住房券',
+  },
+  {
+    id: 3,
     levelName: '线下',
+  },
+  {
+    id: 4,
+    levelName: '系统赠送',
   },
 ];
 
@@ -49,25 +64,25 @@ const ConsumptionList: React.FC = () => {
     }
   }
 
-// 删除指定行
-// const handleRemove = async (selectedItem: API.RuleListItem) => {
-//   const hide = message.loading('正在删除');
-//   if (!selectedItem) return true;
+// 撤销消费
+const handleRemove = async (selectedItem: API.RuleListItem) => {
+  const hide = message.loading('正在撤销');
+  if (!selectedItem) return true;
 
-//   try {
-//     await removeConsumptionList({
-//       id: selectedItem.id,
-//     });
-//     hide();
-//     message.success('删除成功!');
-//     handleReload();
-//     return true;
-//   } catch (error) {
-//     hide();
-//     message.error('删除失败，请稍后重试!');
-//     return false;
-//   }
-// };
+  try {
+    await removeConsumptionList({
+      id: selectedItem.id,
+    });
+    hide();
+    message.success('撤销成功!');
+    handleReload();
+    return true;
+  } catch (error) {
+    hide();
+    message.error('撤销失败，请稍后重试!');
+    return false;
+  }
+};
 
   const formRef = useRef<ProFormInstance>();
   const handleExport = async () => {
@@ -92,6 +107,16 @@ const ConsumptionList: React.FC = () => {
     setVisibleEditModal(false);
     setCurrentRow(undefined);
     handleReload();
+  }
+
+  const beforeRemove = (record) => {
+    confirm({
+      title: '再次提醒',
+      content: '是否确认撤销该消费？',
+      onOk() {
+        handleRemove(record)
+      },
+    });
   }
 
   const columns: ProColumns<API.RuleListItem>[] = [
@@ -162,25 +187,23 @@ const ConsumptionList: React.FC = () => {
       hideInSearch: true,
       renderText: (val: string) => moment(val).format('YYYY-MM-DD HH:mm:ss'),
     },
-    // {
-    //   title: '操作',
-    //   dataIndex: 'option',
-    //   valueType: 'option',
-    //   render: (_, record) => 
-
-    //   <Popconfirm
-    //     key={record.id}
-    //     title="确定删除吗?"
-    //     onConfirm={() => handleRemove(record)}
-    //     okText="确定"
-    //     cancelText="取消"
-    //   >
-    //     <Button key='remove' type="link" size="small" danger>
-    //       删除
-    //     </Button>
-    //   </Popconfirm>
-    //   ,
-    // },
+    {
+      title: '记录状态',
+      dataIndex: 'isDelete',
+      renderText: (val: string) => val ? '已撤销' : '正常',
+    },
+    {
+      title: '操作',
+      dataIndex: 'option',
+      valueType: 'option',
+      render: (_, record) => {
+        if (record?.isDelete) return;
+        return <Button key='remove' type="link" size="small" danger onClick={() => beforeRemove(record)}>
+          撤销
+        </Button>
+      }
+      ,
+    },
   ];
   return (
     <PageContainer>

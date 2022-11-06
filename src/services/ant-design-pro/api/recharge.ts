@@ -10,3 +10,12 @@ export async function rechargeAmount(params?: { [key: string]: any }, options?: 
     ...(options || {}),
   });
 }
+
+/** 核销 /pc/api/payment/consumption/add */
+export async function consumptAmount(params?: { [key: string]: any }, options?: { [key: string]: any }) {
+  return request<Record<string, any>>(`/pc/api/payment/consumption/add`, {
+    method: 'POST',
+    data: params,
+    ...(options || {}),
+  });
+}

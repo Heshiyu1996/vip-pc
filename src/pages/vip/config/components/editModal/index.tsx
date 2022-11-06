@@ -11,7 +11,7 @@ import { editVipConfig } from '@/services/ant-design-pro/api';
 import { CheckInOptions, BirthdayOptions } from '@/common/config'
 
 interface IProps {
-  values: { [key: string]: any };
+  values: Record<string, any>;
   visible: boolean;
   onVisibleChange: React.Dispatch<React.SetStateAction<boolean>>;
   onOk: () => void;
@@ -183,14 +183,14 @@ const EditModal: React.FC<IProps> = (props) => {
       />
       <ProFormSelect
         label="专享特权"
-        mode="multiple"
+        mode="tags"
         allowClear
         options={CheckInOptions}
         name="privilegeOrigin"
       />
       <ProFormSelect
         label="生日礼包"
-        mode="multiple"
+        mode="tags"
         allowClear
         options={BirthdayOptions}
         name="birthdayPackageOrigin"

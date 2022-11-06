@@ -4,11 +4,11 @@ import {
   PageContainer,
   ProTable,
 } from '@ant-design/pro-components';
-import { Button, message } from 'antd';
+import { Button, message, Popconfirm } from 'antd';
 import ConfirmModal from './components/confirmModal';
 import RejectModal from './components/rejectModal';
 import DrawerDetail from './components/drawer-detail';
-import { getRoomOrderList, exportRoomOrder } from '@/services/ant-design-pro/api';
+import { getRoomOrderList, exportRoomOrder, cancelRoomOrder } from '@/services/ant-design-pro/api';
 import { download, getParams } from '@/common/tools';
 import moment from 'moment';
 import './index.less';
@@ -28,6 +28,10 @@ const mockStatusData = [
   {
     id: 'REJECTED',
     levelName: '已拒绝',
+  },
+  {
+    id: 'CANCELLED',
+    levelName: '已取消',
   },
 ];
 
@@ -100,6 +104,19 @@ const RoomOrder: React.FC = () => {
     }
   }
 
+  const handleCancel = async (id) => {
+    try {
+      const res = await cancelRoomOrder({ id });
+      console.log(res, 444);
+      if (res?.success) {
+        handleReload();
+        message.success('取消成功!');
+      }
+    } catch (error) {
+      
+    }
+  }
+
   const actionRef = useRef<ActionType>();
   const columns: ProColumns<API.RoomOrderListItem>[] = [
     {
@@ -144,6 +161,10 @@ const RoomOrder: React.FC = () => {
       dataIndex: 'orderStatusCode',
       valueEnum: StatusEnumConfig,
       render: (_, record) => <span className={`status-${record.orderStatusCode}`}>{StatusEnumConfig[record.orderStatusCode]}</span>,
+    },
+    {
+      title: '房间数',
+      dataIndex: 'amount',
     },
     {
       title: '创建时间',
@@ -196,23 +217,43 @@ const RoomOrder: React.FC = () => {
           </Button>
         ]
 
+        // 「待确认」：查看详情、同意、拒绝
+        if (record.orderStatusCode === 'NEW') {
+          return opList.concat([
+            <Button key='edit' type="link" size="small" onClick={() => {
+              setVisibleConfirmModal(true);
+              setCurrentRow(record);
+            }}>
+              同意
+            </Button>
+            ,
+            <Button key='remove' type="link" size="small" danger onClick={() => {
+              setVisibleRejectModal(true);
+              setCurrentRow(record);
+            }}>
+              拒绝
+            </Button>,
+          ])
+        }
+
+        // 「已确认」订单支持“取消”
+        if (record.orderStatusCode === 'ACCEPTED') {
+          return opList.concat(
+            <Popconfirm
+              key={record.id}
+              title="确定取消吗?"
+              onConfirm={() => handleCancel(record.id)}
+              okText="确定"
+              cancelText="取消"
+            >
+            <Button key='cancel' type="link" size="small" danger>
+              取消订单
+            </Button>
+          </Popconfirm>)
+        }
+
         if (record.orderStatusCode !== 'NEW') return opList;
 
-        return opList.concat([
-          <Button key='edit' type="link" size="small" onClick={() => {
-            setVisibleConfirmModal(true);
-            setCurrentRow(record);
-          }}>
-            同意
-          </Button>
-          ,
-          <Button key='remove' type="link" size="small" danger onClick={() => {
-            setVisibleRejectModal(true);
-            setCurrentRow(record);
-          }}>
-            拒绝
-          </Button>,
-        ])
       },
     },
   ];

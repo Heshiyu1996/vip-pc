@@ -175,12 +175,18 @@ const AddModal: React.FC<IProps> = (props) => {
             message: '房间设施必填!',
           },
         ]}
-        width="sm"
+        width="xl"
         name="roomFacility"
       />
       <ProFormTextArea
         label="入住礼包"
-        width="sm"
+        rules={[
+          {
+            required: true,
+            message: '房间设施必填!',
+          },
+        ]}
+        width="xl"
         name="giftPackages"
       />
       <ProFormTextArea
@@ -191,7 +197,7 @@ const AddModal: React.FC<IProps> = (props) => {
             message: '入住及取消政策必填!',
           },
         ]}
-        width="sm"
+        width="xl"
         name="policyDesc"
       />
     </ModalForm>

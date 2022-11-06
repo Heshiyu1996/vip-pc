@@ -40,7 +40,16 @@ export async function rejectRoomOrder(params?: { [key: string]: any }, options?:
   });
 }
 
-/** 导出订房记录 GET /pc/api/room/order/export */
+/** 取消订房 PUT /pc/api/room/order/cancel/{id} */
+export async function cancelRoomOrder(params?: { [key: string]: any }, options?: { [key: string]: any }) {
+  return request<API.RoomRefundListItem>(`/pc/api/room/order/cancel/${params.id}`, {
+    method: 'PUT',
+    data: params,
+    ...(options || {}),
+  });
+}
+
+/** 导出订单记录 GET /pc/api/room/order/export */
 export async function exportRoomOrder(params?: { [key: string]: any }, options?: { [key: string]: any }) {
   return request<API.RoomRefundListItem>('/pc/api/room/order/export', {
     method: 'GET',

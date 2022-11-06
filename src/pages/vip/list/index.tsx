@@ -5,7 +5,7 @@ import {
   PageContainer,
   ProTable,
 } from '@ant-design/pro-components';
-import { Button, message, Popconfirm } from 'antd';
+import { Button, message, Modal, Popconfirm } from 'antd';
 import { removeVip, getVipList, getVipConfigList } from '@/services/ant-design-pro/api';
 import { getParams } from '@/common/tools';
 import EditModal from './components/editModal';
@@ -14,6 +14,7 @@ import DrawerDetail from './components/drawer-detail';
 import './index.less';
 
 const defaultCardId = getParams('cardId')
+const { confirm } = Modal;
 
 const TableList: React.FC = () => {
   const [showDetail, setShowDetail] = useState<boolean>(false);
@@ -51,7 +52,7 @@ const TableList: React.FC = () => {
 
   // 删除指定行
   const handleRemove = async (selectedItem: API.RuleListItem) => {
-    const hide = message.loading('正在删除');
+    const hide = message.loading('正在注销');
     if (!selectedItem) return true;
   
     try {
@@ -59,15 +60,24 @@ const TableList: React.FC = () => {
         id: selectedItem.id,
       });
       hide();
-      message.success('删除成功!');
+      message.success('注销成功!');
       handleReload();
       return true;
     } catch (error) {
       hide();
-      message.error('删除失败，请稍后重试!');
+      message.error('注销失败，请稍后重试!');
       return false;
     }
   };
+  const beforeRemove = (record) => {
+    confirm({
+      title: '再次提醒',
+      content: '是否注销该会员？',
+      onOk() {
+        handleRemove(record)
+      },
+    });
+  }
   const columns: ProColumns<API.RuleListItem>[] = [
     {
       title: '卡号',
@@ -131,17 +141,9 @@ const TableList: React.FC = () => {
           编辑
         </Button>
         ,
-        <Popconfirm
-          key={record.id}
-          title="确定删除吗?"
-          onConfirm={() => handleRemove(record)}
-          okText="确定"
-          cancelText="取消"
-        >
-          <Button key='remove' type="link" size="small" danger>
-            删除
-          </Button>
-        </Popconfirm>,
+          <Button key='remove' type="link" size="small" danger onClick={() => beforeRemove(record)}>
+            注销
+          </Button>,
       ],
     },
   ];

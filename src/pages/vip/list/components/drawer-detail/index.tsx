@@ -55,7 +55,7 @@ const DrawerDetail: React.FC<IProps> = (props) => {
             订房管理
           </Col>
           <Col span={6}>
-            <Button onClick={() => window.open(`/room/order?cardId=${values?.id}`)}>查询订房记录</Button>
+            <Button onClick={() => window.open(`/room/order?cardId=${values?.id}`)}>查询订单记录</Button>
           </Col>
           <Col span={6}>
             <Button onClick={() => window.open(`/room/refund?cardId=${values?.id}`)}>查询退款记录</Button>
