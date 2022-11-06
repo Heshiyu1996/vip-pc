@@ -13,7 +13,7 @@ export default {
   'menu.room': '订房管理',
   'menu.room.arrange': '房态房价配置',
   'menu.room.config': '客房配置',
-  'menu.room.order': '订房记录',
+  'menu.room.order': '订单记录',
   'menu.room.refund': '退款申请',
 
   'menu.store': '店铺管理',
