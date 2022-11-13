@@ -5,7 +5,7 @@ import {
   PageContainer,
   ProTable,
 } from '@ant-design/pro-components';
-import { Button, message, Modal, 
+import { Button, message, Modal, Tag, 
   // Popconfirm
  } from 'antd';
 import { 
@@ -190,7 +190,7 @@ const handleRemove = async (selectedItem: API.RuleListItem) => {
     {
       title: '记录状态',
       dataIndex: 'isDelete',
-      renderText: (val: string) => val ? '已撤销' : '正常',
+      renderText: (val: string) => val ? <Tag color="magenta">已撤销</Tag> : <Tag color="green">正常</Tag>,
     },
     {
       title: '操作',

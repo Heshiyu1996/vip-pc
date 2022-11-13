@@ -4,7 +4,7 @@ import {
   PageContainer,
   ProTable,
 } from '@ant-design/pro-components';
-import { Button, message, Popconfirm } from 'antd';
+import { Button, message, Popconfirm, Tag } from 'antd';
 import { removeRechargeList, getRechargeList, exportRechargeList } from '@/services/ant-design-pro/api';
 import moment from 'moment';
 import { download, getParams } from '@/common/tools';
@@ -14,14 +14,27 @@ import AddModal from './components/addModal';
 // url携带参数时的查找逻辑
 const defaultCardId = getParams('cardId')
 
+
 const mocChannelData = [
+  // {
+  //   id: 0,
+  //   levelName: '卡内余额',
+  // },
   {
-    id: '0',
-    levelName: '微信',
+    id: 1,
+    levelName: '微信支付',
+  },
+  // {
+  //   id: 2,
+  //   levelName: '住房券',
+  // },
+  {
+    id: 3,
+    levelName: '线下',
   },
   {
-    id: '1',
-    levelName: '线下',
+    id: 4,
+    levelName: '系统赠送',
   },
 ];
 
@@ -140,6 +153,11 @@ const RechargeList: React.FC = () => {
       valueType: 'textarea',
     },
     {
+      title: '记录状态',
+      dataIndex: 'isDelete',
+      renderText: (val: string) => val ? <Tag color="magenta">已退款</Tag> : <Tag color="green">正常</Tag>,
+    },
+    {
       title: '操作人',
       dataIndex: 'updater',
       hideInSearch: true,
@@ -176,8 +194,9 @@ const RechargeList: React.FC = () => {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
-      render: (_, record) => 
-        <Popconfirm
+      render: (_, record) => {
+        if (record?.isDelete) return;
+        return <Popconfirm
           key={record.id}
           title="确定退款吗?"
           onConfirm={() => handleRefund(record)}
@@ -188,6 +207,7 @@ const RechargeList: React.FC = () => {
             退款
           </Button>
         </Popconfirm>
+      }
       ,
     },
   ];
