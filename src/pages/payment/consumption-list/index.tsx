@@ -163,22 +163,36 @@ const handleRemove = async (selectedItem: API.RuleListItem) => {
     {
       title: '消费时间',
       dataIndex: 'createTime',
-      key: 'showTime',
-      valueType: 'dateRange',
+      hideInSearch: true,
+    },
+    {
+      title: '消费时间',
+      dataIndex: 'createTime',
       hideInTable: true,
+      valueType: 'dateRange',
       search: {
-        transform: (value) => {
-          return {
-            startTime: value[0],
-            endTime: value[1],
-          };
-        },
-      },
-      fieldProps: {
-        showTime: { format: 'HH:mm' },
-        format: "YYYY-MM-DD HH:mm"
+        transform: (value: any) => ({ startTime: value[0], endTime: value[1] }),
       },
     },
+    // {
+    //   title: '消费时间',
+    //   dataIndex: 'createTime',
+    //   key: 'showTime',
+    //   valueType: 'dateRange',
+    //   hideInTable: true,
+    //   search: {
+    //     transform: (value) => {
+    //       return {
+    //         startTime: value[0],
+    //         endTime: value[1],
+    //       };
+    //     },
+    //   },
+    //   fieldProps: {
+    //     showTime: { format: 'HH:mm' },
+    //     format: "YYYY-MM-DD HH:mm"
+    //   },
+    // },
     {
       title: '消费时间',
       dataIndex: 'createTime',

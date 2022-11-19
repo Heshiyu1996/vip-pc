@@ -5,7 +5,7 @@ import {
   PageContainer,
   ProTable,
 } from '@ant-design/pro-components';
-import { Button, message, Modal, Popconfirm } from 'antd';
+import { Button, message, Modal, Tag } from 'antd';
 import { removeVip, getVipList, getVipConfigList } from '@/services/ant-design-pro/api';
 import { getParams } from '@/common/tools';
 import EditModal from './components/editModal';
@@ -123,28 +123,42 @@ const TableList: React.FC = () => {
       // hideInTable: true,
     },
     {
+      title: '账号状态',
+      dataIndex: 'isDelete',
+      // 后端不支持这个 isDelete 入参
+      // valueEnum: EnableIsDeleteEnumConfig,
+      renderText: (val: string) => val ? <Tag color="magenta">已注销</Tag> : <Tag color="green">正常</Tag>,
+      
+    },
+    {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
       hideInDescriptions: true,
-      render: (_, record) => [
-        <Button key='detail' type="link" size="small" onClick={() => {
-          setCurrentRow(record);
-          setShowDetail(true);
-        }}>
-          查看详情
-        </Button>,
-        <Button key='edit' type="link" size="small" onClick={() => {
-          setVisibleEditModal(true);
-          setCurrentRow(record);
-        }}>
-          编辑
-        </Button>
-        ,
-          <Button key='remove' type="link" size="small" danger onClick={() => beforeRemove(record)}>
-            注销
+      render: (_, record) => {
+        const options = [
+          <Button key='detail' type="link" size="small" onClick={() => {
+            setCurrentRow(record);
+            setShowDetail(true);
+          }}>
+            查看详情
           </Button>,
-      ],
+          <Button key='edit' type="link" size="small" onClick={() => {
+            setVisibleEditModal(true);
+            setCurrentRow(record);
+          }}>
+            编辑
+          </Button>
+        ];
+        if (!record.isDelete) {
+          options.push(
+            <Button key='remove' type="link" size="small" danger onClick={() => beforeRemove(record)}>
+            注销
+          </Button>
+          )
+        };
+        return options;
+      }
     },
   ];
 

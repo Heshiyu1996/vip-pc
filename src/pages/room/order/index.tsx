@@ -140,12 +140,7 @@ const RoomOrder: React.FC = () => {
     {
       title: '支付渠道',
       dataIndex: 'transactionChannelId',
-      hideInTable: true,
       valueEnum: ChannelEnumConfig,
-    },
-    {
-      title: '支付渠道',
-      dataIndex: 'transactionChannel',
     },
     {
       title: '预订天数',
@@ -154,7 +149,17 @@ const RoomOrder: React.FC = () => {
     {
       title: '预订日期',
       dataIndex: 'orderStartDate',
+      hideInSearch: true,
       render: (_, record) => `${moment(record.orderStartDate).format('YYYY-MM-DD')} ~ ${moment(record.orderEndDate).format('YYYY-MM-DD')}`,
+    },
+    {
+      title: '预订日期',
+      dataIndex: 'orderStartDateRange',
+      hideInTable: true,
+      valueType: 'dateRange',
+      search: {
+        transform: (value: any) => ({ startTime: value[0], endTime: value[1] }),
+      },
     },
     {
       title: '状态',
@@ -169,8 +174,31 @@ const RoomOrder: React.FC = () => {
     {
       title: '创建时间',
       dataIndex: 'createTime',
-      renderText: (val: string) => moment(val).format('YYYY-MM-DD HH:mm:ss'),
+      hideInSearch: true,
     },
+    {
+      title: '创建时间',
+      dataIndex: 'createTime',
+      hideInTable: true,
+      valueType: 'date',
+    },
+    // {
+    //   title: '创建时间',
+    //   dataIndex: 'createTime',
+    //   valueType: 'dateRange',
+    //   hideInTable: true,
+    //   search: {
+    //     transform: (value) => {
+    //       return {
+    //         startTime: value[0],
+    //         endTime: value[1],
+    //       };
+    //     },
+    //   },
+    //   fieldProps: {
+    //     format: "YYYY-MM-DD"
+    //   },
+    // },
     {
       title: '确认号',
       dataIndex: 'identifyCode',

@@ -165,30 +165,16 @@ const RechargeList: React.FC = () => {
     {
       title: '充值时间',
       dataIndex: 'createTime',
-      key: 'showTime',
-      valueType: 'dateRange',
-      hideInTable: true,
-      search: {
-        transform: (value) => {
-          return {
-            startTime: value[0],
-            endTime: value[1],
-          };
-        },
-      },
-      fieldProps: {
-        showTime: { format: 'HH:mm' },
-        format: "YYYY-MM-DD HH:mm"
-      },
+      hideInSearch: true,
     },
     {
       title: '充值时间',
       dataIndex: 'createTime',
-      valueType: 'dateTime',
-      key: 'showTime',
-      hideInSearch: true,
-      sorter: true,
-      renderText: (val: string) => moment(val).format('YYYY-MM-DD HH:mm:ss'),
+      hideInTable: true,
+      valueType: 'dateRange',
+      search: {
+        transform: (value: any) => ({ startTime: value[0], endTime: value[1] }),
+      },
     },
     {
       title: '操作',

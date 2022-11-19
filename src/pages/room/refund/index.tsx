@@ -135,8 +135,15 @@ const RoomRefund: React.FC = () => {
       render: (_, record) => `${moment(record.orderStartDate).format('YYYY-MM-DD HH:mm:ss')} ~ ${moment(record.orderEndDate).format('YYYY-MM-DD HH:mm:ss')}`,
     },
     {
-      title: '申请时间',
+      title: '创建时间',
       dataIndex: 'createTime',
+      hideInSearch: true,
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'createTime',
+      hideInTable: true,
+      valueType: 'date',
     },
     {
       title: '确认号',
