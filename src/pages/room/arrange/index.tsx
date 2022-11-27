@@ -12,7 +12,7 @@ import moment from 'moment';
 import { DayMap } from '@/common/config';
 import './index.less';
 
-const monthFormat = 'YYYY-MM';
+const dateFormat = 'YYYY-MM-DD';
 const defaultDate = `${new Date().getFullYear()}-${new Date().getMonth() + 1}`;
 const DefaultColumns = [
   {
@@ -44,26 +44,32 @@ const ArrangeList: React.FC = () => {
   // 获取房态列表
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const fetchData = async (month) => {
+  const fetchData = async (date) => {
     try {
       setLoading(true);
       const params = {
-        month,
+        // month,
+        date
       }
       const res = await getRoomArrangeStatusList(params);
-      setData(res?.data || {});
       setLoading(false);
+      setData(res?.data || {});
+      return res?.data || {};
     } catch (error) {
       setLoading(false);
     }
   }
 
-  const onChangeMonthPicker = (date) => {
+  const onChangeMonthPicker = async (date) => {
     if (!date) return;
     setCurrentDate(moment(date));
 
-    const dateGroup = moment(date).format(monthFormat)
-    const { dateList, dayList } = getDayList(dateGroup);
+    const dateGroup = moment(date).format(dateFormat)
+    // 先请求数据
+    const data = await fetchData(dateGroup);
+    // 默认获取第一个房型下的所有日期（筛选掉roomType这个key）
+    const dateList = Object.keys(data?.[0]).filter((item) => item !== 'roomType');
+    const { dayList } = getDayList(dateList);
 
     const additionColumns = [];
     dateList?.forEach((date, index) => {
@@ -96,8 +102,6 @@ const ArrangeList: React.FC = () => {
     })
     const newColumns = DefaultColumns.concat(additionColumns);
     setColumns(newColumns);
-    // 请求数据
-    fetchData(dateGroup);
   }
 
   useEffect(() => {
@@ -118,26 +122,16 @@ const ArrangeList: React.FC = () => {
         formRef={formRef}
         search={false}
         loading={loading}
-        // request={getRoomArrangeList}
         dataSource={data}
         scroll={{ x: 1300, y: 1000 }}
         toolbar={{
-          // search: {
-          //   onSearch: (value) => {
-          //     alert(value);
-          //   },
-          // },
           filter: (
             <LightFilter>
               <ProFormDatePicker
                 name="startdate"
-                placeholder="请选择月份"
-                initialValue={moment(defaultDate, monthFormat)}
+                placeholder="请选择日期"
+                initialValue={moment(defaultDate, dateFormat)}
                 fieldProps={{ 
-                  // defaultValue: moment('2015-01', monthFormat),
-                  // format: monthFormat,
-                  picker: "month",
-                  format: 'YYYY-MM',
                   onChange: onChangeMonthPicker
                 }}
               />

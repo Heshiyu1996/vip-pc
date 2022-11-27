@@ -75,25 +75,11 @@ export const getDayCount = (date = '2022-10') => {
   return day.getDate();
 }
 
-export const getDayList = (date = '2022-01') => {
-  console.log(date, 4441);
-  const [year, month] = date.split('-').map((item) => Number(item));
-  
-  // 先拿到当前月的最大天数
-  const maxDayCount = getDayCount(date);
-
-  // 日期列表（['2022-10-01', '2022-10-02'...]）
-  const dateList = [];
-  const dateListWithoutYear = [];
+export const getDayList = (dateList = []) => {
   const dayList = [];
-  for (let day = 1; day <= maxDayCount; day++) {
-    const currentDate = `${year}-${month}-${day}`;
-    const currentDay = new Date(currentDate).getDay();
-    dateList.push(currentDate);
-    
-    const currentDateWithoutYear = `${month}-${day}`;
-    dateListWithoutYear.push(currentDateWithoutYear)
+  dateList.forEach((date) => {
+    const currentDay = new Date(date).getDay();
     dayList.push(currentDay);
-  }
-  return { dateList, dayList, dateListWithoutYear };
+  })
+  return { dateList, dayList };
 }

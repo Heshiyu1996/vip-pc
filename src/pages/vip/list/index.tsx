@@ -16,6 +16,29 @@ import './index.less';
 const defaultCardId = getParams('cardId')
 const { confirm } = Modal;
 
+const mockAccountStatusData = [
+  {
+    value: '',
+    label: '全部',
+  },
+  {
+    value: 0,
+    label: '正常',
+  },
+  {
+    value: 1,
+    label: '已注销',
+  },
+];
+
+const AccountStatusEnumConfig = (() => {
+  const map = {};
+  mockAccountStatusData.forEach((item) => {
+    map[item.value] = item.label;
+  });
+  return map;
+})();
+
 const TableList: React.FC = () => {
   const [showDetail, setShowDetail] = useState<boolean>(false);
   const [visibleAddModal, setVisibleAddModal] = useState<boolean>(false);
@@ -125,10 +148,15 @@ const TableList: React.FC = () => {
     {
       title: '账号状态',
       dataIndex: 'isDelete',
-      // 后端不支持这个 isDelete 入参
-      // valueEnum: EnableIsDeleteEnumConfig,
+      hideInSearch: true,
       renderText: (val: string) => val ? <Tag color="magenta">已注销</Tag> : <Tag color="green">正常</Tag>,
-      
+    },
+    {
+      title: '账号状态',
+      dataIndex: 'isDelete',
+      hideInTable: true,
+      valueEnum: AccountStatusEnumConfig,
+      renderText: (val: string) => AccountStatusEnumConfig[val],
     },
     {
       title: '操作',
