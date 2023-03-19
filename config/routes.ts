@@ -62,6 +62,7 @@ export default [
       { path: '/score/exchange-list', name: '兑换记录', icon: 'smile', component: './score/exchange-list' },
       { path: '/score/gift-list', name: '兑换品配置', icon: 'smile', component: './score/gift-list' },
       { path: '/score/rule', name: '积分规则配置', icon: 'smile', component: './score/rule' },
+      { path: '/score/consumpt', name: '人工核销', icon: 'smile', component: './score/consumpt' },
     ],
   },
   {
