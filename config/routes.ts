@@ -48,6 +48,8 @@ export default [
       { path: '/store/config', name: '店铺配置', icon: 'smile', component: './store/config' },
       { path: '/store/activity-config', name: '活动配置', icon: 'smile', component: './store/activity-config' },
       { path: '/store/staff', name: '员工管理', icon: 'smile', component: './store/staff' },
+      { path: '/store/department', name: '部门配置', icon: 'smile', component: './store/department' },
+      { path: '/store/position', name: '职位配置', icon: 'smile', component: './store/position' },
     ],
   },
   {
