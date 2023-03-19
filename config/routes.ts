@@ -60,6 +60,7 @@ export default [
     routes: [
       { path: '/score/search-list', name: '积分查询', icon: 'smile', component: './score/search-list' },
       { path: '/score/exchange-list', name: '兑换记录', icon: 'smile', component: './score/exchange-list' },
+      { path: '/score/gift-list', name: '兑换品配置', icon: 'smile', component: './score/gift-list' },
     ],
   },
   {
