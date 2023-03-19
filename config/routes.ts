@@ -53,6 +53,16 @@ export default [
     ],
   },
   {
+    path: '/score',
+    name: '积分管理',
+    icon: 'crown',
+    access: 'canAdmin',
+    routes: [
+      { path: '/score/search-list', name: '积分查询', icon: 'smile', component: './score/search-list' },
+      { path: '/score/exchange-list', name: '兑换记录', icon: 'smile', component: './score/exchange-list' },
+    ],
+  },
+  {
     path: '/user',
     layout: false,
     routes: [{ path: '/user/login', component: './user/Login' }, { component: './404' }],
