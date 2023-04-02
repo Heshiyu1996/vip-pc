@@ -4,39 +4,14 @@ import {
   PageContainer,
   ProTable,
 } from '@ant-design/pro-components';
-import { Button, message, Popconfirm, Tag } from 'antd';
-import { removeRechargeList, getRechargeList, exportRechargeList } from '@/services/ant-design-pro/api';
-import moment from 'moment';
-import { download, getParams } from '@/common/tools';
+import { Button, message, Popconfirm } from 'antd';
+import { getPointExchangeList,acceptExchangeList, rejectExchangeList } from '@/services/ant-design-pro/api';
+import { getParams } from '@/common/tools';
 import EditModal from './components/editModal';
 import AddModal from './components/addModal';
 
 // url携带参数时的查找逻辑
 const defaultCardId = getParams('cardId')
-
-
-const mocChannelData = [
-  {
-    id: 1,
-    levelName: '待确认',
-  },
-  {
-    id: 3,
-    levelName: '已确认',
-  },
-  {
-    id: 4,
-    levelName: '已拒绝',
-  },
-];
-
-const ChannelEnumConfig = (() => {
-  const map = {};
-  mocChannelData.forEach((item) => {
-    map[item.id] = item.levelName;
-  });
-  return map;
-})();
 
 const RechargeList: React.FC = () => {
   const [visibleAddModal, setVisibleAddModal] = useState<boolean>(false);
@@ -50,45 +25,44 @@ const RechargeList: React.FC = () => {
     }
   }
 
-  // 删除指定行
-  const handleRefund = async (selectedItem: API.RuleListItem) => {
-    const hide = message.loading('正在退款');
+  const handleAccept = async (selectedItem: API.RuleListItem) => {
+    const hide = message.loading('正在兑换');
     if (!selectedItem) return true;
   
     try {
-      await removeRechargeList({
+      await acceptExchangeList({
         id: selectedItem.id,
       });
       hide();
-      message.success('退款成功!');
+      message.success('确认兑换成功!');
       handleReload();
       return true;
     } catch (error) {
       hide();
-      message.error('退款失败，请稍后重试!');
+      message.error('兑换失败，请稍后重试!');
+      return false;
+    }
+  };
+  const handleReject = async (selectedItem: API.RuleListItem) => {
+    const hide = message.loading('正在拒绝兑换');
+    if (!selectedItem) return true;
+  
+    try {
+      await rejectExchangeList({
+        id: selectedItem.id,
+      });
+      hide();
+      message.success('拒绝兑换成功!');
+      handleReload();
+      return true;
+    } catch (error) {
+      hide();
+      message.error('拒绝兑换失败，请稍后重试!');
       return false;
     }
   };
 
   const formRef = useRef<ProFormInstance>();
-  const handleExport = async () => {
-    const hide = message.loading('导出中...');
-    const params = formRef.current?.getFieldsValue();
-    
-    try {
-      const res = await exportRechargeList(params);
-      const { data } = res || {};
-      if (!data) throw new Error();
-      const filename = getParams(data, 'filename');
-      download(data, filename);
-      hide();
-      message.success('导出成功!');
-    } catch (error) {
-      hide();
-      // message.error('导出失败，请稍后重试!');
-    }
-  }
-
   const onEditOk = () => {
     setVisibleEditModal(false);
     setCurrentRow(undefined);
@@ -103,32 +77,30 @@ const RechargeList: React.FC = () => {
     },
     {
       title: '会员卡号',
-      dataIndex: 'cardId',
+      dataIndex: 'vipCardId',
     },
     {
       title: '会员名',
-      dataIndex: 'ownerName',
+      dataIndex: 'vipCardName',
       valueType: 'textarea',
     },
     {
       title: '兑换品',
-      dataIndex: 'amount',
+      dataIndex: 'itemName',
       valueType: 'textarea',
     },
     {
       title: '状态',
-      dataIndex: 'isDelete',
-      valueEnum: ChannelEnumConfig,
-      renderText: (val: string) => ChannelEnumConfig[val],
+      dataIndex: 'orderStatus',
     },
     {
       title: '兑换时间',
-      dataIndex: 'createTime',
+      dataIndex: 'updateTime',
       hideInSearch: true,
     },
     {
       title: '兑换时间',
-      dataIndex: 'createTime',
+      dataIndex: 'updateTime',
       hideInTable: true,
       valueType: 'dateRange',
       search: {
@@ -139,11 +111,13 @@ const RechargeList: React.FC = () => {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
+      
+      // TODO: 操作需根据状态来调整
       render: (_, record) => {
         return [<Popconfirm
           key={record.id}
           title="确定兑换吗?"
-          onConfirm={() => handleRefund(record)}
+          onConfirm={() => handleAccept(record)}
           okText="确定"
           cancelText="取消"
         >
@@ -154,7 +128,7 @@ const RechargeList: React.FC = () => {
           <Popconfirm
           key={record.id}
           title="拒绝兑换吗?"
-          onConfirm={() => handleRefund(record)}
+          onConfirm={() => handleReject(record)}
           okText="确定"
           cancelText="取消"
         >
@@ -182,12 +156,12 @@ const RechargeList: React.FC = () => {
         search={{
           labelWidth: 120,
         }}
-        toolBarRender={() => [
-          <Button key="primary" onClick={handleExport}>
-            导出
-          </Button>,
-        ]}
-        request={getRechargeList}
+        // toolBarRender={() => [
+        //   <Button key="primary" onClick={handleExport}>
+        //     导出
+        //   </Button>,
+        // ]}
+        request={getPointExchangeList}
         columns={columns}
       />
 

@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns, ProFormInstance } from '@ant-design/pro-components';
+import { SettingOutlined } from '@ant-design/icons';
 import {
   PageContainer,
   ProTable,
@@ -8,30 +9,28 @@ import {
 import { Button, message, Image, Space, Popconfirm } from 'antd';
 import AddModal from './components/addModal';
 import EditModal from './components/editModal';
-// import EditMultiPriceModal from './components/edit-multi-price-modal';
-// import EditMultiCountModal from './components/edit-multi-count-modal';
-import EditMultiModal from './components/edit-multi-price-modal';
-import { getRoomConfigList, removeRoomConfig } from '@/services/ant-design-pro/api';
+import EditAmountModal from './components/editAmountModal';
+import { getPointItemList, removePointItem } from '@/services/ant-design-pro/api';
 import './index.less';
 
-const mockUseVipDiscount = [
+const ItemStatusList = [
   {
     id: null,
     levelName: '全部',
   },
   {
-    id: true,
-    levelName: '是',
+    id: 'NORMAL',
+    levelName: '正常兑换',
   },
   {
-    id: false,
-    levelName: '否',
+    id: 'PAUSED',
+    levelName: '暂停兑换',
   },
 ];
 
-const VipDiscountEnumConfig = (() => {
+const ItemStatusEnumConfig = (() => {
   const map = {};
-  mockUseVipDiscount.forEach((item) => {
+  ItemStatusList.forEach((item) => {
     map[item.id] = item.levelName;
   });
   return map;
@@ -63,11 +62,8 @@ const EnableRoomTicketEnumConfig = (() => {
 const RoomConfig: React.FC = () => {
   const [visibleAddModal, setVisibleAddModal] = useState<boolean>(false);
   const [visibleEditModal, setVisibleEditModal] = useState<boolean>(false);
+  const [visibleEditAmountModal, setVisibleEditAmountModal] = useState<boolean>(false);
   const [currentRow, setCurrentRow] = useState<API.RoomConfigListItem>();
-
-  // const [visibleEditMultiPriceModal, setVisibleEditMultiPriceModal] = useState<boolean>(false);
-  // const [visibleEditMultiCountModal, setVisibleEditMultiCountModal] = useState<boolean>(false);
-  const [visibleEditMultiModal, setVisibleEditMultiModal] = useState<boolean>(false);
 
   const handleReload = () => {
     if (actionRef.current) {
@@ -78,11 +74,8 @@ const RoomConfig: React.FC = () => {
   const onRefresh = () => {
     setVisibleAddModal(false);
     setVisibleEditModal(false);
-    // setVisibleEditMultiPriceModal(false);
-    // setVisibleEditMultiCountModal(false);
-    setVisibleEditMultiModal(false);
+    setVisibleEditAmountModal(false);
     setCurrentRow(undefined);
-    // setCurrentSelectedRowKey(undefined);
     handleReload();
   }
 
@@ -92,7 +85,7 @@ const RoomConfig: React.FC = () => {
     if (!selectedItem) return true;
   
     try {
-      await removeRoomConfig({
+      await removePointItem({
         id: selectedItem.id,
       });
       hide();
@@ -106,16 +99,11 @@ const RoomConfig: React.FC = () => {
     }
   };
 
-  const formRef = useRef<ProFormInstance>();
-
-  const handleEditRoomConfigPrice = () => {
-    // setVisibleEditMultiPriceModal(true);
-    setVisibleEditMultiModal(true);
+  const openAmountModal = (record) => {
+    setVisibleEditAmountModal(true)
   }
 
-  // const handleEditRoomConfigCount = () => {
-  //   setVisibleEditMultiCountModal(true);
-  // }
+  const formRef = useRef<ProFormInstance>();
 
   const actionRef = useRef<ActionType>();
   const columns: ProColumns<API.RoomConfigListItem>[] = [
@@ -126,7 +114,7 @@ const RoomConfig: React.FC = () => {
     },
     {
       title: '名称',
-      dataIndex: 'roomType',
+      dataIndex: 'itemName',
     },
     {
       title: '图片',
@@ -134,7 +122,7 @@ const RoomConfig: React.FC = () => {
       valueType: 'textarea',
       hideInSearch: true,
       // @ts-ignore
-      render: (val: string[]) => val?.map((url, index) => <Image
+      render: (val: string[]) => val?.slice(0, 1).map((url, index) => <Image
         key={`${url}${index}`}
         width={100}
         src={url}
@@ -143,23 +131,32 @@ const RoomConfig: React.FC = () => {
     },
     {
       title: '描述',
-      dataIndex: 'roomType',
+      dataIndex: 'itemDescription',
       hideInSearch: true,
     },
     {
       title: '所需积分',
-      dataIndex: 'roomType',
+      dataIndex: 'points',
       hideInSearch: true,
     },
     {
       title: '余量/总量',
-      dataIndex: 'roomType',
+      dataIndex: 'restBalance',
       hideInSearch: true,
+      render: (_, record) => <span>
+        {record?.restBalance} / {record?.totalBalance}
+        <span 
+          style={{ marginLeft: '10px', cursor: 'pointer' }} 
+          onClick={() => {    
+          setCurrentRow(record);
+          openAmountModal(record)}
+        }><SettingOutlined /></span>
+        </span>
     },
     {
       title: '状态',
-      dataIndex: 'vipDiscount',
-      valueEnum: VipDiscountEnumConfig,
+      dataIndex: 'itemStatusCode',
+      valueEnum: ItemStatusEnumConfig,
     },
     {
       title: '操作',
@@ -211,7 +208,7 @@ const RoomConfig: React.FC = () => {
               </Button>
             </Space>,
         ]}
-        request={getRoomConfigList}
+        request={getPointItemList}
         columns={columns}
       />
 
@@ -220,6 +217,9 @@ const RoomConfig: React.FC = () => {
 
       {/* 弹框：编辑 */}
       <EditModal values={currentRow || {}} visible={visibleEditModal} onVisibleChange={setVisibleEditModal} onOk={onRefresh} />
+
+      {/* 弹框：编辑数量 */}
+      <EditAmountModal values={currentRow || {}} visible={visibleEditAmountModal} onVisibleChange={setVisibleEditAmountModal} onOk={onRefresh} />
     </PageContainer>
   );
 };
