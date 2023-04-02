@@ -1,15 +1,15 @@
 import { useState, useRef } from 'react';
 import type { ActionType } from '@ant-design/pro-components';
 import { ProList } from '@ant-design/pro-components';
-import { Button, Image } from 'antd';
-import { getStoreConfigList } from '@/services/ant-design-pro/api';
+import { Button } from 'antd';
+import { getPointRuleList } from '@/services/ant-design-pro/api';
 import EditModal from './components/editModal';
 import './index.less';
 
 interface IItem {
   id: string;
-  label: string;
-  value: string;
+  sourceKey: string;
+  pointAmount: string;
   images: string[];
   title: string;
 }
@@ -33,25 +33,22 @@ export default () => {
   return (
     <>
       <ProList<IItem>
-        className='u-store-rule'
+        className='u-score-rule'
         headerTitle="积分规则配置"
         rowKey="id"
-        // dataSource={dataSource}
-        request={getStoreConfigList}
+        request={getPointRuleList}
         split
         actionRef={actionRef}
         metas={{
           title: {
-            dataIndex: 'label'
-          },
-          description: {
-            dataIndex: 'value',
+            dataIndex: 'sourceKey'
           },
           content: {
             render: (_, row) => {
               return (
-                <div key={row.id}>
-                  {row.key}
+                <div key={row.id} className="item-wrapper">
+                  <div className='item'>{row.pointAmount}</div>
+                  <div className='item'>{row.expiredType}</div>
                 </div>
               );
             },
