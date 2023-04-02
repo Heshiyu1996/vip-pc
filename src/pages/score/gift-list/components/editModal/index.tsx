@@ -9,7 +9,7 @@ import {
   ProFormTextArea,
 } from '@ant-design/pro-components';
 import { message } from 'antd';
-import { editRoomConfig } from '@/services/ant-design-pro/api';
+import { editPointItem } from '@/services/ant-design-pro/api';
 import { handlePreviewImageList, beforeUpload } from '@/common/tools';
 import type { IFile } from '@/common/config';
 
@@ -22,15 +22,13 @@ interface IProps {
 
 export type FormValueType = {
   id:           string;
-  amount:       number;
+  totalBalance:       number;
+  restBalance:       number;
   images:       string[] | IFile[];
-  policyDesc:   string;
-  giftPackages:   string;
-  price:        number;
-  roomFacility: string;
-  roomType:     string;
-  vipDiscount:  boolean;
-  enableRoomTicket: boolean;
+  itemDescription:   string;
+  points:        number;
+  itemName:     string;
+  itemStatusCode:  boolean;
 };
 
 const FormLayout = {
@@ -46,15 +44,13 @@ const EditModal: React.FC<IProps> = (props) => {
   useEffect(() => {
     const values = {
       id: props.values.id,
-      roomType: props.values.roomType,
-      price: props.values.price,
-      vipDiscount: props.values.vipDiscount,
-      enableRoomTicket: props.values.enableRoomTicket,
+      itemName: props.values.itemName,
+      points: props.values.points,
+      itemStatusCode: props.values.itemStatusCode,
       images: handlePreviewImageList(props.values.images),
-      amount: props.values.amount,
-      roomFacility: props.values.roomFacility,
-      policyDesc: props.values.policyDesc,
-      giftPackages: props.values.giftPackages,
+      totalBalance: props.values.totalBalance,
+      restBalance: props.values.restBalance,
+      itemDescription: props.values.itemDescription,
     }
     formRef?.current?.setFieldsValue(values);
   }, [props.values]);
@@ -63,12 +59,11 @@ const EditModal: React.FC<IProps> = (props) => {
     const hide = message.loading('正在更新');
     
     try {
-      await editRoomConfig({
+      await editPointItem({
         id: fields.id,
-        roomType: fields.roomType,
-        price: fields.price,
-        vipDiscount: fields.vipDiscount,
-        enableRoomTicket: fields.enableRoomTicket,
+        itemName: fields.itemName,
+        points: fields.points,
+        itemStatusCode: fields.itemStatusCode,
         images: fields.images?.map((item) => {
           if (item.exist) {
             return item.url;
@@ -76,10 +71,9 @@ const EditModal: React.FC<IProps> = (props) => {
             return item?.response?.data;
           }
         }),
-        amount: fields.amount,
-        roomFacility: fields.roomFacility,
-        policyDesc: fields.policyDesc,
-        giftPackages: fields.giftPackages,
+        totalBalance: fields.totalBalance,
+        restBalance: fields.restBalance,
+        itemDescription: fields.itemDescription,
       });
       hide();
       message.success('编辑成功!');
@@ -129,7 +123,7 @@ const EditModal: React.FC<IProps> = (props) => {
           },
         ]}
         width="md"
-        name="roomType"
+        name="itemName"
       />
 
       <ProFormDigit
@@ -143,20 +137,20 @@ const EditModal: React.FC<IProps> = (props) => {
         width="md"
         fieldProps={{controls: false}}
         min={0}
-        name="price"
+        name="points"
       />
 
       <ProFormRadio.Group
-        name="vipDiscount"
+        name="itemStatusCode"
         label="状态"
         options={[
           {
-            value: true,
-            label: '是',
+            value: 'NORMAL',
+            label: '正常兑换',
           },
           {
-            value: false,
-            label: '否',
+            value: 'PAUSED',
+            label: '暂停兑换',
           },
         ]}
       />
@@ -185,17 +179,30 @@ const EditModal: React.FC<IProps> = (props) => {
       />
 
       <ProFormDigit
-        label="数量"
+        label="总量"
         rules={[
           {
             required: true,
-            message: '数量必填!',
+            message: '总量必填!',
           },
         ]}
         width="md"
         addonAfter="份"
         fieldProps={{controls: false}}
-        name="amount"
+        name="totalBalance"
+      />
+      <ProFormDigit
+        label="余量"
+        rules={[
+          {
+            required: true,
+            message: '余量必填!',
+          },
+        ]}
+        width="md"
+        addonAfter="份"
+        fieldProps={{controls: false}}
+        name="restBalance"
       />
       <ProFormTextArea
         label="描述"
@@ -206,7 +213,7 @@ const EditModal: React.FC<IProps> = (props) => {
           },
         ]}
         width="xl"
-        name="policyDesc"
+        name="itemDescription"
       />
     </ModalForm>
   );

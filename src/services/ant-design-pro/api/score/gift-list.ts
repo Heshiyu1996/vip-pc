@@ -33,8 +33,8 @@ export async function addPointItem(params?: { [key: string]: any }, options?: { 
 
 /** 编辑兑换品 /pc/api/point/item/edit */
 export async function editPointItem(params?: { [key: string]: any }, options?: { [key: string]: any }) {
-  return request<Record<string, any>>(`/pc/api/point/item/edit${params?.id}`, {
-    method: 'POST',
+  return request<Record<string, any>>(`/pc/api/point/item/edit/${params?.id}`, {
+    method: 'PUT',
     data: params,
     ...(options || {}),
   });

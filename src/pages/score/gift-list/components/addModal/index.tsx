@@ -8,7 +8,7 @@ import {
   ProFormUploadButton,
 } from '@ant-design/pro-components';
 import { message } from 'antd';
-import { addRoomConfig } from '@/services/ant-design-pro/api';
+import { addPointItem } from '@/services/ant-design-pro/api';
 import { beforeUpload } from '@/common/tools';
 
 interface IProps {
@@ -35,7 +35,7 @@ const AddModal: React.FC<IProps> = (props) => {
     });
 
     try {
-      await addRoomConfig(params);
+      await addPointItem(params);
       hide();
       message.success('新增成功!');
       return true;
@@ -77,7 +77,7 @@ const AddModal: React.FC<IProps> = (props) => {
           },
         ]}
         width="md"
-        name="roomType"
+        name="itemName"
       />
 
       <ProFormDigit
@@ -91,20 +91,20 @@ const AddModal: React.FC<IProps> = (props) => {
         width="md"
         fieldProps={{controls: false}}
         min={0}
-        name="price"
+        name="points"
       />
 
       <ProFormRadio.Group
-        name="vipDiscount"
+        name="itemStatusCode"
         label="状态"
         options={[
           {
-            value: true,
-            label: '是',
+            value: 'NORMAL',
+            label: '正常兑换',
           },
           {
-            value: false,
-            label: '否',
+            value: 'PAUSED',
+            label: '暂停兑换',
           },
         ]}
       />
@@ -123,7 +123,7 @@ const AddModal: React.FC<IProps> = (props) => {
         rules={[
           {
             required: true,
-            message: '客房图片必填!',
+            message: '图片必填!',
           },
         ]}
         title="上传文件"
@@ -143,7 +143,7 @@ const AddModal: React.FC<IProps> = (props) => {
         width="md"
         addonAfter="份"
         fieldProps={{controls: false}}
-        name="amount"
+        name="totalBalance"
       />
       
       <ProFormTextArea
@@ -155,7 +155,7 @@ const AddModal: React.FC<IProps> = (props) => {
           },
         ]}
         width="xl"
-        name="policyDesc"
+        name="itemDescription"
       />
     </ModalForm>
   );

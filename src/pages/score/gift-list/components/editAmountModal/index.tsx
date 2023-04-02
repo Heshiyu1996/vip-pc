@@ -6,7 +6,7 @@ import {
   ProFormDigit,
 } from '@ant-design/pro-components';
 import { message } from 'antd';
-import { editRoomConfig } from '@/services/ant-design-pro/api';
+import { editPointItem } from '@/services/ant-design-pro/api';
 
 interface IProps {
   values: Record<string, any>;
@@ -46,7 +46,7 @@ const EditModal: React.FC<IProps> = (props) => {
     const hide = message.loading('正在更新');
     
     try {
-      await editRoomConfig({
+      await editPointItem({
         id: fields.id,
         restBalance: fields.restBalance,
       });
