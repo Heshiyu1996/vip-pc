@@ -53,6 +53,15 @@ export default [
     ],
   },
   {
+    path: '/distribution',
+    name: '分销管理',
+    icon: 'crown',
+    access: 'canAdmin',
+    routes: [
+      { path: '/distribution/reward', name: '营销奖励配置', icon: 'smile', component: './store/config' },
+    ],
+  },
+  {
     path: '/score',
     name: '积分管理',
     icon: 'crown',

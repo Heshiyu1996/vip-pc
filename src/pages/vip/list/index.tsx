@@ -146,6 +146,12 @@ const TableList: React.FC = () => {
       // hideInTable: true,
     },
     {
+      title: '积分',
+      dataIndex: 'totalPointBalance',
+      valueType: 'textarea',
+      hideInSearch: true,
+    },
+    {
       title: '账号状态',
       dataIndex: 'isDelete',
       hideInSearch: true,

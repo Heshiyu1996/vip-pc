@@ -8,7 +8,7 @@ import { message } from 'antd';
 import { editVip } from '@/services/ant-design-pro/api';
 
 interface IProps {
-  values: { [key: string]: any };
+  values: Record<string, any>;
   visible: boolean;
   onVisibleChange: React.Dispatch<React.SetStateAction<boolean>>;
   onOk: () => void;

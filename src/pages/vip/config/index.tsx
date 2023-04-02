@@ -50,6 +50,7 @@ const TableList: React.FC = () => {
     {
       title: '卡类型编码',
       dataIndex: 'id',
+      hideInTable: true
     },
     {
       title: '等级名称',
@@ -75,6 +76,16 @@ const TableList: React.FC = () => {
     {
       title: '温泉/乐园折扣(元)',
       dataIndex: 'hotSpringOrParkDiscount',
+    },
+    {
+      title: '专享特权',
+      dataIndex: 'privilege',
+      ellipsis: true
+    },
+    {
+      title: '生日礼包',
+      dataIndex: 'birthdayPackage',
+      ellipsis: true
     },
     {
       title: '操作',

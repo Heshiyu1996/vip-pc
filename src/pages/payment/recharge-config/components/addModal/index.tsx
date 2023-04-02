@@ -1,13 +1,10 @@
 import React from 'react';
 import {
   ModalForm,
-  ProFormText,
   ProFormDigit,
-  ProFormSelect,
 } from '@ant-design/pro-components';
 import { message } from 'antd';
 import { addRechargeConfig } from '@/services/ant-design-pro/api';
-import { CheckInOptions, BirthdayOptions } from '@/common/config'
 
 interface IProps {
   visible: boolean;

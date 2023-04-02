@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import type { ProFormInstance } from '@ant-design/pro-components';
 import {
   ModalForm,
@@ -7,8 +7,7 @@ import {
   ProFormSelect,
 } from '@ant-design/pro-components';
 import { message } from 'antd';
-import { editVipConfig } from '@/services/ant-design-pro/api';
-import { CheckInOptions, BirthdayOptions } from '@/common/config'
+import { editVipConfig, getBirthdayPackageConfigList, getPrivilegeConfigList } from '@/services/ant-design-pro/api';
 
 interface IProps {
   values: Record<string, any>;
@@ -71,6 +70,28 @@ const EditModal: React.FC<IProps> = (props) => {
       return false;
     }
   };
+
+  const [privilegeList, setPrivilegeList] = useState([]);
+  const getPrivilegeList = async () => {
+    const res = await getPrivilegeConfigList();
+    const { data = [] } = res || {};
+    setPrivilegeList(data);
+  }
+  useEffect(() => {
+    if (!visible) return;
+    getPrivilegeList()
+  }, [visible])
+
+  const [birthdayPackageList, setBirthdayPackageList] = useState([]);
+  const getBirthdayPackageList = async () => {
+    const res = await getBirthdayPackageConfigList();
+    const { data = [] } = res || {};
+    setBirthdayPackageList(data);
+  }
+  useEffect(() => {
+    if (!visible) return;
+    getBirthdayPackageList()
+  }, [visible])
 
   return (
     <ModalForm
@@ -185,14 +206,14 @@ const EditModal: React.FC<IProps> = (props) => {
         label="专享特权"
         mode="tags"
         allowClear
-        options={CheckInOptions}
+        options={privilegeList}
         name="privilegeOrigin"
       />
       <ProFormSelect
         label="生日礼包"
         mode="tags"
         allowClear
-        options={BirthdayOptions}
+        options={birthdayPackageList}
         name="birthdayPackageOrigin"
       />
     </ModalForm>

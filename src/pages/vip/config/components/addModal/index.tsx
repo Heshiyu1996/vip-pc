@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import type {
+  ProFormInstance} from '@ant-design/pro-components';
 import {
   ModalForm,
   ProFormText,
   ProFormDigit,
-  ProFormSelect,
+  ProFormSelect
 } from '@ant-design/pro-components';
 import { message } from 'antd';
-import { addVipConfig } from '@/services/ant-design-pro/api';
-import { CheckInOptions, BirthdayOptions } from '@/common/config'
+import { addVipConfig, getPrivilegeConfigList, getBirthdayPackageConfigList } from '@/services/ant-design-pro/api';
 
 interface IProps {
   visible: boolean;
@@ -42,9 +43,39 @@ const AddModal: React.FC<IProps> = (props) => {
     }
   };
 
+  const [privilegeList, setPrivilegeList] = useState([]);
+  const getPrivilegeList = async () => {
+    const res = await getPrivilegeConfigList();
+    const { data = [] } = res || {};
+    setPrivilegeList(data);
+  }
+  useEffect(() => {
+    if (!visible) return;
+    getPrivilegeList()
+  }, [visible])
+
+  const [birthdayPackageList, setBirthdayPackageList] = useState([]);
+  const getBirthdayPackageList = async () => {
+    const res = await getBirthdayPackageConfigList();
+    const { data = [] } = res || {};
+    setBirthdayPackageList(data);
+  }
+  useEffect(() => {
+    if (!visible) return;
+    getBirthdayPackageList()
+  }, [visible])
+
+  const formRef = useRef<ProFormInstance>();
+  useEffect(() => {
+    if (!visible) {
+      formRef?.current?.resetFields();
+    }
+  }, [visible]);
+
   return (
     <ModalForm
       title="新增等级配置"
+      formRef={formRef}
       visible={visible}
       width={550}
       {...FormLayout}
@@ -146,16 +177,16 @@ const AddModal: React.FC<IProps> = (props) => {
       />
       <ProFormSelect
         label="专享特权"
-        mode="multiple"
+        mode="tags"
         allowClear
-        options={CheckInOptions}
+        options={privilegeList}
         name="privilegeOrigin"
       />
       <ProFormSelect
         label="生日礼包"
-        mode="multiple"
+        mode="tags"
         allowClear
-        options={BirthdayOptions}
+        options={birthdayPackageList}
         name="birthdayPackageOrigin"
       />
     </ModalForm>

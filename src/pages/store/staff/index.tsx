@@ -16,7 +16,6 @@ import './index.less';
 const defaultCardId = getParams('cardId')
 const { confirm } = Modal;
 
-
 const StaffTableList: React.FC = () => {
   const [visibleAddModal, setVisibleAddModal] = useState<boolean>(false);
 

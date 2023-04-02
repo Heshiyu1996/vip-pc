@@ -49,3 +49,19 @@ export async function removeVipConfig(params?: { [key: string]: any }, options?:
     ...(options || {}),
   });
 }
+
+/** 查询专享特权列表 GET /pc/api/vip/level/privilege/list */
+export async function getPrivilegeConfigList() {
+  return request<API.RuleList>('/pc/api/vip/level/privilege/list', {
+    method: 'GET',
+    params: {},
+  });
+}
+
+/** 查询生日礼包列表 GET /pc/api/vip/level/birthdayPackage/list */
+export async function getBirthdayPackageConfigList() {
+  return request<API.RuleList>('/pc/api/vip/level/birthdayPackage/list', {
+    method: 'GET',
+    params: {},
+  });
+}

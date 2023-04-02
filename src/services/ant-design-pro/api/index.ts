@@ -11,3 +11,4 @@ export * from './room-arrange';
 export * from './room-config';
 export * from './room-order';
 export * from './room-refund';
+export * from './point-list';
