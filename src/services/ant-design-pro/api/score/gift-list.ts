@@ -40,6 +40,15 @@ export async function editPointItem(params?: { [key: string]: any }, options?: {
   });
 }
 
+/** 编辑兑换品余量 /pc/api/point/item/restAmount/edit */
+export async function editPointItemRestAmount(params?: { [key: string]: any }, options?: { [key: string]: any }) {
+  return request<Record<string, any>>(`/pc/api/point/item/restAmount/edit/${params?.id}`, {
+    method: 'PUT',
+    data: params,
+    ...(options || {}),
+  });
+}
+
 /** 删除兑换品 DELETE /pc/api/point/item/{id} */
 export async function removePointItem(params?: Record<string, any>, options?: Record<string, any>) {
   return request<Record<string, any>>(`/pc/api/point/item/${params.id}`, {

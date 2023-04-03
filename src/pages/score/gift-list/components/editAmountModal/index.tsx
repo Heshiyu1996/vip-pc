@@ -6,7 +6,7 @@ import {
   ProFormDigit,
 } from '@ant-design/pro-components';
 import { message } from 'antd';
-import { editPointItem } from '@/services/ant-design-pro/api';
+import { editPointItemRestAmount } from '@/services/ant-design-pro/api';
 
 interface IProps {
   values: Record<string, any>;
@@ -46,7 +46,7 @@ const EditModal: React.FC<IProps> = (props) => {
     const hide = message.loading('正在更新');
     
     try {
-      await editPointItem({
+      await editPointItemRestAmount({
         id: fields.id,
         restBalance: fields.restBalance,
       });
@@ -55,7 +55,6 @@ const EditModal: React.FC<IProps> = (props) => {
       return true;
     } catch (error) {
       hide();
-      message.error('编辑失败，请稍后重试!');
       return false;
     }
   };

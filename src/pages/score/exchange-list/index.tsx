@@ -10,6 +10,29 @@ import { getParams } from '@/common/tools';
 import EditModal from './components/editModal';
 import AddModal from './components/addModal';
 
+const StatusData = [
+  {
+    id: 'ACCEPTED',
+    levelName: '已确认',
+  },
+  {
+    id: 'REJECTED',
+    levelName: '已拒绝',
+  },
+  {
+    id: 'NEW',
+    levelName: '待处理',
+  },
+];
+
+const StatusEnumConfig = (() => {
+  const map = {};
+  StatusData.forEach((item) => {
+    map[item.id] = item.levelName;
+  });
+  return map;
+})();
+
 // url携带参数时的查找逻辑
 const defaultCardId = getParams('cardId')
 
@@ -91,7 +114,9 @@ const RechargeList: React.FC = () => {
     },
     {
       title: '状态',
-      dataIndex: 'orderStatus',
+      dataIndex: 'orderStatusCode',
+      valueEnum: StatusEnumConfig,
+      renderText: (val: string) => StatusEnumConfig[val],
     },
     {
       title: '兑换时间',
@@ -111,9 +136,8 @@ const RechargeList: React.FC = () => {
       title: '操作',
       dataIndex: 'option',
       valueType: 'option',
-      
-      // TODO: 操作需根据状态来调整
       render: (_, record) => {
+        if (record.orderStatusCode !== 'NEW') return '-';
         return [<Popconfirm
           key={record.id}
           title="确定兑换吗?"
