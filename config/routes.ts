@@ -58,7 +58,7 @@ export default [
     icon: 'crown',
     access: 'canAdmin',
     routes: [
-      { path: '/distribution/reward', name: '营销奖励配置', icon: 'smile', component: './store/config' },
+      { path: '/distribution/reward', name: '营销奖励配置', icon: 'smile', component: './distribution/reward' },
     ],
   },
   {
