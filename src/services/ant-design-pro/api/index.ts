@@ -1,7 +1,12 @@
 export * from './home';
 export * from './vip-list';
 export * from './vip-config';
-export * from './store-config';
+
+export * from './store/store-config';
+export * from './store/staff';
+export * from './store/department';
+export * from './store/role';
+
 export * from './activity-config';
 export * from './recharge';
 export * from './recharge-list';
@@ -17,3 +22,5 @@ export * from './score/exchange-list';
 export * from './score/gift-list';
 export * from './score/rule-list';
 export * from './distribution/reward-list';
+
+export * from './permission';

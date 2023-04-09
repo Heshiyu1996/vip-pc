@@ -5,7 +5,7 @@ import {
   ProFormText,
 } from '@ant-design/pro-components';
 import { message } from 'antd';
-import { editVip } from '@/services/ant-design-pro/api';
+import { editDept } from '@/services/ant-design-pro/api';
 
 interface IProps {
   values: Record<string, any>;
@@ -14,7 +14,7 @@ interface IProps {
   onOk: () => void;
 }
 export type FormValueType = {
-  ownerName: string;
+  name: string;
   mobileNumber: string;
   identityNumber: string;
 } & Partial<API.RuleListItem>;
@@ -27,9 +27,7 @@ const EditModal: React.FC<IProps> = (props) => {
   useEffect(() => {
     const values = {
       id: props.values.id,
-      ownerName: props.values.ownerName,
-      mobileNumber: props.values.mobileNumber,
-      identityNumber: props.values.identityNumber,
+      name: props.values.name,
     }
     formRef?.current?.setFieldsValue(values);
   }, [props.values]);
@@ -38,11 +36,9 @@ const EditModal: React.FC<IProps> = (props) => {
     const hide = message.loading('正在更新');
 
     try {
-      await editVip({
+      await editDept({
         id: fields.id,
-        ownerName: fields.ownerName,
-        mobileNumber: fields.mobileNumber,
-        identityNumber: fields.identityNumber,
+        name: fields.name,
       });
       hide();
       message.success('编辑成功!');
@@ -57,8 +53,9 @@ const EditModal: React.FC<IProps> = (props) => {
   return (
     <ModalForm
       formRef={formRef}
-      title="编辑部门"
       visible={visible}
+      layout='horizontal'
+      title="编辑部门"
       modalProps={{
         zIndex: 1001
       }}
@@ -72,6 +69,18 @@ const EditModal: React.FC<IProps> = (props) => {
       }}
     >
       <ProFormText
+        label="部门ID"
+        rules={[
+          {
+            required: true,
+            message: '部门ID必填!',
+          },
+        ]}
+        width="md"
+        name="id"
+        hidden
+      />
+      <ProFormText
         label="部门名称"
         rules={[
           {
@@ -80,7 +89,7 @@ const EditModal: React.FC<IProps> = (props) => {
           },
         ]}
         width="md"
-        name="id"
+        name="name"
       />
     </ModalForm>
   );

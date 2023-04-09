@@ -7,7 +7,7 @@ import {
   ProFormSelect
 } from '@ant-design/pro-components';
 import { message } from 'antd';
-import { editVip } from '@/services/ant-design-pro/api';
+import { editRole, getPermissionList } from '@/services/ant-design-pro/api';
 
 interface IProps {
   values: Record<string, any>;
@@ -16,9 +16,8 @@ interface IProps {
   onOk: () => void;
 }
 export type FormValueType = {
-  ownerName: string;
-  mobileNumber: string;
-  identityNumber: string;
+  roleName: string;
+  permissionsIds: string[];
 } & Partial<API.RuleListItem>;
 
 const EditModal: React.FC<IProps> = (props) => {
@@ -29,9 +28,8 @@ const EditModal: React.FC<IProps> = (props) => {
   useEffect(() => {
     const values = {
       id: props.values.id,
-      ownerName: props.values.ownerName,
-      mobileNumber: props.values.mobileNumber,
-      identityNumber: props.values.identityNumber,
+      roleName: props.values.roleName,
+      permissionsIds: props.values.permissionsIds,
     }
     formRef?.current?.setFieldsValue(values);
   }, [props.values]);
@@ -40,11 +38,10 @@ const EditModal: React.FC<IProps> = (props) => {
     const hide = message.loading('正在更新');
 
     try {
-      await editVip({
+      await editRole({
         id: fields.id,
-        ownerName: fields.ownerName,
-        mobileNumber: fields.mobileNumber,
-        identityNumber: fields.identityNumber,
+        roleName: fields.roleName,
+        permissionsIds: fields.permissionsIds,
       });
       hide();
       message.success('编辑成功!');
@@ -61,6 +58,7 @@ const EditModal: React.FC<IProps> = (props) => {
       formRef={formRef}
       title="编辑职位"
       visible={visible}
+      layout='horizontal'
       modalProps={{
         zIndex: 1001
       }}
@@ -75,6 +73,19 @@ const EditModal: React.FC<IProps> = (props) => {
       }}
     >
       <ProFormText
+        label="职位ID名称"
+        rules={[
+          {
+            required: true,
+            message: '职位ID必填!',
+          },
+        ]}
+        width="md"
+        hidden
+        name="id"
+      />
+
+      <ProFormText
         label="职位名称"
         rules={[
           {
@@ -83,16 +94,24 @@ const EditModal: React.FC<IProps> = (props) => {
           },
         ]}
         width="md"
-        name="id"
+        name="roleName"
       />
 
       <ProFormSelect
-        name="template"
+        name="permissionsIds"
         width="md"
         label="权限列表"
-        valueEnum={{
-          0: '权限一',
-          1: '权限一',
+        rules={[
+          {
+            required: true,
+            message: '权限列表必填!',
+          },
+        ]}
+        request={async () => {
+          const res = await getPermissionList();
+          const data = res?.data;
+          const options = data?.map((item) => ({ label: item.permissionName, value: `${item.id}` }))
+          return options;
         }}
         mode="multiple"
       />

@@ -7,7 +7,7 @@ import {
   ProTable,
 } from '@ant-design/pro-components';
 import { Button, message, Modal } from 'antd';
-import { removeVip, getVipList } from '@/services/ant-design-pro/api';
+import { removeRole, getRoleList } from '@/services/ant-design-pro/api';
 import { getParams } from '@/common/tools';
 import EditModal from './components/editModal';
 import AddModal from './components/addModal';
@@ -40,7 +40,7 @@ const StaffTableList: React.FC = () => {
     if (!selectedItem) return true;
   
     try {
-      await removeVip({
+      await removeRole({
         id: selectedItem.id,
       });
       hide();
@@ -56,7 +56,7 @@ const StaffTableList: React.FC = () => {
   const beforeRemove = (record) => {
     confirm({
       title: '再次提醒',
-      content: '是否注销该会员？',
+      content: '是否删除该职位？',
       onOk() {
         handleRemove(record)
       },
@@ -72,13 +72,20 @@ const StaffTableList: React.FC = () => {
     },
     {
       title: '职位名称',
-      dataIndex: 'ownerName',
+      dataIndex: 'roleName',
+      hideInSearch: true,
+    },
+    {
+      title: '职位名称',
+      dataIndex: 'name',
+      hideInTable: true,
     },
     {
       title: '权限列表',
-      dataIndex: 'authority',
+      dataIndex: 'permissions',
       ellipsis: true,
       hideInSearch: true,
+      renderText: (text) => `${text?.join('、')}`
     },
     {
       title: '操作',
@@ -93,7 +100,7 @@ const StaffTableList: React.FC = () => {
           编辑
         </Button>,
         <Button key='remove' type="link" size="small" danger onClick={() => beforeRemove(record)}>
-        注销
+        删除
       </Button>
       ]
     },
@@ -124,7 +131,7 @@ const StaffTableList: React.FC = () => {
             <PlusOutlined /> 新增
           </Button>,
         ]}
-        request={getVipList}
+        request={getRoleList}
         columns={columns}
       />
 

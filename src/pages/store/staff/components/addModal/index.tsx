@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
   ModalForm,
+  ProFormDigit,
+  ProFormInstance,
   ProFormSelect,
   ProFormText,
 } from '@ant-design/pro-components';
 import { message } from 'antd';
-import { addVip } from '@/services/ant-design-pro/api';
+import { addStaff, getDeptList, getRoleList } from '@/services/ant-design-pro/api';
 
 interface IProps {
   visible: boolean;
@@ -20,7 +22,7 @@ const AddModal: React.FC<IProps> = (props) => {
     const hide = message.loading('正在新增');
 
     try {
-      await addVip(params);
+      await addStaff(params);
       hide();
       message.success('新增成功!');
       return true;
@@ -31,9 +33,23 @@ const AddModal: React.FC<IProps> = (props) => {
     }
   };
 
+  const formRef = useRef<ProFormInstance>();
+  useEffect(() => {
+    if (!visible) {
+      formRef?.current?.resetFields();
+      return;
+    }
+  }, [visible, formRef]);
+
   return (
     <ModalForm
+      formRef={formRef}
+      labelCol={{
+        span: 3
+      }}
+      labelAlign='left'
       title="新增员工"
+      layout='horizontal'
       visible={visible}
       onVisibleChange={onVisibleChange}
       onFinish={async (value) => {
@@ -46,42 +62,31 @@ const AddModal: React.FC<IProps> = (props) => {
         }
       }}
     >
-      <ProFormText
-        label="名字"
+      <ProFormDigit
+        label="会员卡号"
         rules={[
           {
             required: true,
-            message: '名字必填!',
+            message: '会员卡号必填!',
           },
         ]}
         width="md"
-        name="ownerName"
+        name="vipCardId"
+      />
+      <ProFormText
+        label="登录账号"
+        rules={[
+          {
+            required: true,
+            message: '登录账号必填!',
+          },
+        ]}
+        width="md"
+        name="username"
       />
 
-      <ProFormText
-        label="手机号"
-        rules={[
-          {
-            required: true,
-            message: '手机号必填!',
-          },
-        ]}
-        width="md"
-        name="mobileNumber"
-      />
-      <ProFormText
-        label="身份证号"
-        rules={[
-          {
-            required: true,
-            message: '身份证号必填!',
-          },
-        ]}
-        width="md"
-        name="identityNumber"
-      />
       <ProFormSelect
-        name="target"
+        name="roleId"
         width="md"
         label="职位"
         rules={[
@@ -90,13 +95,15 @@ const AddModal: React.FC<IProps> = (props) => {
             message: '职位必填!',
           },
         ]}
-        valueEnum={{
-          0: 'T0',
-          1: 'T1',
+        request={async () => {
+          const res = await getRoleList();
+          const data = res?.data;
+          const options = data?.map((item) => ({ label: item.roleName, value: item.id }))
+          return options;
         }}
       />
       <ProFormSelect
-        name="target"
+        name="departmentId"
         width="md"
         label="部门"
         rules={[
@@ -105,9 +112,11 @@ const AddModal: React.FC<IProps> = (props) => {
             message: '部门必填!',
           },
         ]}
-        valueEnum={{
-          0: 'T0',
-          1: 'T1',
+        request={async () => {
+          const res = await getDeptList();
+          const data = res?.data;
+          const options = data?.map((item) => ({ label: item.name, value: item.id }))
+          return options;
         }}
       />
     </ModalForm>

@@ -7,7 +7,7 @@ import {
   ProTable,
 } from '@ant-design/pro-components';
 import { Button, message, Modal } from 'antd';
-import { removeVip, getVipList } from '@/services/ant-design-pro/api';
+import { removeDept, getDeptList } from '@/services/ant-design-pro/api';
 import { getParams } from '@/common/tools';
 import EditModal from './components/editModal';
 import AddModal from './components/addModal';
@@ -40,7 +40,7 @@ const StaffTableList: React.FC = () => {
     if (!selectedItem) return true;
   
     try {
-      await removeVip({
+      await removeDept({
         id: selectedItem.id,
       });
       hide();
@@ -56,7 +56,7 @@ const StaffTableList: React.FC = () => {
   const beforeRemove = (record) => {
     confirm({
       title: '再次提醒',
-      content: '是否注销该会员？',
+      content: '是否注销该部门？',
       onOk() {
         handleRemove(record)
       },
@@ -72,7 +72,7 @@ const StaffTableList: React.FC = () => {
     },
     {
       title: '部门名称',
-      dataIndex: 'ownerName',
+      dataIndex: 'name',
     },
     {
       title: '操作',
@@ -118,7 +118,7 @@ const StaffTableList: React.FC = () => {
             <PlusOutlined /> 新增
           </Button>,
         ]}
-        request={getVipList}
+        request={getDeptList}
         columns={columns}
       />
 

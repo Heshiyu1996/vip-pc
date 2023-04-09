@@ -5,7 +5,7 @@ import {
   ProFormText,
 } from '@ant-design/pro-components';
 import { message } from 'antd';
-import { addVip } from '@/services/ant-design-pro/api';
+import { addRole, getPermissionList } from '@/services/ant-design-pro/api';
 
 interface IProps {
   visible: boolean;
@@ -20,7 +20,7 @@ const AddModal: React.FC<IProps> = (props) => {
     const hide = message.loading('正在新增');
 
     try {
-      await addVip(params);
+      await addRole(params);
       hide();
       message.success('新增成功!');
       return true;
@@ -33,8 +33,9 @@ const AddModal: React.FC<IProps> = (props) => {
 
   return (
     <ModalForm
-      title="新增部门"
+      title="新增职位"
       visible={visible}
+      layout='horizontal'
       onVisibleChange={onVisibleChange}
       onFinish={async (value) => {
         const success = await handleAdd(value as API.RuleListItem);
@@ -47,23 +48,32 @@ const AddModal: React.FC<IProps> = (props) => {
       }}
     >
       <ProFormText
-        label="部门"
+        label="职位名称"
         rules={[
           {
             required: true,
-            message: '部门必填!',
+            message: '职位名称必填!',
           },
         ]}
         width="md"
-        name="ownerName"
+        name="roleName"
       />
       <ProFormSelect
-        name="template"
+        name="permissionsIds"
         width="md"
         label="权限列表"
-        valueEnum={{
-          0: '权限一',
-          1: '权限一',
+        rules={[
+          {
+            required: true,
+            message: '权限列表必填!',
+          },
+        ]}
+        request={async () => {
+          const res = await getPermissionList();
+          const data = res?.data;
+          const options = data?.map((item) => ({ label: item.permissionName, value: item.id }))
+          
+          return options;
         }}
         mode="multiple"
       />

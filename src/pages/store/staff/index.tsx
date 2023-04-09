@@ -7,7 +7,7 @@ import {
   ProTable,
 } from '@ant-design/pro-components';
 import { Button, message, Modal } from 'antd';
-import { removeVip, getVipList } from '@/services/ant-design-pro/api';
+import { removeStaff, getStaffList } from '@/services/ant-design-pro/api';
 import { getParams } from '@/common/tools';
 import EditModal from './components/editModal';
 import AddModal from './components/addModal';
@@ -39,7 +39,7 @@ const StaffTableList: React.FC = () => {
     if (!selectedItem) return true;
   
     try {
-      await removeVip({
+      await removeStaff({
         id: selectedItem.id,
       });
       hide();
@@ -63,8 +63,15 @@ const StaffTableList: React.FC = () => {
   }
   const columns: ProColumns<API.RuleListItem>[] = [
     {
-      title: '卡号',
-      dataIndex: 'id',
+      title: '登录账号',
+      dataIndex: 'username',
+      valueType: 'textarea',
+      hideInForm: true,
+      hideInSearch: true,
+    },
+    {
+      title: '会员卡号',
+      dataIndex: 'vipCardId',
       valueType: 'textarea',
       hideInForm: true,
       hideInSearch: true,
@@ -78,15 +85,14 @@ const StaffTableList: React.FC = () => {
       dataIndex: 'mobileNumber',
       valueType: 'textarea',
     },
-    // TODO: 无字段
     {
       title: '部门',
-      dataIndex: 'currentLevel',
+      dataIndex: 'departmentName',
       hideInSearch: true,
     },
     {
       title: '职位',
-      dataIndex: 'currentLevel',
+      dataIndex: 'permissionRole',
       hideInSearch: true,
     },
     {
@@ -113,7 +119,7 @@ const StaffTableList: React.FC = () => {
       <ProTable<API.RuleListItem, API.PageParams>
         headerTitle="查询结果"
         actionRef={actionRef}
-        rowKey="id"
+        rowKey="username"
         search={{
           labelWidth: 120,
         }}
@@ -133,7 +139,7 @@ const StaffTableList: React.FC = () => {
             <PlusOutlined /> 新增
           </Button>,
         ]}
-        request={getVipList}
+        request={getStaffList}
         columns={columns}
       />
 
