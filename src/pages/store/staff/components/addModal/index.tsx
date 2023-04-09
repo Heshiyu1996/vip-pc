@@ -46,10 +46,10 @@ const AddModal: React.FC<IProps> = (props) => {
   const [vipInfo, setVipInfo] = useState<API.RuleListItem>({});
   const searchVip = async () => {
     const id = formRef?.current?.getFieldValue('vipCardId')
-    console.log(id, 1221);
-    // const data = await getVipList({ vipCardId });
-    // console.log(data);
-
+    if (!id) {
+      message.error('请输入会员卡号!')
+      return;
+    }
     getVipList({ id }).then((res) => {
       const { data } = res;
       if (!data?.length) {
@@ -61,20 +61,6 @@ const AddModal: React.FC<IProps> = (props) => {
       const info = data?.[0];
       setVipInfo(info);
     })
-
-
-    // getVipList(params).then((res) => {
-    //   const { data } = res;
-    //   if (!data?.length) {
-    //     message.error(ifSearchById ? '会员卡号不存在，请重新输入!' : '会员手机号不存在，请重新输入!');
-    //     setVipInfo({});
-    //     return;
-    //   }
-
-    //   const info = data?.[0];
-    //   setVipInfo(info);
-    // })
-    
   }
 
   return (

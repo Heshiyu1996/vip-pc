@@ -155,8 +155,15 @@ const RoomConfig: React.FC = () => {
     },
     {
       title: '状态',
+      dataIndex: 'statusCode',
+      valueEnum: ItemStatusEnumConfig,
+      hideInTable: true,
+    },
+    {
+      title: '状态',
       dataIndex: 'itemStatusCode',
       valueEnum: ItemStatusEnumConfig,
+      hideInSearch: true
     },
     {
       title: '操作',
