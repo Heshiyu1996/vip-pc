@@ -49,11 +49,18 @@ export async function removeReward(params?: { [key: string]: any }, options?: { 
   });
 }
 
-
 /** 设置营销奖励参数配置 PUT /pc/api/distribution/reward/setting */
 export async function editRewardSetting(params?: { [key: string]: any }, options?: { [key: string]: any }) {
   return request<Record<string, any>>(`/pc/api/distribution/reward/setting`, {
     method: 'PUT',
+    data: params,
+    ...(options || {}),
+  });
+}
+
+export async function getRewardSetting(params?: { [key: string]: any }, options?: { [key: string]: any }) {
+  return request<Record<string, any>>(`/pc/api/distribution/reward/setting`, {
+    method: 'GET',
     data: params,
     ...(options || {}),
   });

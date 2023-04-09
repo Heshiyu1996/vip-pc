@@ -7,7 +7,7 @@ import {
   ProFormSelect
 } from '@ant-design/pro-components';
 import { message } from 'antd';
-import { editRewardSetting } from '@/services/ant-design-pro/api';
+import { editRewardSetting, getRewardSetting } from '@/services/ant-design-pro/api';
 
 interface IProps {
   values: Record<string, any>;
@@ -22,12 +22,18 @@ const EditModal: React.FC<IProps> = (props) => {
 
   const formRef = useRef<ProFormInstance>();
 
-  useEffect(() => {
+  const fetchRewardSetting = async () => {
+    const data = await getRewardSetting();
+    console.log(data, 123);
+    // TODO: 个税参数
     const values = {
       personalTaxPercent: props.values.personalTaxPercent,
     }
     formRef?.current?.setFieldsValue(values);
-  }, [props.values]);
+  }
+  useEffect(() => {
+    fetchRewardSetting();
+  }, []);
 
   const handleEdit = async (fields: FormValueType) => {
     const hide = message.loading('正在更新');
