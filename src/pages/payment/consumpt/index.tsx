@@ -189,7 +189,7 @@ const Consumpt: React.FC = () => {
                   <Descriptions.Item label="会员卡号">{vipInfo?.id}</Descriptions.Item>
                   <Descriptions.Item label="会员名字">{vipInfo?.ownerName}</Descriptions.Item>
                   <Descriptions.Item label="手机号">{vipInfo?.mobileNumber}</Descriptions.Item>
-                  <Descriptions.Item label="当前等级">{vipConfigList[vipInfo?.currentLevelCode]}</Descriptions.Item>
+                  <Descriptions.Item label="当前等级">{vipInfo?.currentLevel}</Descriptions.Item>
                 </Descriptions>
               </Col>
             </Row>

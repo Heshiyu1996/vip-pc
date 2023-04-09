@@ -78,20 +78,6 @@ const EditModal: React.FC<IProps> = (props) => {
     >
       <ProFormText
         disabled
-        label="登录账号"
-        rules={[
-          {
-            required: true,
-            message: '登录账号必填!',
-          },
-        ]}
-        width="md"
-        name="username"
-      >
-        {props.values.username}
-      </ProFormText>
-      <ProFormText
-        disabled
         label="会员卡号"
         rules={[
           {
@@ -103,6 +89,20 @@ const EditModal: React.FC<IProps> = (props) => {
         name="vipCardId"
       >
         {props.values.vipCardId}
+      </ProFormText>
+      <ProFormText
+        disabled
+        label="登录账号"
+        rules={[
+          {
+            required: true,
+            message: '登录账号必填!',
+          },
+        ]}
+        width="md"
+        name="username"
+      >
+        {props.values.username}
       </ProFormText>
       <ProFormText
         label="名字"

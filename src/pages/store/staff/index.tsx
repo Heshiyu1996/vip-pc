@@ -1,14 +1,14 @@
 // TODO: 缺少接口：查询、删除、新增、编辑
 import React, { useRef, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
-import type { ActionType, ProColumns } from '@ant-design/pro-components';
+import type { ActionType, ProColumns, ProFormInstance } from '@ant-design/pro-components';
 import {
   PageContainer,
   ProTable,
 } from '@ant-design/pro-components';
 import { Button, message, Modal } from 'antd';
-import { removeStaff, getStaffList } from '@/services/ant-design-pro/api';
-import { getParams } from '@/common/tools';
+import { removeStaff, getStaffList, exportStaff } from '@/services/ant-design-pro/api';
+import { download, getParams } from '@/common/tools';
 import EditModal from './components/editModal';
 import AddModal from './components/addModal';
 import './index.less';
@@ -63,15 +63,15 @@ const StaffTableList: React.FC = () => {
   }
   const columns: ProColumns<API.RuleListItem>[] = [
     {
-      title: '登录账号',
-      dataIndex: 'username',
+      title: '会员卡号',
+      dataIndex: 'vipCardId',
       valueType: 'textarea',
       hideInForm: true,
       hideInSearch: true,
     },
     {
-      title: '会员卡号',
-      dataIndex: 'vipCardId',
+      title: '登录账号',
+      dataIndex: 'username',
       valueType: 'textarea',
       hideInForm: true,
       hideInSearch: true,
@@ -114,11 +114,31 @@ const StaffTableList: React.FC = () => {
     },
   ];
 
+  const formRef = useRef<ProFormInstance>();
+  const handleExport = async () => {
+    const hide = message.loading('导出中...');
+    const params = formRef.current?.getFieldsValue();
+    
+    try {
+      const res = await exportStaff(params);
+      const { data } = res || {};
+      if (!data) throw new Error();
+      const filename = getParams(data, 'filename');
+      download(data, filename);
+      hide();
+      message.success('导出成功!');
+    } catch (error) {
+      hide();
+      // message.error('导出失败，请稍后重试!');
+    }
+  }
+
   return (
     <PageContainer>
       <ProTable<API.RuleListItem, API.PageParams>
         headerTitle="查询结果"
         actionRef={actionRef}
+        formRef={formRef}
         rowKey="username"
         search={{
           labelWidth: 120,
@@ -129,6 +149,9 @@ const StaffTableList: React.FC = () => {
           }
         }}
         toolBarRender={() => [
+          <Button key="primary" onClick={handleExport}>
+            导出
+          </Button>,
           <Button
             type="primary"
             key="primary"

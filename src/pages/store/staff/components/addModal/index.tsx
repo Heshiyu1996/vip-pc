@@ -1,13 +1,15 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   ModalForm,
+  ProColumns,
   ProFormDigit,
   ProFormInstance,
   ProFormSelect,
   ProFormText,
+  ProTable,
 } from '@ant-design/pro-components';
-import { message } from 'antd';
-import { addStaff, getDeptList, getRoleList } from '@/services/ant-design-pro/api';
+import { Button, Col, Descriptions, message, Row } from 'antd';
+import { addStaff, getDeptList, getRoleList, getVipList } from '@/services/ant-design-pro/api';
 
 interface IProps {
   visible: boolean;
@@ -40,6 +42,40 @@ const AddModal: React.FC<IProps> = (props) => {
       return;
     }
   }, [visible, formRef]);
+  
+  const [vipInfo, setVipInfo] = useState<API.RuleListItem>({});
+  const searchVip = async () => {
+    const id = formRef?.current?.getFieldValue('vipCardId')
+    console.log(id, 1221);
+    // const data = await getVipList({ vipCardId });
+    // console.log(data);
+
+    getVipList({ id }).then((res) => {
+      const { data } = res;
+      if (!data?.length) {
+        message.error('会员卡号不存在，请重新输入!');
+        setVipInfo({});
+        return;
+      }
+
+      const info = data?.[0];
+      setVipInfo(info);
+    })
+
+
+    // getVipList(params).then((res) => {
+    //   const { data } = res;
+    //   if (!data?.length) {
+    //     message.error(ifSearchById ? '会员卡号不存在，请重新输入!' : '会员手机号不存在，请重新输入!');
+    //     setVipInfo({});
+    //     return;
+    //   }
+
+    //   const info = data?.[0];
+    //   setVipInfo(info);
+    // })
+    
+  }
 
   return (
     <ModalForm
@@ -70,55 +106,79 @@ const AddModal: React.FC<IProps> = (props) => {
             message: '会员卡号必填!',
           },
         ]}
+        fieldProps={{
+          controls: false,
+        }}
+        addonAfter={
+          <Button onClick={searchVip}>
+            查找
+          </Button>
+        }
         width="md"
         name="vipCardId"
       />
-      <ProFormText
-        label="登录账号"
-        rules={[
-          {
-            required: true,
-            message: '登录账号必填!',
-          },
-        ]}
-        width="md"
-        name="username"
-      />
 
-      <ProFormSelect
-        name="roleId"
-        width="md"
-        label="职位"
-        rules={[
-          {
-            required: true,
-            message: '职位必填!',
-          },
-        ]}
-        request={async () => {
-          const res = await getRoleList();
-          const data = res?.data;
-          const options = data?.map((item) => ({ label: item.roleName, value: item.id }))
-          return options;
-        }}
-      />
-      <ProFormSelect
-        name="departmentId"
-        width="md"
-        label="部门"
-        rules={[
-          {
-            required: true,
-            message: '部门必填!',
-          },
-        ]}
-        request={async () => {
-          const res = await getDeptList();
-          const data = res?.data;
-          const options = data?.map((item) => ({ label: item.name, value: item.id }))
-          return options;
-        }}
-      />
+      {vipInfo?.id && 
+      <>
+        <Row 
+          style={{ marginBottom: '10px' }}>
+          <Col span={24}>
+            <Descriptions bordered column={1}>
+              <Descriptions.Item label="会员卡号">{vipInfo?.id}</Descriptions.Item>
+              <Descriptions.Item label="会员名字">{vipInfo?.ownerName}</Descriptions.Item>
+              <Descriptions.Item label="手机号">{vipInfo?.mobileNumber}</Descriptions.Item>
+              <Descriptions.Item label="当前等级">{vipInfo?.currentLevel}</Descriptions.Item>
+            </Descriptions>
+          </Col>
+        </Row>
+
+        <ProFormText
+          label="登录账号"
+          rules={[
+            {
+              required: true,
+              message: '登录账号必填!',
+            },
+          ]}
+          width="md"
+          name="username"
+        />
+
+        <ProFormSelect
+          name="roleId"
+          width="md"
+          label="职位"
+          rules={[
+            {
+              required: true,
+              message: '职位必填!',
+            },
+          ]}
+          request={async () => {
+            const res = await getRoleList();
+            const data = res?.data;
+            const options = data?.map((item) => ({ label: item.roleName, value: item.id }))
+            return options;
+          }}
+        />
+        <ProFormSelect
+          name="departmentId"
+          width="md"
+          label="部门"
+          rules={[
+            {
+              required: true,
+              message: '部门必填!',
+            },
+          ]}
+          request={async () => {
+            const res = await getDeptList();
+            const data = res?.data;
+            const options = data?.map((item) => ({ label: item.name, value: item.id }))
+            return options;
+          }}
+        />
+      </>}
     </ModalForm>
   );
 };
