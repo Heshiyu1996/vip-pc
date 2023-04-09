@@ -7,7 +7,7 @@ import {
   ProTable,
 } from '@ant-design/pro-components';
 import { Button, message, Modal } from 'antd';
-import { removeReward, getRewardList } from '@/services/ant-design-pro/api';
+import { removeReward, getRewardList, getRoomConfigList } from '@/services/ant-design-pro/api';
 import { getParams } from '@/common/tools';
 import EditModal from './components/editModal';
 import EditDeployModal from './components/editDeplpoyModal';
@@ -70,9 +70,24 @@ const StaffTableList: React.FC = () => {
   const columns: ProColumns<API.RuleListItem>[] = [
     {
       title: '房型',
+      dataIndex: 'roomId',
+      valueType: 'select',
+      hideInTable: true,
+      request: async () => {
+        const res = await getRoomConfigList();
+        const data = res?.data;
+        const options = data?.map((item) => ({ label: item.roomType, value: item.id }))
+        return options;
+      },
+      fieldProps: {
+        showSearch: true,
+      }
+    },
+    {
+      title: '房型',
       dataIndex: 'roomType',
       valueType: 'textarea',
-      hideInForm: true,
+      hideInSearch: true,
     },
     {
       title: '奖励金额',

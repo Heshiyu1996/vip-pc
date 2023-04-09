@@ -77,7 +77,7 @@ export default [
   {
     path: '/user',
     layout: false,
-    routes: [{ path: '/user/login', component: './user/Login' }, { component: './404' }],
+    routes: [{ path: '/user/login', component: './user/login' }, { component: './404' }],
   },
   { path: '/', redirect: '/home' },
   { component: './404' },
