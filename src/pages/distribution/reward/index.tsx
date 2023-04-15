@@ -1,4 +1,3 @@
-// TODO: 缺少接口：查询、删除、新增、编辑
 import React, { useRef, useState } from 'react';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
@@ -41,7 +40,7 @@ const StaffTableList: React.FC = () => {
 
   // 删除指定行
   const handleRemove = async (selectedItem: API.RuleListItem) => {
-    const hide = message.loading('正在注销');
+    const hide = message.loading('正在删除');
     if (!selectedItem) return true;
   
     try {
@@ -49,19 +48,19 @@ const StaffTableList: React.FC = () => {
         id: selectedItem.id,
       });
       hide();
-      message.success('注销成功!');
+      message.success('删除成功!');
       handleReload();
       return true;
     } catch (error) {
       hide();
-      message.error('注销失败，请稍后重试!');
+      message.error('删除失败，请稍后重试!');
       return false;
     }
   };
   const beforeRemove = (record) => {
     confirm({
       title: '再次提醒',
-      content: '是否注销该会员？',
+      content: '是否删除？',
       onOk() {
         handleRemove(record)
       },

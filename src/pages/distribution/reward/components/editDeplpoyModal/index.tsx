@@ -1,5 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import type { ProFormInstance} from '@ant-design/pro-components';
+import { ProFormDigit} from '@ant-design/pro-components';
 
 import {
   ModalForm,
@@ -23,17 +24,18 @@ const EditModal: React.FC<IProps> = (props) => {
   const formRef = useRef<ProFormInstance>();
 
   const fetchRewardSetting = async () => {
-    const data = await getRewardSetting();
-    console.log(data, 123);
+    const res = await getRewardSetting();
+    const { personalTaxPercent } = res?.data || {};
     // TODO: 个税参数
     const values = {
-      personalTaxPercent: props.values.personalTaxPercent,
+      personalTaxPercent
     }
     formRef?.current?.setFieldsValue(values);
   }
   useEffect(() => {
+    if (!visible || !formRef?.current) return;
     fetchRewardSetting();
-  }, []);
+  }, [visible, formRef?.current]);
 
   const handleEdit = async (fields: FormValueType) => {
     const hide = message.loading('正在更新');
@@ -71,7 +73,8 @@ const EditModal: React.FC<IProps> = (props) => {
         }
       }}
     >
-      <ProFormText
+
+      <ProFormDigit
         label="个税扣除比例"
         rules={[
           {
@@ -79,8 +82,10 @@ const EditModal: React.FC<IProps> = (props) => {
             message: '个税扣除比例必填!',
           },
         ]}
-        width="md"
+        width="10"
         addonAfter="%"
+        min={0}
+        max={100}
         name="personalTaxPercent"
       />
     </ModalForm>

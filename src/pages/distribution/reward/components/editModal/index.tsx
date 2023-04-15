@@ -8,7 +8,7 @@ import {
   ProFormSelect
 } from '@ant-design/pro-components';
 import { message } from 'antd';
-import { editVip, getRoomConfigList } from '@/services/ant-design-pro/api';
+import { editReward, getRoomConfigList } from '@/services/ant-design-pro/api';
 
 interface IProps {
   values: Record<string, any>;
@@ -19,7 +19,7 @@ interface IProps {
 export type FormValueType = {
   rewardPercent: string;
   roomId: string;
-  actualRewardPercent: string;
+  // actualRewardPercent: string;
 } & Partial<API.RuleListItem>;
 
 const EditModal: React.FC<IProps> = (props) => {
@@ -32,20 +32,25 @@ const EditModal: React.FC<IProps> = (props) => {
       id: props.values.id,
       rewardPercent: props.values.rewardPercent,
       roomId: props.values.roomId,
-      actualRewardPercent: props.values.actualRewardPercent,
+      // // actualRewardPercent: props.values.actualRewardPercent,
     }
     formRef?.current?.setFieldsValue(values);
+
+    // setFinalReward(props?.values?.actualRewardPercent);
+
   }, [props.values]);
 
   const handleEdit = async (fields: FormValueType) => {
     const hide = message.loading('正在更新');
 
+    console.log(fields, 3334);
+    
     try {
-      await editVip({
-        id: fields.id,
+      await editReward({
+        id: props.values.id,
         rewardPercent: fields.rewardPercent,
         roomId: fields.roomId,
-        actualRewardPercent: fields.actualRewardPercent,
+        // // actualRewardPercent: fields.actualRewardPercent,
       });
       hide();
       message.success('编辑成功!');
@@ -57,13 +62,14 @@ const EditModal: React.FC<IProps> = (props) => {
     }
   };
 
-  const [finalReward, setFinalReward] = useState();
+  // const [finalReward, setFinalReward] = useState();
 
   return (
     <ModalForm
       formRef={formRef}
       title="编辑营销奖励配置"
       visible={visible}
+      width={800}
       layout='horizontal'
       modalProps={{
         zIndex: 1001
@@ -81,6 +87,7 @@ const EditModal: React.FC<IProps> = (props) => {
       <ProFormSelect
         name="roomId"
         label="客房类型"
+        width={200}
         request={async () => {
           const res = await getRoomConfigList();
           const data = res?.data;
@@ -95,20 +102,20 @@ const EditModal: React.FC<IProps> = (props) => {
       />
       <ProFormDigit
         label="奖励金额"
+        width={100}
         rules={[
           {
             required: true,
             message: '奖励金额必填!',
           },
         ]}
-        width="md"
         addonAfter="%"
         fieldProps={{
           controls: false,
-          onChange: (e) => {
-            console.log(e, 33);
-            setFinalReward(e - 3);
-          }
+          // onChange: (e) => {
+          //   console.log(e, 33);
+          //   setFinalReward(e - 3);
+          // }
         }}
         min={3}
         max={1000}
@@ -126,12 +133,12 @@ const EditModal: React.FC<IProps> = (props) => {
       >
         3.0%
       </ProFormText>
-      <ProFormText
+      {/* <ProFormText
         label="实际发放奖励金额"
         tooltip="实际发放奖励金额 = 奖励金额 - 个税扣除"
         width="md"
-        name="actualRewardPercent"
-      >{finalReward?.toFixed(1)}%</ProFormText>
+        // name="actualRewardPercent"
+      >{finalReward?.toFixed(1)}%</ProFormText> */}
     </ModalForm>
   );
 };

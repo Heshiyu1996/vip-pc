@@ -79,6 +79,12 @@ const StaffTableList: React.FC = () => {
     {
       title: '名字',
       dataIndex: 'ownerName',
+      hideInSearch: true,
+    },
+    {
+      title: '名字',
+      dataIndex: 'name',
+      hideInTable: true,
     },
     {
       title: '手机号',

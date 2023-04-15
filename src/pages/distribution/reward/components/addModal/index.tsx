@@ -32,12 +32,13 @@ const AddModal: React.FC<IProps> = (props) => {
     }
   };
 
-  const [finalReward, setFinalReward] = useState();
+  // const [finalReward, setFinalReward] = useState();
 
   return (
     <ModalForm
       title="新增营销奖励配置"
       layout='horizontal'
+      width={800}
       visible={visible}
       onVisibleChange={onVisibleChange}
       onFinish={async (value) => {
@@ -53,6 +54,7 @@ const AddModal: React.FC<IProps> = (props) => {
       <ProFormSelect
         name="roomId"
         label="客房类型"
+        width={200}
         request={async () => {
           const res = await getRoomConfigList();
           const data = res?.data;
@@ -73,14 +75,14 @@ const AddModal: React.FC<IProps> = (props) => {
             message: '奖励金额必填!',
           },
         ]}
-        width="md"
+        width={100}
         addonAfter="%"
         fieldProps={{
           controls: false,
-          onChange: (e) => {
-            console.log(e, 33);
-            setFinalReward(e - 3);
-          }
+          // onChange: (e) => {
+          //   console.log(e, 33);
+          //   setFinalReward(e - 3);
+          // }
         }}
         min={3}
         max={1000}
@@ -98,11 +100,11 @@ const AddModal: React.FC<IProps> = (props) => {
       >
         3.0%
       </ProFormText>
-      <ProFormText
+      {/* <ProFormText
         label="实际发放奖励金额"
         tooltip="实际发放奖励金额 = 奖励金额 - 个税扣除"
         width="md"
-      >{finalReward?.toFixed(1)}%</ProFormText>
+      >{(finalReward || 0).toFixed(1)}%</ProFormText> */}
     </ModalForm>
   );
 };
