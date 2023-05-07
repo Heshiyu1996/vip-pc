@@ -87,7 +87,9 @@ export default [
         routes: [
           { path: '/report/store/merchant-list', name: '商户数据汇总报表', icon: 'smile', component: './report/store/merchant-list' },
           { path: '/report/store/distribution-list', name: '分销卖货报表', icon: 'smile', component: './report/store/distribution-list' },
-          // { path: '/report/store/distribution-list', name: '销量日报表', icon: 'smile', component: './report/store/distribution-list' },
+          // TODO: delay
+          { path: '/report/store/sale-list', name: '销量日报表', icon: 'smile', component: './report/store/sale-list' },
+          { path: '/report/store/reward-list', name: '员工奖励报表', icon: 'smile', component: './report/store/reward-list' },
         ],
       },
       {
