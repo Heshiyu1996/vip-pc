@@ -75,6 +75,17 @@ export default [
     ],
   },
   {
+    path: '/finance',
+    name: '财务中心',
+    icon: 'crown',
+    access: 'canAdmin',
+    routes: [
+      { path: '/finance/account-balance-list', name: '账户余额', icon: 'smile', component: './finance/account-balance-list' },
+      { path: '/finance/card-balance-list', name: '会员卡余额总览', icon: 'smile', component: './finance/card-balance-list' },
+      // { path: '/finance/check-list', name: '客房订单对账', icon: 'smile', component: './finance/check-list' },
+    ],
+  },
+  {
     path: '/user',
     layout: false,
     routes: [{ path: '/user/login', component: './user/login' }, { component: './404' }],
