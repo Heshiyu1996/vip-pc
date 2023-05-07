@@ -90,6 +90,7 @@ export default [
           // TODO: delay
           { path: '/report/store/sale-list', name: '销量日报表', icon: 'smile', component: './report/store/sale-list' },
           { path: '/report/store/reward-list', name: '员工奖励报表', icon: 'smile', component: './report/store/reward-list' },
+          { path: '/report/store/room-list', name: '客房报表', icon: 'smile', component: './report/store/room-list' },
         ],
       },
       {
