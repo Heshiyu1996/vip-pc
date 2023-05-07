@@ -82,7 +82,7 @@ export default [
     routes: [
       { path: '/finance/account-balance-list', name: '账户余额', icon: 'smile', component: './finance/account-balance-list' },
       { path: '/finance/card-balance-list', name: '会员卡余额总览', icon: 'smile', component: './finance/card-balance-list' },
-      // { path: '/finance/check-list', name: '客房订单对账', icon: 'smile', component: './finance/check-list' },
+      { path: '/finance/room-order-list', name: '客房订单对账', icon: 'smile', component: './finance/room-order-list' },
     ],
   },
   {
