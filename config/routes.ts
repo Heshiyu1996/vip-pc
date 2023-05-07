@@ -73,6 +73,33 @@ export default [
       { path: '/score/rule', name: '积分规则配置', icon: 'smile', component: './score/rule' },
       { path: '/score/consumpt', name: '人工核销', icon: 'smile', component: './score/consumpt' },
     ],
+  },{
+    path: '/report',
+    name: '报表系统',
+    icon: 'crown',
+    access: 'canAdmin',
+    routes: [
+      {
+        path: '/report/store',
+        name: '店铺数据',
+        icon: 'crown',
+        access: 'canAdmin',
+        routes: [
+          { path: '/report/store/merchant-list', name: '商户数据汇总报表', icon: 'smile', component: './report/store/merchant-list' },
+          { path: '/report/store/distribution-list', name: '分销卖货报表', icon: 'smile', component: './report/store/distribution-list' },
+          // { path: '/report/store/distribution-list', name: '销量日报表', icon: 'smile', component: './report/store/distribution-list' },
+        ],
+      },
+      {
+        path: '/report/vip',
+        name: '会员数据',
+        icon: 'crown',
+        access: 'canAdmin',
+        routes: [
+          // { path: '/report/vip/merchant-list', name: '商户数据汇总报表', icon: 'smile', component: './report/vip/merchant-list' },
+        ],
+      }
+    ],
   },
   {
     path: '/finance',

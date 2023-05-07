@@ -28,3 +28,6 @@ export * from './permission';
 export * from './finance/account-balance-list';
 export * from './finance/card-balance-list';
 export * from './finance/room-order-list';
+
+export * from './report/store/merchant-list';
+export * from './report/store/distribution-list';
