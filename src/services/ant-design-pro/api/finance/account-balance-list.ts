@@ -4,7 +4,7 @@ import { requestList } from '@/common/tools';
 import { request } from 'umi';
 
 export async function getFinanceAccountBalanceList(
-  params: {
+  params?: {
     /** 当前的页码 */
     currentPage?: number;
     /** 页面的容量 */

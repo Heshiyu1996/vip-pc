@@ -99,7 +99,8 @@ export default [
         icon: 'crown',
         access: 'canAdmin',
         routes: [
-          // { path: '/report/vip/merchant-list', name: '商户数据汇总报表', icon: 'smile', component: './report/vip/merchant-list' },
+          { path: '/report/vip/value-analysis', name: '会员价值分析', icon: 'smile', component: './report/vip/value-analysis' },
+          // { path: '/report/vip/consume-analysis', name: '会员充值与消费分析', icon: 'smile', component: './report/vip/consume-analysis' },
         ],
       }
     ],

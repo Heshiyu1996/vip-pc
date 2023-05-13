@@ -36,3 +36,5 @@ export * from './report/store/merchant-list';
 export * from './report/store/distribution-list';
 export * from './report/store/reward-list';
 export * from './report/store/room-list';
+
+export * from './report/vip/value-analysis';
