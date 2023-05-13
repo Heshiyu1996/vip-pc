@@ -3,7 +3,7 @@ export default [
   {
     path: '/vip',
     name: '会员卡管理',
-    icon: 'crown',
+    icon: 'user',
     routes: [
       { path: '/vip/list', name: '会员列表', icon: 'smile', component: './vip/list' },
       { path: '/vip/config', name: '等级配置', icon: 'smile', component: './vip/config' },
@@ -12,7 +12,7 @@ export default [
   {
     path: '/payment',
     name: '支付管理',
-    icon: 'crown',
+    icon: 'transaction',
     access: 'canAdmin',
     routes: [
       { path: '/payment/recharge', name: '充值', icon: 'smile', component: './payment/recharge' },
@@ -30,7 +30,7 @@ export default [
   {
     path: '/room',
     name: '订房管理',
-    icon: 'crown',
+    icon: 'calendar',
     access: 'canAdmin',
     routes: [
       { path: '/room/arrange', name: '房态房价配置', icon: 'smile', component: './room/arrange' },
@@ -42,7 +42,7 @@ export default [
   {
     path: '/store',
     name: '店铺管理',
-    icon: 'crown',
+    icon: 'home',
     access: 'canAdmin',
     routes: [
       { path: '/store/config', name: '店铺配置', icon: 'smile', component: './store/config' },
@@ -55,7 +55,7 @@ export default [
   {
     path: '/distribution',
     name: '分销管理',
-    icon: 'crown',
+    icon: 'setting',
     access: 'canAdmin',
     routes: [
       { path: '/distribution/reward', name: '营销奖励配置', icon: 'smile', component: './distribution/reward' },
@@ -64,7 +64,7 @@ export default [
   {
     path: '/score',
     name: '积分管理',
-    icon: 'crown',
+    icon: 'gift',
     access: 'canAdmin',
     routes: [
       { path: '/score/search-list', name: '积分查询', icon: 'smile', component: './score/search-list' },
@@ -76,7 +76,7 @@ export default [
   },{
     path: '/report',
     name: '报表系统',
-    icon: 'crown',
+    icon: 'hdd',
     access: 'canAdmin',
     routes: [
       {
@@ -107,7 +107,7 @@ export default [
   {
     path: '/finance',
     name: '财务中心',
-    icon: 'crown',
+    icon: 'dollarCircle',
     access: 'canAdmin',
     routes: [
       { path: '/finance/account-balance-list', name: '账户余额', icon: 'smile', component: './finance/account-balance-list' },
