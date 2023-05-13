@@ -20,10 +20,22 @@ const RechargeList: React.FC = () => {
     {
       title: '订单号',
       dataIndex: 'id',
+      hideInSearch: true,
+    },
+    {
+      title: '订单号',
+      dataIndex: 'orderId',
+      hideInTable: true,
     },
     {
       title: '支付单号',
-      dataIndex: 'vipCardId',
+      dataIndex: 'associationTransactionFlowId',
+      hideInSearch: true,
+    },
+    {
+      title: '支付单号',
+      dataIndex: 'flowId',
+      hideInTable: true,
     },
     {
       title: '应获奖励人',
@@ -32,7 +44,12 @@ const RechargeList: React.FC = () => {
       hideInSearch: true,
     },
     {
-      title: '姓名',
+      title: '会员卡号',
+      dataIndex: 'vipCardId',
+      // hideInTable: true,
+    },
+    {
+      title: '会员名',
       dataIndex: 'vipCardName',
       hideInSearch: true,
     },
@@ -56,12 +73,7 @@ const RechargeList: React.FC = () => {
       dataIndex: 'identifyCode',
     },
     {
-      title: '会员卡号',
-      dataIndex: 'vipCardId',
-      hideInTable: true,
-    },
-    {
-      title: '会员名字',
+      title: '会员名',
       dataIndex: 'vipCardName',
       hideInTable: true,
     },

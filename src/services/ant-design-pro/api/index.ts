@@ -17,10 +17,13 @@ export * from './room-config';
 export * from './room-order';
 export * from './room-refund';
 export * from './point-list';
+
 export * from './score/search-list';
 export * from './score/exchange-list';
 export * from './score/gift-list';
 export * from './score/rule-list';
+export * from './score/judge';
+
 export * from './distribution/reward-list';
 
 export * from './permission';

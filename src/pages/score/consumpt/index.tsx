@@ -4,21 +4,19 @@ import {
 } from '@ant-design/pro-components';
 import { Input, InputNumber, Row, Col, Descriptions, Button, message, Modal, Select, Radio } from 'antd';
 import { EyeInvisibleOutlined, EyeTwoTone } from '@ant-design/icons';
-import { getVipConfigList, getVipList, consumptAmount } from '@/services/ant-design-pro/api';
+import { getVipConfigList, getVipList, addPointRecharge, addPointConsumption } from '@/services/ant-design-pro/api';
 import md5 from 'md5';
 import './index.less';
 import { getParams } from '@/common/tools';
 
 const defaultCardId = getParams('cardId');
 enum EConsumptionType {
-  RECHARGE_BALANCE,
-  GIFT_BALANCE,
-  ROOM_TICKET,
+  ADD,
+  CONSUMPTION,
 }
 const EConsumptionTypeText ={
-  [EConsumptionType.RECHARGE_BALANCE]: '充值金',
-  [EConsumptionType.GIFT_BALANCE]: '赠送金',
-  [EConsumptionType.ROOM_TICKET]: '住房券',
+  [EConsumptionType.ADD]: '赠送',
+  [EConsumptionType.CONSUMPTION]: '扣减',
 }
   
 const Consumpt: React.FC = () => {
@@ -102,7 +100,7 @@ const Consumpt: React.FC = () => {
     setPassword(val);
   }
 
-  const [consumtionType, setConsumtionType] = useState(EConsumptionType.RECHARGE_BALANCE);
+  const [consumtionType, setConsumtionType] = useState(EConsumptionType.ADD);
   const onChangeType = (ev) => {
     const val = ev.target.value;
     setConsumtionType(val);
@@ -129,27 +127,33 @@ const Consumpt: React.FC = () => {
       amount,
       password: md5(password),
       remark,
-      assetsType: consumtionType
+      // assetsType: consumtionType
     }
 
     setIsLoading(true);
-    consumptAmount(params).then(() => {
-      const consumptionContent = <span>
-        {consumtionType === EConsumptionType.ROOM_TICKET ? 
-          `${amount} 张 ${EConsumptionTypeText[EConsumptionType.ROOM_TICKET]}`
-          :
-          `${amount} 元 ${EConsumptionTypeText[consumtionType]}`
-        }
-      </span>
 
-      Modal.success({
-        title: '核销成功!',
-        content: (<p>已成功为 <b>{vipInfo.ownerName}(卡号: {vipInfo.id}) </b> 核销 {consumptionContent}.</p>)
+    // 赠送
+    if (consumtionType === EConsumptionType.ADD) {
+      addPointRecharge(params).then(() => {
+        Modal.success({
+          title: '核销成功!',
+          content: (<p>已成功为 <b>{vipInfo.ownerName}(卡号: {vipInfo.id}) </b> 赠送 {amount} 积分.</p>)
+        })
+        handleReset();
+      }).finally(() => {
+        setIsLoading(false);
       })
-      handleReset();
-    }).finally(() => {
-      setIsLoading(false);
-    })
+    } else {
+      addPointConsumption(params).then(() => {
+        Modal.success({
+          title: '核销成功!',
+          content: (<p>已成功为 <b>{vipInfo.ownerName}(卡号: {vipInfo.id}) </b> 扣除 {amount} 积分.</p>)
+        })
+        handleReset();
+      }).finally(() => {
+        setIsLoading(false);
+      })
+    }
   }
 
   return (
@@ -189,7 +193,8 @@ const Consumpt: React.FC = () => {
                   <Descriptions.Item label="会员卡号">{vipInfo?.id}</Descriptions.Item>
                   <Descriptions.Item label="会员名字">{vipInfo?.ownerName}</Descriptions.Item>
                   <Descriptions.Item label="手机号">{vipInfo?.mobileNumber}</Descriptions.Item>
-                  <Descriptions.Item label="当前等级">{vipConfigList[vipInfo?.currentLevelCode]}</Descriptions.Item>
+                  <Descriptions.Item label="当前等级">{vipInfo?.currentLevel}</Descriptions.Item>
+                  <Descriptions.Item label="当前积分">{vipInfo?.totalPointBalance}</Descriptions.Item>
                 </Descriptions>
               </Col>
             </Row>
@@ -200,8 +205,8 @@ const Consumpt: React.FC = () => {
               </Col>
               <Col span={18}>
                 <Radio.Group value={consumtionType} onChange={onChangeType}>
-                  <Radio value={EConsumptionType.RECHARGE_BALANCE}>赠送</Radio>
-                  <Radio value={EConsumptionType.GIFT_BALANCE}>扣减</Radio>
+                  <Radio value={EConsumptionType.ADD}>赠送</Radio>
+                  <Radio value={EConsumptionType.CONSUMPTION}>扣减</Radio>
                 </Radio.Group>
               </Col>
             </Row>
