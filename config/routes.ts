@@ -100,7 +100,7 @@ export default [
         access: 'canAdmin',
         routes: [
           { path: '/report/vip/value-analysis', name: '会员价值分析', icon: 'smile', component: './report/vip/value-analysis' },
-          // { path: '/report/vip/consume-analysis', name: '会员充值与消费分析', icon: 'smile', component: './report/vip/consume-analysis' },
+          { path: '/report/vip/financial-analysis', name: '会员充值与消费分析', icon: 'smile', component: './report/vip/financial-analysis' },
         ],
       }
     ],
