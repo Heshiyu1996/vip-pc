@@ -1,15 +1,39 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import type { ActionType, ProColumns, ProFormInstance } from '@ant-design/pro-components';
 import {
   PageContainer,
   ProTable,
 } from '@ant-design/pro-components';
-import { getParams } from '@/common/tools';
 import { getReportStoreMerchantList } from '@/services/ant-design-pro/api';
-import CardIndicator from '@/components/card-indicator';
 
-// url携带参数时的查找逻辑
-const defaultCardId = getParams('cardId')
+
+const SaleChannelData = [
+  {
+    value: '',
+    label: '全部',
+  },
+  {
+    value: 'CONSUMER',
+    label: '消费者传播',
+  },
+  {
+    value: 'STAFF',
+    label: '员工传播',
+  },
+  {
+    value: 'OFFICIAL',
+    label: '官微',
+  },
+];
+
+const SaleChannelEnumConfig = (() => {
+  const map = {};
+  SaleChannelData.forEach((item) => {
+    map[item.value] = item.label;
+  });
+  return map;
+})();
+
 
 const RechargeList: React.FC = () => {
   const actionRef = useRef<ActionType>();
@@ -28,6 +52,14 @@ const RechargeList: React.FC = () => {
     {
       title: '销售渠道',
       dataIndex: 'saleChannel',
+      hideInSearch: true,
+    },
+    {
+      title: '销售渠道',
+      dataIndex: 'saleChannel',
+      hideInTable: true,
+      valueEnum: SaleChannelEnumConfig,
+      renderText: (val: string) => SaleChannelEnumConfig[val],
     },
     {
       title: '客房销售额',
@@ -48,28 +80,12 @@ const RechargeList: React.FC = () => {
     },
   ];
 
-  // const [totalAmount, setTotalAmout] = useState(0);
-  // const getTotalAmount = async () => {
-  //   const res = await getFinanceAccountBalanceStatistics();
-  //   const { totalBalance } = res?.data || {};
-  //   setTotalAmout(totalBalance);
-  // } 
-  // useEffect(() => {
-  //   getTotalAmount()
-  // }, []);
-
   return (
     <PageContainer>
       <ProTable<API.RuleListItem, API.PageParams>
-        // headerTitle={<CardIndicator data={[ { label: '现金账户（元）', value: totalAmount } ]} />}
         actionRef={actionRef}
         rowKey="id"
         formRef={formRef}
-        form={{
-          initialValues: {
-            cardId: defaultCardId
-          }
-        }}
         search={{
           labelWidth: 120,
         }}
