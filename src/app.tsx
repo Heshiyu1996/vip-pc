@@ -6,6 +6,8 @@ import { PageLoading,
 } from '@ant-design/pro-components';
 import type { RunTimeLayoutConfig, RequestConfig } from 'umi';
 import { history } from 'umi';
+import RouteWithBadge from './components/route-with-badge';
+import bus, { ON_NEW_ORDER } from '@/common/bus';
 import defaultSettings from '../config/defaultSettings';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 
@@ -49,8 +51,18 @@ export async function getInitialState(): Promise<{
   };
 }
 
+let firstHeaderRender = true;
+
 // ProLayout 支持的api https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
+  // 首次获取“待确认订单”数量
+  if (firstHeaderRender) {
+    setTimeout(() => {
+      bus.emit(ON_NEW_ORDER);
+    })
+    firstHeaderRender = false;
+  }
+
   return {
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
@@ -59,14 +71,32 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     },
     footerRender: () => <Footer />,
     onPageChange: () => {
+      // 获取“待确认订单”数量
       const { location } = history;
       // 如果没有登录，重定向到 login
       if (!initialState?.currentUser && location.pathname !== loginPath) {
         history.push(loginPath);
       }
+      // bus.emit(ON_NEW_ORDER);
     },
     links: [],
-    menuHeaderRender: undefined,
+    menuHeaderRender: () => {
+      return undefined;
+    },
+    menuItemRender: (item, defaultDom) => {
+      if (['/room/order'].includes(item?.path)) {
+        return <div onClick={()=> history.push(item.path) }>{defaultDom}<RouteWithBadge /></div>
+      }
+      
+      return <div onClick={()=> history.push(item.path) }>{defaultDom}</div>
+    },
+    subMenuItemRender: (item, defaultDom) => {
+      if (['/room'].includes(item?.path)) {
+        return <div onClick={()=> history.push(item.path) }>{defaultDom}<RouteWithBadge /></div>
+      }
+      
+      return <div onClick={()=> history.push(item.path) }>{defaultDom}</div>
+    },
     // 自定义 403 页面
     // unAccessible: <div>unAccessible</div>,
     // 增加一个 loading 的状态

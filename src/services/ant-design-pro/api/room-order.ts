@@ -86,3 +86,12 @@ export async function getRoomOrderConfig(params?: { [key: string]: any }, option
     ...(options || {}),
   });
 }
+
+/** 获得某个状态的订单数量 GET /pc/api/room/order/amount/{status} */
+export async function getRoomOrderAmount(params?: { [key: string]: any }, options?: { [key: string]: any }) {
+  return request<API.RoomRefundListItem>(`/pc/api/room/order/amount/${params.status}`, {
+    method: 'GET',
+    data: params,
+    ...(options || {}),
+  });
+}
