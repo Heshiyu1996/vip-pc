@@ -10,6 +10,33 @@ import { getReportStoreMerchantList } from '@/services/ant-design-pro/api';
 // url携带参数时的查找逻辑
 const defaultCardId = getParams('cardId')
 
+const SaleChannelData = [
+  {
+    value: '',
+    label: '全部',
+  },
+  {
+    value: 'CONSUMER',
+    label: '消费者传播',
+  },
+  {
+    value: 'STAFF',
+    label: '员工传播',
+  },
+  {
+    value: 'OFFICIAL',
+    label: '官微',
+  },
+];
+
+const SaleChannelEnumConfig = (() => {
+  const map = {};
+  SaleChannelData.forEach((item) => {
+    map[item.value] = item.label;
+  });
+  return map;
+})();
+
 const RechargeList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const formRef = useRef<ProFormInstance>();
@@ -27,6 +54,8 @@ const RechargeList: React.FC = () => {
     {
       title: '销售渠道',
       dataIndex: 'saleChannel',
+      valueEnum: SaleChannelEnumConfig,
+      renderText: (val: string) => SaleChannelEnumConfig[val],
     },
     {
       title: '客房销售额',

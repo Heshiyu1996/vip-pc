@@ -49,15 +49,15 @@ const RechargeList: React.FC = () => {
         transform: (value: any) => ({ startTime: value[0], endTime: value[1] }),
       },
     },
+    // {
+    //   title: '销售渠道',
+    //   dataIndex: 'saleChannel',
+    //   hideInSearch: true,
+    // },
     {
       title: '销售渠道',
       dataIndex: 'saleChannel',
-      hideInSearch: true,
-    },
-    {
-      title: '销售渠道',
-      dataIndex: 'saleChannel',
-      hideInTable: true,
+      // hideInTable: true,
       valueEnum: SaleChannelEnumConfig,
       renderText: (val: string) => SaleChannelEnumConfig[val],
     },
@@ -75,7 +75,7 @@ const RechargeList: React.FC = () => {
     },
     {
       title: '赠送金金额',
-      dataIndex: 'createTime',
+      dataIndex: 'giftBalance',
       hideInSearch: true,
     },
   ];

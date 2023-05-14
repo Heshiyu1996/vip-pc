@@ -22,18 +22,18 @@ const RechargeList: React.FC = () => {
 
     {
       title: '员工名称',
-      dataIndex: 'name',
+      dataIndex: 'staffName',
       hideInSearch: true,
     },
-    {
-      title: '部门名称',
-      dataIndex: 'saleChannel',
-      hideInSearch: true,
-    },
+    // {
+    //   title: '部门名称',
+    //   dataIndex: 'departmentName',
+    //   hideInSearch: true,
+    // },
  
     {
       title: '总奖励',
-      dataIndex: 'saleChannel',
+      dataIndex: 'totalReward',
       hideInSearch: true,
     },
  
