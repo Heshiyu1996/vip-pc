@@ -5,7 +5,7 @@ import { requestList } from '@/common/tools';
 
 /** 查询客房配置列表 GET /pc/api/room/config/list */
 export async function getRoomConfigList(
-  params: {
+  params?: {
     /** 当前的页码 */
     currentPage?: number;
     /** 页面的容量 */

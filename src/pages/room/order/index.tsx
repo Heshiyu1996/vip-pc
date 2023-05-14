@@ -12,6 +12,8 @@ import { getRoomOrderList, exportRoomOrder, cancelRoomOrder } from '@/services/a
 import { download, getParams } from '@/common/tools';
 import moment from 'moment';
 import './index.less';
+import EditModal from './components/edit-modal';
+import EditConfigModal from './components/edit-config-modal';
 
 const defaultCardId = getParams('cardId')
 const defaultOrderStatusCode = getParams('orderStatusCode');
@@ -68,14 +70,20 @@ const ChannelEnumConfig = (() => {
 
 
 const RoomOrder: React.FC = () => {
+  const [visibleEditConfigModal, setVisibleEditConfigModal] = useState<boolean>(false);
+
   const [showDetail, setShowDetail] = useState<boolean>(false);
 
   const [visibleRejectModal, setVisibleRejectModal] = useState<boolean>(false);
 
   const [visibleConfirmModal, setVisibleConfirmModal] = useState<boolean>(false);
+  
+  const [visibleEditModal, setVisibleEditModal] = useState<boolean>(false);
   const [currentRow, setCurrentRow] = useState<API.RoomOrderListItem>();
   const onEditOk = () => {
     setVisibleConfirmModal(false);
+    setVisibleEditModal(false);
+    setVisibleEditConfigModal(false);
     setCurrentRow(undefined);
     handleReload();
   }
@@ -238,28 +246,34 @@ const RoomOrder: React.FC = () => {
       render: (_, record) => {
         const opList = [
           <Button key='edit' type="link" size="small" onClick={() => {
+            setVisibleEditModal(true);
+            setCurrentRow(record);
+          }}>
+            修改
+          </Button>,
+          <Button key='detail' type="link" size="small" onClick={() => {
             setShowDetail(true);
             setCurrentRow(record);
           }}>
-            查看详情
+            详情
           </Button>
         ]
 
         // 「待确认」：查看详情、同意、拒绝
         if (record.orderStatusCode === 'NEW') {
           return opList.concat([
-            <Button key='edit' type="link" size="small" onClick={() => {
+            <Button key='confirm' type="link" size="small" onClick={() => {
               setVisibleConfirmModal(true);
               setCurrentRow(record);
             }}>
-              同意
+              确认
             </Button>
             ,
             <Button key='remove' type="link" size="small" danger onClick={() => {
               setVisibleRejectModal(true);
               setCurrentRow(record);
             }}>
-              拒绝
+              取消
             </Button>,
           ])
         }
@@ -281,7 +295,6 @@ const RoomOrder: React.FC = () => {
         }
 
         if (record.orderStatusCode !== 'NEW') return opList;
-
       },
     },
   ];
@@ -303,11 +316,19 @@ const RoomOrder: React.FC = () => {
           <Button key="primary" onClick={handleExport}>
             导出
           </Button>,
+          <Button key="primary" type='primary' onClick={() => setVisibleEditConfigModal(true)}>
+            设置
+          </Button>,
         ]}
         request={getRoomOrderList}
         columns={columns}
       />
 
+      {/* 弹框：订单设置 */}
+      <EditConfigModal values={currentRow || {}} visible={visibleEditConfigModal} onVisibleChange={setVisibleEditConfigModal} onOk={onEditOk} />
+
+      {/* 弹框：修改 */}
+      <EditModal values={currentRow || {}} visible={visibleEditModal} onVisibleChange={setVisibleEditModal} onOk={onEditOk} />
 
       {/* 弹框：确认 */}
       <ConfirmModal values={currentRow || {}} visible={visibleConfirmModal} onVisibleChange={setVisibleConfirmModal} onOk={onEditOk} />

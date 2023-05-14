@@ -59,3 +59,30 @@ export async function exportRoomOrder(params?: { [key: string]: any }, options?:
     ...(options || {}),
   });
 }
+
+/** 编辑订单 PUT /pc/api/room/order/{orderId} */
+export async function editRoomOrder(params?: { [key: string]: any }, options?: { [key: string]: any }) {
+  return request<API.RoomRefundListItem>(`/pc/api/room/order/${params.id}`, {
+    method: 'PUT',
+    data: params,
+    ...(options || {}),
+  });
+}
+
+/** 编辑订单配置 PUT /pc/api/room/order/setting */
+export async function editRoomOrderConfig(params?: { [key: string]: any }, options?: { [key: string]: any }) {
+  return request<API.RoomRefundListItem>(`/pc/api/room/order/setting`, {
+    method: 'PUT',
+    data: params,
+    ...(options || {}),
+  });
+}
+
+/** 获取订单配置 GET /pc/api/room/order/setting */
+export async function getRoomOrderConfig(params?: { [key: string]: any }, options?: { [key: string]: any }) {
+  return request<API.RoomRefundListItem>(`/pc/api/room/order/setting`, {
+    method: 'GET',
+    data: params,
+    ...(options || {}),
+  });
+}
