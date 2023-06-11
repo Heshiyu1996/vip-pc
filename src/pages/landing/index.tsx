@@ -1,19 +1,22 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { generateScheme } from '@/services/ant-design-pro/api'
 import { getParams } from '@/common/tools';
 import moment from 'moment';
 
 /** 房源分享 */
 const PageLanding: React.FC = () => {
+  const [tip, setTip] = useState('翔顺金水台VIP欢迎你');
+
   const init = () => {
     const path = '/pages/book-detail/index';
     let queryJson = {};
 
     // 获取分销参数
     const invitation = getParams('invitation') || '';
+    if (!invitation) return null;
     // base64解码
-    const invitationEncodeVal = window.atob(invitation);
-    const invitationVal = JSON.parse(invitationEncodeVal);
+    const invitationEncodeVal = window.atob(invitation) || null;
+    const invitationVal = JSON.parse(invitationEncodeVal) || {};
     const { roomId: id } = invitationVal;
     
     // 计算当前日期
@@ -37,18 +40,21 @@ const PageLanding: React.FC = () => {
       const res = await generateScheme(params)
       wxLink = res.data;
     } catch (error) {
-      wxLink = error?.data;
+      // wxLink = error?.data;
     }
     location.href = wxLink;
   }
   useLayoutEffect(() => {
     const params = init();
+    if (!params) return;
+    
+    setTip('正在跳转“翔顺金水台VIP会员微信小程序”...');
     getScheme(params);
   }, []);
 
   return (
     <div>
-      正在跳转“翔顺金水台VIP会员微信小程序”...
+      {tip}
     </div>
   );
 };

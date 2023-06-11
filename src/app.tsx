@@ -133,9 +133,9 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
 
 export const request: RequestConfig = {
   errorConfig: {
-    adaptor: (resData) => {
-      // 异常处理
-      if (!resData.success) {
+    adaptor: (resData, ctx) => {
+      // 异常处理（code是兼容调用小程序接口）
+      if (!resData.success && resData.code !== 200) {
         // 未登录
         if ([902, 909].includes(resData?.data?.errorType)) {
           history.push(`/user/login`);

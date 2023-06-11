@@ -7,7 +7,7 @@ export async function generateScheme (
   params: any,
   options?: { [key: string]: any },
 ) {
-  return request<any>('/api/wx/scheme/generate', {
+  return request<any>('/mp/api/wx/scheme/generate', {
     method: 'GET',
     params,
     ...(options || {}),
