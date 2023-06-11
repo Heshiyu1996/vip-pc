@@ -12,7 +12,7 @@ import defaultSettings from '../config/defaultSettings';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 
 const loginPath = '/user/login';
-const landingPath = '/landing';
+const landingPath = '/landing/';
 const noNeedLoginPath = [loginPath, landingPath];
 
 /** 获取用户信息比较慢的时候会展示一个 loading */
@@ -42,7 +42,7 @@ export async function getInitialState(): Promise<{
   };
 
   // 如果不是：【登录页、小程序中间页】，执行
-  if (!noNeedLoginPath.includes(history.location.pathname)) {
+  if (!noNeedLoginPath.includes(location.pathname)) {
     const currentUser = await fetchUserInfo();
     return {
       fetchUserInfo,

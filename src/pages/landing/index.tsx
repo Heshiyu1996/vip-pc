@@ -45,6 +45,8 @@ const PageLanding: React.FC = () => {
     location.href = wxLink;
   }
   useLayoutEffect(() => {
+    document.title ='金水台VIP'
+
     const params = init();
     if (!params) return;
     
