@@ -39,3 +39,5 @@ export * from './report/store/room-list';
 
 export * from './report/vip/value-analysis';
 export * from './report/vip/financial-analysis';
+
+export * from './landing';

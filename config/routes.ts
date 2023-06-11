@@ -1,5 +1,6 @@
 export default [
   { path: '/home', name: '首页', icon: 'smile', component: './home' },
+  { path: '/landing', name: '微信小程序中转页', icon: 'smile', component: './landing', layout: false },
   {
     path: '/vip',
     name: '会员卡管理',

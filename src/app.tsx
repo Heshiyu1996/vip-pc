@@ -12,6 +12,8 @@ import defaultSettings from '../config/defaultSettings';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 
 const loginPath = '/user/login';
+const landingPath = '/landing';
+const noNeedLoginPath = [loginPath, landingPath];
 
 /** 获取用户信息比较慢的时候会展示一个 loading */
 export const initialStateConfig = {
@@ -27,6 +29,8 @@ export async function getInitialState(): Promise<{
   loading?: boolean;
   fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
 }> {
+
+
   const fetchUserInfo = async () => {
     try {
       const msg = await queryCurrentUser();
@@ -36,8 +40,9 @@ export async function getInitialState(): Promise<{
     }
     return undefined;
   };
-  // 如果不是登录页面，执行
-  if (history.location.pathname !== loginPath) {
+
+  // 如果不是：【登录页、小程序中间页】，执行
+  if (!noNeedLoginPath.includes(history.location.pathname)) {
     const currentUser = await fetchUserInfo();
     return {
       fetchUserInfo,
@@ -74,7 +79,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
       // 获取“待确认订单”数量
       const { location } = history;
       // 如果没有登录，重定向到 login
-      if (!initialState?.currentUser && location.pathname !== loginPath) {
+      if (!initialState?.currentUser && !noNeedLoginPath.includes(location.pathname)) {
         history.push(loginPath);
       }
       // bus.emit(ON_NEW_ORDER);
