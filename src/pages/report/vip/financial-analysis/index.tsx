@@ -87,8 +87,8 @@ const RechargeList: React.FC = () => {
         { label: '充值人数', value: rechargeStatisticsInfo?.rechargeMember },
         { label: '人均充值次数', value: rechargeStatisticsInfo?.rechargeAverageCount },
         { label: '充值金额', value: `本金：${rechargeStatisticsInfo?.rechargeAmount?.totalBalance}、赠送金：${rechargeStatisticsInfo?.rechargeAmount?.giftBalance}` },
-        { label: '消费金额', value: `本金：${rechargeStatisticsInfo?.consumptionAmout?.totalBalance}、赠送金：${rechargeStatisticsInfo?.consumptionAmout?.giftBalance}` },
-        { label: '待消费金额',  value: `本金：${rechargeStatisticsInfo?.consumptionWaitingAmout?.totalBalance}、赠送金：${rechargeStatisticsInfo?.consumptionWaitingAmout?.giftBalance}` }
+        { label: '消费金额', value: `本金：${rechargeStatisticsInfo?.consumptionAmount?.totalBalance}、赠送金：${rechargeStatisticsInfo?.consumptionAmount?.giftBalance}` },
+        { label: '待消费金额',  value: `本金：${rechargeStatisticsInfo?.consumptionWaitingAmount?.totalBalance}、赠送金：${rechargeStatisticsInfo?.consumptionWaitingAmount?.giftBalance}` }
       ]} />
       
       {/* 其他充值指标 */}
@@ -98,7 +98,7 @@ const RechargeList: React.FC = () => {
       <CardIndicator data={[ 
           { label: '消费人数', value: consumptionStatisticsInfo?.consumptionMember },
           { label: '人均消费次数', value: consumptionStatisticsInfo?.consumptionAverageCount },
-          { label: '平均消费金额', value: consumptionStatisticsInfo?.consumptionAverageAmout }
+          { label: '平均消费金额', value: consumptionStatisticsInfo?.consumptionAverageAmount }
         ]} />
 
       {/* 其他消费指标 */}

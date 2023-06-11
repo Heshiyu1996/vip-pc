@@ -32,7 +32,7 @@ const TableOrder: React.FC = (props: any) => {
     },
     {
       title: '订单数',
-      dataIndex: 'orderAmount',
+      dataIndex: 'vipCountPercent',
     },
     {
       title: '复购订单数',

@@ -24,15 +24,15 @@ const TableRechargeStatistics: React.FC = (props: any) => {
     },
     {
       title: '本金消费',
-      dataIndex: 'totalComsumptionAmount',
+      dataIndex: 'totalConsumptionAmount',
     },
     {
       title: '赠送金消费',
-      dataIndex: 'giftComsumptionAmount',
+      dataIndex: 'giftConsumptionAmount',
     },
     {
       title: '平均消费金额',
-      dataIndex: 'comsumptionAverageAmount',
+      dataIndex: 'consumptionAverageAmount',
     },
   ];
 
