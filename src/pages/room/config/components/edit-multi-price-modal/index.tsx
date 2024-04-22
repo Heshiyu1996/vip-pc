@@ -8,7 +8,7 @@ import {
   ProFormSelect,
   ProFormDateRangePicker,
 } from '@ant-design/pro-components';
-import { message, InputNumber } from 'antd';
+import { message, InputNumber, Tag } from 'antd';
 import moment from 'moment';
 import { editRoomConfigPrice, editRoomConfigAmount, getRoomConfigList } from '@/services/ant-design-pro/api';
 import './index.less';
@@ -250,6 +250,7 @@ const EditMultiModal: React.FC<IProps> = (props) => {
         }
       }}
     >
+      <Tag style={{ marginBottom: '10px' }}>注意：选完“星期组别”、“日期时间段”后，记得选完后点+号才生效</Tag>
       <ProFormRadio.Group
         label="修改内容"
         rules={[

@@ -53,7 +53,9 @@ const EditModal: React.FC<IProps> = (props) => {
         roomType: fields.roomType,
         price: fields.price,
         amountDesc: fields.amountDesc,
-        date: fields.date,
+        // date: fields.date,
+        startDate: fields.date,
+        endDate: fields.date,
         isOpen: fields.isOpen,
         totalAmount: fields.totalAmount,
       });
