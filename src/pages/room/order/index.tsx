@@ -20,6 +20,10 @@ const defaultOrderStatusCode = getParams('orderStatusCode');
 
 const mockStatusData = [
   {
+    id: 'ALL',
+    levelName: '全部',
+  },
+  {
     id: 'NEW',
     levelName: '待确认',
   },
@@ -134,7 +138,7 @@ const RoomOrder: React.FC = () => {
     },
     {
       title: '名字',
-      dataIndex: 'vipCardName',
+      dataIndex: 'contactName',
     },
     {
       title: '会员卡号',

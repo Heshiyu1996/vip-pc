@@ -13,6 +13,11 @@ export async function getRoomOrderList(
   },
   options?: { [key: string]: any },
 ) {
+  // 判断“订单状态”是否为“全部”，若是，则移除
+  if (params?.orderStatusCode === 'ALL') {
+    delete params.orderStatusCode;
+  }
+
   return requestList<API.RoomRefundList>('/pc/api/room/order/list', {
     method: 'GET',
     params: {
