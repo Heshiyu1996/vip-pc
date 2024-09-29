@@ -38,6 +38,19 @@ export const requestList = <T>(url: string, options?: Record<string, any>,) => {
   })
 }
 
+
+export const requestGet = <T>(url: string, options?: Record<string, any>,) => {
+  return request<T>(url, options).then((res: T) => {
+    const { success, msg, data } = res;
+    const modifiedRes = {
+      success,
+      msg,
+      data: data,
+    }
+    return modifiedRes;
+  })
+}
+
 // 回填 Upload 组件前，处理图片列表
 export const handlePreviewImageList = (imgList: string[]): IFile[] => {
   const fileList = imgList?.map((item) => (

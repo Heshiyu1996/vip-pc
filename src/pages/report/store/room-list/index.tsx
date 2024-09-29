@@ -22,52 +22,56 @@ const RechargeList: React.FC = () => {
     },
     {
       title: '产品',
-      dataIndex: 'saleChannel',
+      dataIndex: 'roomType',
+      hideInSearch: true,
     },
     {
       title: '交易额',
-      dataIndex: 'roomSaleAmount',
+      dataIndex: 'saleBalance',
       hideInSearch: true,
     },
     {
       title: '间夜量',
-      dataIndex: 'roomTicketDeduction',
+      dataIndex: 'roomAmount',
       hideInSearch: true,
     },
     {
       title: '平均房价',
-      dataIndex: 'createTime',
+      dataIndex: 'roomAveragePrice',
       hideInSearch: true,
     },
     {
       title: '支付人数',
-      dataIndex: 'createTime',
+      dataIndex: 'paidNumber',
       hideInSearch: true,
     },
     {
       title: '复购人数',
-      dataIndex: 'createTime',
+      dataIndex: 'repurchaseNumber',
       hideInSearch: true,
     },
     {
       title: '复购金额',
-      dataIndex: 'createTime',
+      dataIndex: 'repurchaseBalance',
       hideInSearch: true,
     },
     {
       title: '复购人数占比',
-      dataIndex: 'createTime',
+      dataIndex: 'repurchaseNumberProportion',
       hideInSearch: true,
+      renderText: (text) => `${text}%`
     },
     {
       title: '复购金额占比',
-      dataIndex: 'createTime',
+      dataIndex: 'repurchaseBalanceProportion',
       hideInSearch: true,
+      renderText: (text) => `${text}%`
     },
   ];
 
   return (
     <PageContainer>
+      （说明：请先选择“查询日期”后查询）
       <ProTable<API.RuleListItem, API.PageParams>
         actionRef={actionRef}
         rowKey="id"

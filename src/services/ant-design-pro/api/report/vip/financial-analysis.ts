@@ -1,7 +1,7 @@
 // @ts-ignore
 /* eslint-disable */
 import { request } from 'umi';
-import { requestList } from '@/common/tools';
+import { requestGet, requestList } from '@/common/tools';
 
 export async function getVipFinancialRechargeStatistics(
   params: {
@@ -48,7 +48,7 @@ export async function getVipFinancialRechargeOtherStatistics(
   },
   options?: { [key: string]: any },
 ) {
-  return requestList<API.RechargeList>('/pc/api/report/vip/financial/recharge/other/statistics', {
+  return requestGet<API.RechargeList>('/pc/api/report/vip/financial/recharge/other/statistics', {
     method: 'GET',
     params: {
       ...params,
@@ -66,7 +66,7 @@ export async function getVipFinancialConsumptionOtherStatistics(
   },
   options?: { [key: string]: any },
 ) {
-  return requestList<API.RechargeList>('/pc/api/report/vip/financial/consumption/other/statistics', {
+  return requestGet<API.RechargeList>('/pc/api/report/vip/financial/consumption/other/statistics', {
     method: 'GET',
     params: {
       ...params,

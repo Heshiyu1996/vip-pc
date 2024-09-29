@@ -27,7 +27,7 @@ const RechargeList: React.FC = () => {
     },
     {
       title: '部门',
-      dataIndex: 'saleChannel',
+      dataIndex: 'department',
       hideInSearch: true,
     },
     
@@ -37,19 +37,19 @@ const RechargeList: React.FC = () => {
       children: [
         {
           title: '订单量',
-          dataIndex: 'companyAddress',
-          key: 'companyAddress',
+          dataIndex: 'summaryOrderAmount',
+          key: 'summaryOrderAmount',
           width: 200,
         },
         {
           title: '销量',
-          dataIndex: 'companyName',
-          key: 'companyName',
+          dataIndex: 'summarySaleAmount',
+          key: 'summarySaleAmount',
         },
         {
           title: '销售额',
-          dataIndex: 'companyName',
-          key: 'companyName',
+          dataIndex: 'summarySaleBalance',
+          key: 'summarySaleBalance',
         },
       ],
     },
@@ -59,29 +59,29 @@ const RechargeList: React.FC = () => {
       children: [
         {
           title: '浏览量PV',
-          dataIndex: 'companyAddress',
-          key: 'companyAddress',
+          dataIndex: 'roomPv',
+          key: 'roomPv',
           width: 200,
         },
         {
           title: '访客量UV',
-          dataIndex: 'companyName',
-          key: 'companyName',
+          dataIndex: 'roomUv',
+          key: 'roomUv',
         },
         {
           title: '订单量',
-          dataIndex: 'companyName',
-          key: 'companyName',
+          dataIndex: 'roomSaleAmount',
+          key: 'roomSaleAmount',
         },
         {
           title: '销量',
-          dataIndex: 'companyName',
-          key: 'companyName',
+          dataIndex: 'roomSaleAmount',
+          key: 'roomSaleAmount',
         },
         {
           title: '销售额',
-          dataIndex: 'companyName',
-          key: 'companyName',
+          dataIndex: 'roomSaleBalance',
+          key: 'roomSaleBalance',
         },
       ],
     },

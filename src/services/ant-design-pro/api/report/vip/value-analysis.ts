@@ -1,7 +1,7 @@
 // @ts-ignore
 /* eslint-disable */
 import { request } from 'umi';
-import { requestList } from '@/common/tools';
+import { requestGet, requestList } from '@/common/tools';
 
 export async function getVipValueMemberStatistics(
   params: {
@@ -48,7 +48,7 @@ export async function getVipValueChannelList(
   },
   options?: { [key: string]: any },
 ) {
-  return requestList<API.RechargeList>('/pc/api/report/vip/value/channel-list', {
+  return requestGet<API.RechargeList>('/pc/api/report/vip/value/channel-list', {
     method: 'GET',
     params: {
       ...params,
@@ -66,7 +66,7 @@ export async function getVipValueLevelList(
   },
   options?: { [key: string]: any },
 ) {
-  return requestList<API.RechargeList>('/pc/api/report/vip/value/level-list', {
+  return requestGet<API.RechargeList>('/pc/api/report/vip/value/level-list', {
     method: 'GET',
     params: {
       ...params,
@@ -84,7 +84,7 @@ export async function getVipValueOrderList(
   },
   options?: { [key: string]: any },
 ) {
-  return requestList<API.RechargeList>('/pc/api/report/vip/value/order-list', {
+  return requestGet<API.RechargeList>('/pc/api/report/vip/value/order-list', {
     method: 'GET',
     params: {
       ...params,

@@ -24,6 +24,8 @@ const RechargeList: React.FC = () => {
   const [rechargeStatisticsInfo, setRechargeStatisticsInfo] = useState(0);
   const getRechargeStatisticsInfo = async (params) => {
     const res = await getVipFinancialRechargeStatistics(params);
+    console.log(res, 19938);
+    
     setRechargeStatisticsInfo(res?.data || {});
   }
 
@@ -42,10 +44,10 @@ const RechargeList: React.FC = () => {
   }
 
   // 其他消费指标
-  const [dataConsumptionStatistics, setDataLevel] = useState([]);
+  const [dataConsumptionStatistics, setDataConsumptionStatistics] = useState([]);
   const getDataConsumptionStatistics = async (params) => {
     const res = await getVipFinancialConsumptionOtherStatistics(params);
-    setDataLevel(res?.data || {});
+    setDataConsumptionStatistics(res?.data || {});
   }
 
   useEffect(() => {
@@ -86,9 +88,9 @@ const RechargeList: React.FC = () => {
         { label: '续充率', value: rechargeStatisticsInfo?.refillRate },
         { label: '充值人数', value: rechargeStatisticsInfo?.rechargeMember },
         { label: '人均充值次数', value: rechargeStatisticsInfo?.rechargeAverageCount },
-        { label: '充值金额', value: `本金：${rechargeStatisticsInfo?.rechargeAmount?.totalBalance}、赠送金：${rechargeStatisticsInfo?.rechargeAmount?.giftBalance}` },
-        { label: '消费金额', value: `本金：${rechargeStatisticsInfo?.consumptionAmount?.totalBalance}、赠送金：${rechargeStatisticsInfo?.consumptionAmount?.giftBalance}` },
-        { label: '待消费金额',  value: `本金：${rechargeStatisticsInfo?.consumptionWaitingAmount?.totalBalance}、赠送金：${rechargeStatisticsInfo?.consumptionWaitingAmount?.giftBalance}` }
+        { label: '充值金额', value: <div style={{ fontSize: '14px' }}><div>本金：{rechargeStatisticsInfo?.rechargeAmount?.totalBalance}</div><div>赠送金：{rechargeStatisticsInfo?.rechargeAmount?.giftBalance}</div></div> },
+        { label: '消费金额', value: <div style={{ fontSize: '14px' }}><div>本金：{rechargeStatisticsInfo?.consumptionAmount?.totalBalance}</div><div>赠送金：{rechargeStatisticsInfo?.consumptionAmount?.giftBalance}</div></div> },
+        { label: '待消费金额', value: <div style={{ fontSize: '14px' }}><div>本金：{rechargeStatisticsInfo?.consumptionWaitingAmount?.totalBalance}</div><div>赠送金：{rechargeStatisticsInfo?.consumptionWaitingAmount?.giftBalance}</div></div> },
       ]} />
       
       {/* 其他充值指标 */}

@@ -20,7 +20,8 @@ const TableLevel: React.FC = (props: any) => {
     },
     {
       title: '会员数占比',
-      dataIndex: 'proportion',
+      dataIndex: 'vipCountPercent',
+      renderText: (text) => `${text}%`
     },
     {
       title: '复购率',

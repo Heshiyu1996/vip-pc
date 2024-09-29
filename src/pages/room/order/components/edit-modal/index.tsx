@@ -10,6 +10,7 @@ import { message } from 'antd';
 import { editRoomOrder, getRoomConfigList } from '@/services/ant-design-pro/api';
 import type { ProFormInstance } from '@ant-design/pro-components';
 import './index.less';
+import moment from 'moment';
 
 interface IProps {
   values: Record<string, any>;
@@ -31,7 +32,7 @@ const ConfirmModal: React.FC<IProps> = (props) => {
     const values = {
       id: props.values.id,
       roomTypeId: props.values.roomTypeId,
-      timeRange: [props.values.orderStartDate, props.values.orderEndDate],
+      timeRange: [moment(props.values.orderStartDate).format('YYYY-MM-DD'), moment(props.values.orderEndDate).format('YYYY-MM-DD')],
       amount: props.values.amount,
       totalPrice: props.values.totalPrice,
     }
@@ -42,13 +43,13 @@ const ConfirmModal: React.FC<IProps> = (props) => {
     const hide = message.loading('正在操作');
 
     try {
-      const [orderStartDate, orderEndDate] = fields?.timeRange || ['', ''];
+      const [startDate, endDate] = fields?.timeRange || ['', ''];
 
       await editRoomOrder({
         id: fields.id,
         roomTypeId: fields.roomTypeId,
-        orderStartDate,
-        orderEndDate,
+        orderStartDate: moment(startDate).format('YYYY-MM-DD'),
+        orderEndDate: moment(endDate).format('YYYY-MM-DD'),
         amount: fields.amount,
         totalPrice: fields.totalPrice,
       });

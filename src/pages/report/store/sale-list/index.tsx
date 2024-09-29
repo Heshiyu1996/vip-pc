@@ -71,7 +71,7 @@ const RechargeList: React.FC = () => {
     },
     {
       title: '赠送金金额',
-      dataIndex: 'createTime',
+      dataIndex: 'giftBalance',
       hideInSearch: true,
     },
   ];

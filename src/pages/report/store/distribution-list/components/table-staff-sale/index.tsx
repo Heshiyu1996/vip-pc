@@ -22,42 +22,42 @@ const RechargeList: React.FC = () => {
 
     {
       title: '姓名',
-      dataIndex: 'name',
+      dataIndex: 'username',
       hideInSearch: true,
     },
     {
       title: '部门',
-      dataIndex: 'saleChannel',
+      dataIndex: 'department',
       hideInSearch: true,
     },
     {
       title: '产品名称',
-      dataIndex: 'saleChannel',
+      dataIndex: 'roomType',
       hideInSearch: true,
     },
     {
       title: '浏览量PV',
-      dataIndex: 'saleChannel',
+      dataIndex: 'pv',
       hideInSearch: true,
     },
     {
       title: '访客量UV',
-      dataIndex: 'saleChannel',
+      dataIndex: 'uv',
       hideInSearch: true,
     },
     {
       title: '订单量',
-      dataIndex: 'saleChannel',
+      dataIndex: 'orderAmount',
       hideInSearch: true,
     },
     {
       title: '销售量',
-      dataIndex: 'saleChannel',
+      dataIndex: 'saleAmount',
       hideInSearch: true,
     },
     {
       title: '销售额',
-      dataIndex: 'saleChannel',
+      dataIndex: 'saleBalance',
       hideInSearch: true,
     },
   ];

@@ -18,7 +18,7 @@ const CardIndicator: React.FC = (props: any) => {
                 </span>
               </Tooltip>}
             </div>
-            <div className='value'>{item?.value || '-'}</div> 
+            <div className='value'>{item?.value}</div> 
           </div>
         ))
       }

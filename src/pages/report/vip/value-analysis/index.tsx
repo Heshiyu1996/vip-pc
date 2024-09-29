@@ -22,18 +22,20 @@ const RechargeList: React.FC = () => {
   const [timeRange, setTimeRange] = useState(initialValue);
 
   // 会员指标
-  const [totalAmount, setTotalAmout] = useState(0);
+  const [accumulationCount, setAccumulationCount] = useState(0);
+  const [additionCount, setAdditionCount] = useState(0);
   const getTotalAmount = async (params) => {
     const res = await getVipValueMemberStatistics(params);
-    const { totalBalance } = res?.data || {};
-    setTotalAmout(totalBalance);
+    const { accumulationMember, additionMember } = res?.data || {};
+    setAccumulationCount(accumulationMember);
+    setAdditionCount(additionMember);
   }
 
   // 会员渠道分析
   const [dataChannel, setDataChannel] = useState([]);
   const getDataChannel = async (params) => {
     const res = await getVipValueChannelList(params);
-    setDataChannel(res?.data || {});
+    setDataChannel(res?.data || []);
   }
 
   // 会员等级分析
@@ -85,8 +87,8 @@ const RechargeList: React.FC = () => {
 
       {/* 会员指标 */}
       <CardIndicator data={[ 
-          { label: '累积会员数', value: totalAmount },
-          { label: '新增会员数', value: totalAmount }
+          { label: '累积会员数', value: accumulationCount },
+          { label: '新增会员数', value: additionCount }
         ]} />
       
       {/* 会员渠道分析 */}
@@ -97,6 +99,9 @@ const RechargeList: React.FC = () => {
 
       {/* 会员订单分析 */}
       <TableOrder data={dataOrder} />
+
+
+
     </PageContainer>
   );
 };

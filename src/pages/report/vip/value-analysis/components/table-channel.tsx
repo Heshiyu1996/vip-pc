@@ -21,11 +21,12 @@ const TableChannel: React.FC = (props: any) => {
     },
     {
       title: '订单量',
-      dataIndex: 'vipCountPercent',
+      dataIndex: 'orderAmount',
     },
     {
       title: '占比',
       dataIndex: 'proportion',
+      renderText: (text) => `${text}%`
     },
   ];
 

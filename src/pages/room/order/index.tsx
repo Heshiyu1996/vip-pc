@@ -249,7 +249,9 @@ const RoomOrder: React.FC = () => {
       valueType: 'option',
       render: (_, record) => {
         const opList = [
-          <Button key='edit' type="link" size="small" onClick={() => {
+          <Button key='edit' type="link" size="small"
+          disabled={['REJECTED', 'CANCELLED'].includes(record.orderStatusCode)}
+          onClick={() => {
             setVisibleEditModal(true);
             setCurrentRow(record);
           }}>

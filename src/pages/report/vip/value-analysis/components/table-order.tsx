@@ -29,6 +29,7 @@ const TableOrder: React.FC = (props: any) => {
     {
       title: '复购金额占比',
       dataIndex: 'repurchaseAmountProportion',
+      renderText: (text) => `${text}%`
     },
     {
       title: '订单数',
