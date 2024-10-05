@@ -6,6 +6,7 @@ import {
 import { message } from 'antd';
 import { rejectRoomOrder } from '@/services/ant-design-pro/api';
 import './index.less';
+import bus, { ON_NEW_ORDER } from '@/common/bus';
 
 interface IProps {
   values: Record<string, any>;
@@ -30,6 +31,8 @@ const RejectModal: React.FC<IProps> = (props) => {
       });
       hide();
       message.success('操作成功!');
+      // 更新导航小红点
+      bus.emit(ON_NEW_ORDER);
       return true;
     } catch (error) {
       hide();

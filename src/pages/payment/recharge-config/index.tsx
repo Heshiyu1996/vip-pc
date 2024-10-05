@@ -116,7 +116,7 @@ const RechargeConfig: React.FC = () => {
       />
 
       {/* 弹框：新增 */}
-      <AddModal visible={visibleAddModal} onVisibleChange={setVisibleAddModal} onOk={handleReload} />
+      {visibleAddModal && <AddModal visible onVisibleChange={setVisibleAddModal} onOk={handleReload} />}
 
       {/* 弹框：编辑 */}
       <EditModal values={currentRow || {}} visible={visibleEditModal} onVisibleChange={setVisibleEditModal} onOk={onEditOk} />

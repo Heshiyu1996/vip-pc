@@ -16,7 +16,7 @@ const TableOrder: React.FC = (props: any) => {
     },
     {
       title: '复购率',
-      dataIndex: 'repurchaseRate',
+      dataIndex: 'repurchaseAmountProportion',
     },
     {
       title: '购买金额',
@@ -33,7 +33,7 @@ const TableOrder: React.FC = (props: any) => {
     },
     {
       title: '订单数',
-      dataIndex: 'vipCountPercent',
+      dataIndex: 'orderAmount',
     },
     {
       title: '复购订单数',

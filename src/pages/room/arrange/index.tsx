@@ -32,6 +32,7 @@ const ArrangeList: React.FC = () => {
   const [currentRow, setCurrentRow] = useState<API.RuleListItem>();
 
   const formRef = useRef<ProFormInstance>();
+  const ref = useRef();
 
   const [columns, setColumns] = useState< ProColumns<API.RoomArrangeListItem>[]>(DefaultColumns);
   
@@ -124,6 +125,10 @@ const ArrangeList: React.FC = () => {
         loading={loading}
         dataSource={data}
         scroll={{ x: 1300, y: 1000 }}
+        actionRef={ref}
+        options={{
+          reload: () => onChangeMonthPicker(currentDate)
+        }}
         toolbar={{
           filter: (
             <LightFilter>

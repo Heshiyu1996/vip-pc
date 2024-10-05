@@ -13,6 +13,7 @@ import { message } from 'antd';
 import { history, useModel } from 'umi';
 import md5 from 'md5';
 import styles from './index.less';
+import bus, { ON_NEW_ORDER } from '@/common/bus';
 
 const Login: React.FC = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
@@ -40,6 +41,8 @@ const Login: React.FC = () => {
       // 获取用户信息
       await fetchUserInfo();
       history.push('/');
+      // 更新导航小红点
+      bus.emit(ON_NEW_ORDER);
     } catch (error) {
       console.log(error);
     }

@@ -129,9 +129,33 @@ const RoomRefund: React.FC = () => {
       hideInSearch: true,
       renderText: (val: string) => <span className={`status-${val}`}>{StatusEnumConfig[val]}</span>
     },
+
     {
       title: '预订时间',
       dataIndex: 'orderStartDate',
+      key: 'showTime',
+      valueType: 'dateRange',
+      hideInTable: true,
+      search: {
+        transform: (value) => {
+          return {
+            startTime: value[0],
+            endTime: value[1],
+          };
+        },
+      },
+      fieldProps: {
+        showTime: { format: 'HH:mm' },
+        format: "YYYY-MM-DD HH:mm"
+      },
+    },
+    {
+      title: '预订时间',
+      dataIndex: 'orderStartDate',
+      valueType: 'dateTime',
+      key: 'showTime',
+      hideInSearch: true,
+      sorter: true,
       render: (_, record) => `${moment(record.orderStartDate).format('YYYY-MM-DD HH:mm:ss')} ~ ${moment(record.orderEndDate).format('YYYY-MM-DD HH:mm:ss')}`,
     },
     {

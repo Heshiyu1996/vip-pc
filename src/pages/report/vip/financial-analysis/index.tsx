@@ -85,7 +85,7 @@ const RechargeList: React.FC = () => {
 
       {/* 会员充值概览 */}
       <CardIndicator data={[
-        { label: '续充率', value: rechargeStatisticsInfo?.refillRate },
+        { label: '续充率', value: `${rechargeStatisticsInfo?.refillRate || 0}%` },
         { label: '充值人数', value: rechargeStatisticsInfo?.rechargeMember },
         { label: '人均充值次数', value: rechargeStatisticsInfo?.rechargeAverageCount },
         { label: '充值金额', value: <div style={{ fontSize: '14px' }}><div>本金：{rechargeStatisticsInfo?.rechargeAmount?.totalBalance}</div><div>赠送金：{rechargeStatisticsInfo?.rechargeAmount?.giftBalance}</div></div> },

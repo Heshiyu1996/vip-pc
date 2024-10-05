@@ -39,7 +39,7 @@ const RechargeList: React.FC = () => {
     },
     {
       title: '应获奖励人',
-      dataIndex: 'contactName',
+      dataIndex: 'rewardee',
       valueType: 'textarea',
       hideInSearch: true,
     },

@@ -90,7 +90,7 @@ const AddModal: React.FC<IProps> = (props) => {
         ]}
         width="md"
         addonAfter="张"
-        fieldProps={{controls: false}}
+        fieldProps={{controls: false, precision: 0}}
         min={0}
         name="roomTicketAmount"
       />
