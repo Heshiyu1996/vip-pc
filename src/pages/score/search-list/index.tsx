@@ -40,12 +40,25 @@ const RechargeList: React.FC = () => {
   const columns: ProColumns<API.RuleListItem>[] = [
     {
       title: '会员卡号',
+      dataIndex: 'vipCardId',
+      hideInTable: true,
+    },
+    {
+      title: '会员卡号',
       dataIndex: 'id',
+      hideInSearch: true,
+    },
+    {
+      title: '名字',
+      dataIndex: 'vipCardName',
+      valueType: 'textarea',
+      hideInTable: true
     },
     {
       title: '名字',
       dataIndex: 'ownerName',
       valueType: 'textarea',
+      hideInSearch: true,
     },
     {
       title: '手机号',
