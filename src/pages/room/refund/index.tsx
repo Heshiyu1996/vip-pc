@@ -144,10 +144,10 @@ const RoomRefund: React.FC = () => {
           };
         },
       },
-      fieldProps: {
-        showTime: { format: 'HH:mm' },
-        format: "YYYY-MM-DD HH:mm"
-      },
+      // fieldProps: {
+      //   showTime: { format: 'HH:mm' },
+      //   format: "YYYY-MM-DD HH:mm"
+      // },
     },
     {
       title: '预订时间',

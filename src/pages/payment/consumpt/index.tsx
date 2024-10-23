@@ -25,6 +25,7 @@ const Consumpt: React.FC = () => {
   const [ifSearchById, setIfSearchById] = useState<boolean>(true);
   const [searchText, setSearchText] = useState<string>(defaultCardId);
   const [amount, setAmount] = useState<number>();
+  const [remark, setRemark] = useState<string>('');
   const [password, setPassword] = useState<string>();
   const [vipInfo, setVipInfo] = useState<API.RuleListItem>({});
 
@@ -87,7 +88,8 @@ const Consumpt: React.FC = () => {
 
   // 重置
   const handleReset = () => {
-    setAmount(0);
+    setAmount(undefined);
+    setRemark('');
     setPassword('');
     setSearchText('');
     setVipInfo({});
@@ -108,7 +110,6 @@ const Consumpt: React.FC = () => {
     setConsumtionType(val);
   }
 
-  const [remark, setRemark] = useState('');
 
   const consumption = () => {
     if (!vipInfo?.id) {
